@@ -1,7 +1,15 @@
 # Node
-node_modules
+node_modules/
 .pnpm-debug.log
 pnpm-lock.yaml
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
 # Next.js
 .next/
@@ -18,9 +26,15 @@ dist/
 .env.test.local
 .env.production.local
 *.env
+.env*.local
 
 # OS
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
 .directory
 
@@ -28,11 +42,23 @@ Thumbs.db
 *.tsbuildinfo
 
 # Infrastructure & Tools
-.turbo
+.turbo/
 .eslintcache
-.vercel
-.vscode
-.idea
+.vercel/
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Supabase
+.supabase/
+
+# Databases
+*.db
+*.sqlite
 
 # Testing
 coverage/
@@ -41,7 +67,6 @@ test-results/
 blob-report/
 playwright/.cache/
 
-# Local Scratch & Logs
+# Local Scratch
 scratch/
 *.txt
-*.log
