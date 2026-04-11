@@ -11,7 +11,7 @@ const NeuralField = dynamic(() => import('@brainbox/ui').then(mod => mod.NeuralF
 const AmbientLight = dynamic(() => import('@brainbox/ui').then(mod => mod.AmbientLight), { ssr: false });
 
 export function PersistentShell({ children }: { children: React.ReactNode }) {
-  const { activeScreen, activeTheme, setActiveScreen } = useAppStore();
+  const { activeScreen, theme, setActiveScreen } = useAppStore();
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const pathname = usePathname();
 
@@ -24,9 +24,9 @@ export function PersistentShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="relative h-full w-full bg-[#050505] text-white font-sans overflow-hidden flex bg-grain blur-0 scale-100">
-      <AmbientLight theme={activeTheme} monochrome={activeScreen === 'archive'} />
+      <AmbientLight theme={theme} monochrome={activeScreen === 'archive'} />
       <NeuralField 
-        theme={activeTheme} 
+        theme={theme} 
         mode={activeScreen === 'dashboard' ? 'brain' : activeScreen === 'extension' ? 'extension' : 'wander'} 
         speedMultiplier={activeScreen === 'archive' ? 0.25 : 1}
         monochrome={activeScreen === 'archive'}

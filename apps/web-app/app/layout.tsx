@@ -1,12 +1,18 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
+import { Providers } from './providers';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
+const inter = Inter({ 
+  subsets: ['latin', 'cyrillic'], 
+  variable: '--font-inter',
+  display: 'swap'
+});
 
 export const metadata: Metadata = {
   title: 'BrainBox | Neural OS',
-  description: 'AI-Native Workspace for the Modern Mind',
+  description: 'AI-Native Workspace for the Modern Mind. Организирай знанията си с невронна прецизност.',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
@@ -29,10 +35,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={inter.variable}>
-      <body className="antialiased bg-black text-white selection:bg-white/20 h-dvh overflow-hidden">
-        {/* The persistent SPA shell will be implemented in a child Client Component to handle animation state */}
-        {children}
+    <html lang="bg" className={inter.variable} suppressHydrationWarning>
+      <body className="antialiased font-sans">
+        <Providers>
+          <TooltipProvider>
+            {children}
+          </TooltipProvider>
+        </Providers>
       </body>
     </html>
   );

@@ -29,8 +29,9 @@ export const ItemSchema = z.object({
 });
 
 export const ScreenNameSchema = z.enum([
-  'dashboard', 'login', 'settings', 'identity', 'archive', 'library', 
-  'prompts', 'ainexus', 'extension', 'mindgraph', 'workspace'
+  'dashboard', 'login', 'settings', 'identity', 'profile', 'archive', 
+  'library', 'prompts', 'ainexus', 'studio', 'extension', 
+  'mindgraph', 'analytics', 'workspace'
 ]);
 
 export type ScreenName = z.infer<typeof ScreenNameSchema>;

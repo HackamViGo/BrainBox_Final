@@ -41,3 +41,28 @@
 
 ### Последици
 - Всички страници в приложението споделят един и същ фон и анимационен слой.
+
+---
+
+## [ADR-003] Supabase Integration with @supabase/ssr
+**Date:** 2026-04-11
+**Status:** Прието
+
+### Контекст
+Нужда от стабилна аутентикация и персистентност на данните (Library, Folders, Items) отвъд localStorage.
+
+### Решение
+Интегриране на Supabase с използване на `@supabase/ssr` (Server-Side Rendering) пакета.
+- Схема: `folders` и `items` таблици с RLS.
+- Middleware: Задължителен за session refresh pattern.
+- Client: Отделни `createBrowserClient` и `createServerClient` фабрики.
+- Auth: Използване на `getUser()` вместо `getSession()` за сигурност.
+
+### Причини
+- `@supabase/ssr` е текущият препоръчан стандарт за Next.js App Router.
+- RLS осигурява сигурност на ниво база данни.
+- Middleware предотвратява изтичане на сесиите.
+
+### Последици
+- Всички CRUD операции минават през Server Actions с Zod валидация.
+- Zustand store се синхронизира със Supabase след логване.

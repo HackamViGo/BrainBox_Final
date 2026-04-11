@@ -1,48 +1,76 @@
-import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
-import type { ThemeName, ScreenName } from '@brainbox/types';
-import { STORAGE_KEYS } from '@brainbox/utils';
+'use client'
+
+import { create } from 'zustand'
+import { persist, createJSONStorage } from 'zustand/middleware'
+import type { ThemeName, ScreenName } from '@brainbox/types'
+import { STORAGE_KEYS } from '@brainbox/utils'
 
 interface AppState {
-  activeScreen: ScreenName;
-  activeTheme: ThemeName;
-  isSidebarExpanded: boolean;
-  isPinned: boolean;
-  isLoggedIn: boolean;
-  
-  // Actions
-  setActiveScreen: (screen: ScreenName) => void;
-  setActiveTheme: (theme: ThemeName) => void;
-  toggleSidebar: (expanded?: boolean) => void;
-  setPinned: (pinned: boolean) => void;
-  setLoggedIn: (loggedIn: boolean) => void;
+  activeScreen: ScreenName
+  theme: ThemeName
+  isLoggedIn: boolean
+  isSidebarExpanded: boolean
+  isMobileSidebarOpen: boolean
+  isPinned: boolean
+  activeModelId: string
+  pendingModelId: string | null
+  activeFolder: string | null
 }
 
-export const useAppStore = create<AppState>()(
-  persist(
-    (set) => ({
-      activeScreen: 'dashboard',
-      activeTheme: 'chatgpt',
-      isSidebarExpanded: false,
-      isPinned: false,
-      isLoggedIn: false,
+interface AppActions {
+  setActiveScreen: (screen: ScreenName) => void
+  setTheme: (theme: ThemeName) => void
+  setIsLoggedIn: (v: boolean) => void
+  setPendingModelId: (id: string | null) => void
+  setActiveFolder: (id: string | null) => void
+  setIsSidebarExpanded: (v: boolean) => void
+  setIsMobileSidebarOpen: (v: boolean) => void
+  setPinned: (v: boolean) => void
+  closeMobileSidebar: () => void
+}
 
-      setActiveScreen: (screen) => set({ activeScreen: screen }),
-      setActiveTheme: (theme) => set({ activeTheme: theme }),
-      toggleSidebar: (expanded) => 
-        set((state) => ({ isSidebarExpanded: expanded ?? !state.isSidebarExpanded })),
-      setPinned: (pinned) => set({ isPinned: pinned }),
-      setLoggedIn: (loggedIn) => set({ isLoggedIn: loggedIn }),
+export type AppStore = AppState & AppActions
+
+export const useAppStore = create<AppStore>()(
+  persist(
+    (set, get) => ({
+      // State
+      activeScreen: 'dashboard',
+      theme: 'chatgpt',
+      isLoggedIn: false,
+      isSidebarExpanded: false,
+      isMobileSidebarOpen: false,
+      isPinned: false,
+      activeModelId: 'chatgpt',
+      pendingModelId: null,
+      activeFolder: null,
+
+      // Actions
+      setActiveScreen: (screen) => {
+        const currentScreen = get().activeScreen
+        if (screen !== currentScreen) {
+          set({ activeFolder: null })
+        }
+        set({ activeScreen: screen, isMobileSidebarOpen: false })
+      },
+      setTheme: (theme) => set({ theme }),
+      setIsLoggedIn: (v) => set({ isLoggedIn: v }),
+      setPendingModelId: (id) => set({ pendingModelId: id }),
+      setActiveFolder: (id) => set({ activeFolder: id }),
+      setIsSidebarExpanded: (v) => set({ isSidebarExpanded: v }),
+      setIsMobileSidebarOpen: (v) => set({ isMobileSidebarOpen: v }),
+      setPinned: (v) => set({ isPinned: v }),
+      closeMobileSidebar: () => set({ isMobileSidebarOpen: false }),
     }),
     {
-      name: 'brainbox-app-store',
+      name: STORAGE_KEYS.APP_STORE,
       storage: createJSONStorage(() => localStorage),
-      skipHydration: true, // Mandatory for Next.js to prevent hydration mismatch
+      skipHydration: true,
       partialize: (state) => ({
-        activeTheme: state.activeTheme,
-        isPinned: state.isPinned,
+        theme: state.theme,
         isLoggedIn: state.isLoggedIn,
+        activeModelId: state.activeModelId,
       }),
     }
   )
-);
+)

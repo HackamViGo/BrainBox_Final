@@ -4,11 +4,11 @@
     "generated_by": "HUMAN+AGENT",
     "version": "1.0.0",
     "schema_version": "1",
-    "total_nodes": 14,
+    "total_nodes": 16,
     "coverage": {
-      "skills": "5/5",
+      "skills": "6/6",
       "skill_references": "3/3",
-      "rules": "1/1",
+      "rules": "2/2",
       "workflows": "4/4",
       "tasks": "1/1"
     },
@@ -33,6 +33,19 @@
         ".agents/skills/brainbox-sidebar-navigation/SKILL.md",
         ".agents/skills/brainbox-styling-setup/SKILL.md"
       ],
+      "side_effects": [],
+      "public_api": [],
+      "status": "active"
+    },
+    {
+      "id": ".agents/rules/cursorrules.md",
+      "workspace": "agents",
+      "type": "rule",
+      "responsibility": "Инструкции за Cursor/Antigravity агента. Дефинира Autonomy Rule и насочва към Core и BrainBox специфични правила.",
+      "dependencies": [
+        ".agents/rules/GEMINI.md"
+      ],
+      "dependents": [],
       "side_effects": [],
       "public_api": [],
       "status": "active"
@@ -146,6 +159,19 @@
         ".agents/skills/brainbox-nextjs-migration/SKILL.md"
       ],
       "dependents": [],
+      "side_effects": [],
+      "public_api": [],
+      "status": "active"
+    },
+    {
+      "id": ".agents/skills/supabase/SKILL.md",
+      "workspace": "agents",
+      "type": "skill",
+      "responsibility": "Общ Supabase skill. Покрива CLI, сигурност (RLS), documentationFetching стратегия и най-добри практики за Supabase MCP.",
+      "dependencies": [],
+      "dependents": [
+        ".agents/skills/brainbox-supabase-schema/SKILL.md"
+      ],
       "side_effects": [],
       "public_api": [],
       "status": "active"

@@ -22,7 +22,7 @@ import { usePromptStore } from '../store/usePromptStore';
 import { THEMES, MODELS, ICON_LIBRARY } from '@brainbox/types';
 import { NeuralField } from '@brainbox/ui';
 
-import type { ThemeName, Folder as FolderData, Item } from '@brainbox/types';
+import type { ThemeName, Folder as FolderData, Item, ScreenName } from '@brainbox/types';
 
 interface SidebarProps {
   isMobileOpen?: boolean | undefined;
@@ -68,14 +68,14 @@ export function Sidebar({
   // App Store
   const { 
     activeScreen, 
-    activeTheme: theme, 
+    setActiveScreen,
+    theme, 
     isSidebarExpanded: isExpanded, 
-    toggleSidebar, 
+    setIsSidebarExpanded: setIsExpanded, 
     isPinned, 
     setPinned 
   } = useAppStore();
   
-  const setIsExpanded = (val: boolean) => toggleSidebar(val);
   const setIsPinned = (val: boolean) => setPinned(val);
   
   // TODO: Implement activeModelId in app store if needed
@@ -84,33 +84,29 @@ export function Sidebar({
   
   // Library Store
   const {
-    folders: libraryFolders,
+    libraryFolders,
     items: libraryItems,
-    activeFolder: activeLibraryFolder,
-    setActiveFolder: setLibraryActiveFolder
   } = useLibraryStore();
   
   // Prompt Store
   const {
     folders: promptFolders,
     items: promptItems,
-    activeFolder: activePromptFolder,
-    setActiveFolder: setPromptActiveFolder
   } = usePromptStore();
 
-  const activeFolder = activeScreen === 'library' ? activeLibraryFolder : activePromptFolder;
-  const setActiveFolder = activeScreen === 'library' ? setLibraryActiveFolder : setPromptActiveFolder;
+  const { activeFolder, setActiveFolder } = useAppStore();
 
   const items = activeScreen === 'library' ? libraryItems : promptItems;
-  const setLibraryFolders = (folders: any[]) => useLibraryStore.getState().setFolders(folders);
-  const setPromptFolders = (folders: any[]) => usePromptStore.getState().setFolders(folders);
+  
+  const setLibraryFolders = (folders: any[]) => useLibraryStore.setState({ libraryFolders: folders });
+  const setPromptFolders = (folders: any[]) => usePromptStore.setState({ folders });
   const setItems = (items: any[]) => {
-    if (activeScreen === 'library') useLibraryStore.getState().setItems(items);
-    else usePromptStore.getState().setItems(items);
+    if (activeScreen === 'library') useLibraryStore.setState({ items });
+    else usePromptStore.setState({ items });
   };
-  const setActiveScreen = (screen: string) => {
-    useAppStore.getState().setActiveScreen(screen as any);
-    router.push(`/${screen}`);
+
+  const internalSetActiveScreen = (screen: string) => {
+    setActiveScreen(screen as any);
   };
   // Avoid rewriting component state overrides
   const [slideDirection, setSlideDirection] = useState(1);
@@ -253,19 +249,19 @@ export function Sidebar({
   ];
 
   const globalItems = [
-    { id: 'dashboard', icon: Home, label: 'Dashboard' },
-    { id: 'library', icon: BookOpen, label: 'Library' },
-    { id: 'prompts', icon: Zap, label: 'Prompts' },
-    { id: 'ainexus', icon: MessageSquare, label: 'AI Nexus' },
-    { id: 'workspace', icon: Workflow, label: 'Workspace' },
-    { id: 'analytics', icon: Brain, label: 'Mind Graph' },
-    { id: 'archive', icon: History, label: 'Archive' },
+    { id: 'dashboard' as ScreenName, icon: Home, label: 'Dashboard' },
+    { id: 'library' as ScreenName, icon: BookOpen, label: 'Library' },
+    { id: 'prompts' as ScreenName, icon: Zap, label: 'Prompts' },
+    { id: 'ainexus' as ScreenName, icon: MessageSquare, label: 'AI Nexus' },
+    { id: 'workspace' as ScreenName, icon: Workflow, label: 'Workspace' },
+    { id: 'analytics' as ScreenName, icon: Brain, label: 'Mind Graph' },
+    { id: 'archive' as ScreenName, icon: History, label: 'Archive' },
   ];
 
   const bottomItems = [
-    { id: 'settings', icon: Settings, label: 'Settings' },
-    { id: 'profile', icon: Fingerprint, label: 'Identity' },
-    { id: 'extension', icon: Puzzle, label: 'Extension' },
+    { id: 'settings' as ScreenName, icon: Settings, label: 'Settings' },
+    { id: 'profile' as ScreenName, icon: Fingerprint, label: 'Identity' },
+    { id: 'extension' as ScreenName, icon: Puzzle, label: 'Extension' },
   ];
 
   const feathers = [

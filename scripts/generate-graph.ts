@@ -6,17 +6,12 @@
  * 
  * Семантичните полета (responsibility, side_effects, public_api)
  * НЕ се пипат — те се поддържат от агента.
- * 
- * Употреба:
- *   npx tsx scripts/generate-graph.ts
- *   npx tsx scripts/generate-graph.ts --check   ← само проверка, без запис
  */
 
 import { readFileSync, writeFileSync, existsSync } from 'fs'
 import { resolve, relative, dirname, join } from 'path'
-import { glob } from 'glob'
 
-const ROOT = resolve(__dirname, '../..')  // монорепо root
+const ROOT = resolve(__dirname, '..')  // монорепо root
 const GRAPH_PATH = join(ROOT, 'docs/GRAPH.json')
 const DRY_RUN = process.argv.includes('--check')
 
@@ -27,6 +22,13 @@ function readGraph(): GraphFile {
   // Премахва JS коментари преди JSON.parse (GRAPH.json ги съдържа)
   const clean = raw.replace(/\/\/.*$/gm, '').replace(/,(\s*[}\]])/g, '$1')
   return JSON.parse(clean)
+}
+
+function resolveExt(base: string): string {
+  for (const ext of ['.ts', '.tsx', '/index.ts', '/index.tsx', '']) {
+    if (existsSync(base + ext)) return ext
+  }
+  return ''
 }
 
 function resolveImport(fromFile: string, importPath: string): string | null {
@@ -45,9 +47,10 @@ function resolveImport(fromFile: string, importPath: string): string | null {
     }
     // @/ alias → apps/web-app/
     if (importPath.startsWith('@/')) {
-      return 'apps/web-app/' + importPath.slice(2) + resolveExt(
-        join(ROOT, 'apps/web-app', importPath.slice(2))
-      )
+      const relPath = importPath.slice(2)
+      const fullPath = join(ROOT, 'apps/web-app', relPath)
+      const ext = resolveExt(fullPath)
+      return 'apps/web-app/' + relPath + ext
     }
     return null // external package, skip
   }
@@ -57,13 +60,6 @@ function resolveImport(fromFile: string, importPath: string): string | null {
   const ext = resolveExt(base)
   if (!ext) return null
   return relative(ROOT, base + ext).replace(/\\/g, '/')
-}
-
-function resolveExt(base: string): string {
-  for (const ext of ['.ts', '.tsx', '/index.ts', '/index.tsx', '']) {
-    if (existsSync(base + ext)) return ext
-  }
-  return ''
 }
 
 function extractImports(filePath: string): string[] {
@@ -85,11 +81,12 @@ interface GraphNode {
   id: string
   dependencies: string[]
   dependents: string[]
+  type: string
   [key: string]: unknown
 }
 
 interface GraphFile {
-  metadata: Record<string, unknown>
+  metadata: Record<string, any>
   nodes: GraphNode[]
 }
 
@@ -97,89 +94,71 @@ async function main() {
   console.log('📊 BrainBox Graph Generator\n')
 
   const graph = readGraph()
+  const originalJson = JSON.stringify(graph) // for comparison
+
   const nodeMap = new Map<string, GraphNode>(
     graph.nodes.map(n => [n.id, n])
   )
 
-  let changed = 0
-
   // ── Стъпка 1: Обнови dependencies чрез import анализ ──────────────────────
   for (const node of graph.nodes) {
     if (['config', 'stylesheet', 'rule', 'skill', 'skill-reference',
-         'workflow', 'task-log'].includes(node.type as string)) {
-      continue // тези не се анализират
+         'workflow', 'task-log'].includes(node.type)) {
+      continue
     }
 
     const extracted = extractImports(node.id)
-    const existing = [...node.dependencies].sort()
-    const next = [...new Set([...extracted])].sort()
-
-    if (JSON.stringify(existing) !== JSON.stringify(next)) {
-      console.log(`  ✏️  ${node.id}`)
-      console.log(`     deps: [${existing.join(', ')}]`)
-      console.log(`       → [${next.join(', ')}]\n`)
-      node.dependencies = next
-      changed++
-    }
+    node.dependencies = [...new Set(extracted)].sort()
   }
 
   // ── Стъпка 2: Rebuild dependents от dependencies ────────────────────────────
-  // Reset
   for (const node of graph.nodes) node.dependents = []
 
-  // Rebuild
   for (const node of graph.nodes) {
     for (const dep of node.dependencies) {
       const target = nodeMap.get(dep)
       if (target && !target.dependents.includes(node.id)) {
         target.dependents.push(node.id)
-        changed++
       }
     }
   }
 
-  // ── Стъпка 3: Провери за orphan nodes ──────────────────────────────────────
-  const orphans = graph.nodes.filter(
-    n => n.dependencies.length === 0 && n.dependents.length === 0
-       && !['rule', 'task-log', 'package-entry', 'layout', 'page', 'middleware'].includes(n.type as string)
-  )
-  if (orphans.length > 0) {
-    console.log('⚠️  Orphan nodes (no deps + no dependents):')
-    orphans.forEach(n => console.log(`   - ${n.id}`))
-    console.log()
+  // Sort everything for determinism
+  for (const node of graph.nodes) {
+    node.dependencies.sort()
+    node.dependents.sort()
   }
 
-  // ── Стъпка 4: Провери за липсващи nodes ────────────────────────────────────
+  // ── Стъпка 3: Проверки ─────────────────────────────────────────────────────
   const allReferenced = new Set(graph.nodes.flatMap(n => [...n.dependencies, ...n.dependents]))
   const allIds = new Set(graph.nodes.map(n => n.id))
   const missing = [...allReferenced].filter(id => !allIds.has(id))
   if (missing.length > 0) {
     console.log('❌ Referenced but missing from GRAPH.json:')
     missing.forEach(id => console.log(`   - ${id}`))
-    console.log('   → Добави тези nodes или коригирай references\n')
+    console.log()
   }
 
-  // ── Стъпка 5: Обнови metadata ───────────────────────────────────────────────
+  // ── Стъпка 4: Update Metadata ──────────────────────────────────────────────
   graph.metadata.generated_at = new Date().toISOString()
   graph.metadata.generated_by = 'SCRIPT+AGENT'
   graph.metadata.total_nodes = graph.nodes.length
 
-  // ── Запис ───────────────────────────────────────────────────────────────────
+  // Serialize and Compare
+  const finalJson = JSON.stringify(graph, null, 2)
+  const hasChanges = originalJson !== JSON.stringify(readGraph()) // Compare node/meta data values
+
   if (DRY_RUN) {
-    console.log(`\n✅ Dry run: ${changed} промени открити. Без запис.`)
-    if (missing.length > 0) process.exit(1)
+    if (hasChanges || missing.length > 0) {
+      console.log(`\n❌ GRAPH.json е неактуален.`)
+      process.exit(1)
+    }
+    console.log('\n✅ GRAPH.json е актуален.')
     return
   }
 
-  if (changed > 0) {
-    // Preserve JS comments при запис — записваме raw с коментарите
-    // (прочитаме оригинала, заменяме само nodes секцията)
-    const serialized = JSON.stringify(graph, null, 2)
-    writeFileSync(GRAPH_PATH, serialized, 'utf-8')
-    console.log(`\n✅ GRAPH.json обновен — ${changed} промени.`)
-  } else {
-    console.log('\n✅ GRAPH.json е актуален — няма промени.')
-  }
+  writeFileSync(GRAPH_PATH, finalJson, 'utf-8')
+  console.log(`\n✅ GRAPH.json обновен.`)
 }
 
 main().catch(console.error)
