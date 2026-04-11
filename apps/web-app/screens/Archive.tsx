@@ -32,12 +32,12 @@ export function Archive() {
   }, []);
 
   // Filter items that are "deleted" (in Archive)
-  const archivedItems = allItems.filter((item: Item) => item.deletedAt !== null);
+  const archivedItems = allItems.filter((item: Item) => !!item.deletedAt);
 
   const displayedItems = archivedItems.filter((item: Item) => 
     activeLayer === 'echoes' ? !item.isPermanent : item.isPermanent
   ).sort((a: Item, b: Item) => {
-    return new Date(b.deletedAt!).getTime() - new Date(a.deletedAt!).getTime();
+    return new Date(b.deletedAt || 0).getTime() - new Date(a.deletedAt || 0).getTime();
   });
 
   const toggleSelection = (id: string) => {

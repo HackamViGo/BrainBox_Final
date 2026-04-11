@@ -11,14 +11,17 @@ export interface Item {
   id: string;
   title: string;
   description: string;
-  type: 'chat' | 'prompt';
+  type: 'chat' | 'prompt' | 'capture';
   folderId: string | null;
+  modelId?: string;
+  updatedAt?: string;
   url?: string;
   source?: string;
   theme?: ThemeName;
   content?: string;
   tags?: string[];
   isFrozen?: boolean;
+  isPermanent?: boolean;
   deletedAt?: string;
 }
 

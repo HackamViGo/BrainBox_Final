@@ -33,6 +33,9 @@ interface LibraryActions {
   updateFolder: (id: string, updates: Partial<Folder>) => void
   deleteItem: (id: string) => Promise<void>
   freezeItem: (id: string) => Promise<void>
+  // Helper aliases for the screens
+  addItem: (data: Omit<Item, 'id'>) => Promise<void>
+  addCapture: (data: Omit<Item, 'id' | 'type'>) => Promise<void>
 }
 
 export type LibraryStore = LibraryState & LibraryActions
@@ -214,6 +217,12 @@ export const useLibraryStore = create<LibraryStore>()(
           libraryFolders: state.libraryFolders.map((f) => (f.id === id ? { ...f, ...updates } : f)),
           promptFolders: state.promptFolders.map((f) => (f.id === id ? { ...f, ...updates } : f)),
         })),
+
+      addItem: async (data) => get().createItem(data),
+      
+      addCapture: async (data) => {
+        await get().createItem({ ...data, type: 'capture' })
+      },
     }),
     {
       name: STORAGE_KEYS.LIBRARY_STORE,

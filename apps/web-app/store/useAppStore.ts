@@ -47,6 +47,8 @@ interface AppActions {
   setExpandedFolders: (ids: string[]) => void
   setModalOpen: (modal: 'newFolder' | 'newChat' | 'smartSwitch' | 'apiKey', open: boolean, data?: any) => void
   setActiveModelId: (id: string) => void
+  clearPendingModel: () => void
+  setApiKeyModel: (id: string, name: string) => void
 }
 
 export type AppStore = AppState & AppActions
@@ -141,6 +143,8 @@ export const useAppStore = create<AppStore>()(
         }
       },
       setActiveModelId: (id) => set({ activeModelId: id }),
+      clearPendingModel: () => set({ pendingModelId: null }),
+      setApiKeyModel: (id, name) => set({ apiKeyModelId: id, apiKeyModelName: name }),
     }),
     {
       name: STORAGE_KEYS.APP_STORE,

@@ -24,7 +24,9 @@ export function Dashboard() {
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStart(e.touches[0].clientY);
+    if (e.touches && e.touches[0]) {
+      setTouchStart(e.touches[0].clientY);
+    }
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {

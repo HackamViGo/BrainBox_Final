@@ -1,18 +1,18 @@
 {
   "metadata": {
-    "generated_at": "2026-04-11T08:00:06.672Z",
+    "generated_at": "2026-04-11T12:58:18.472Z",
     "generated_by": "SCRIPT+AGENT",
     "version": "1.0.0",
     "schema_version": "1",
-    "total_nodes": 59,
+    "total_nodes": 74,
     "coverage": {
       "tier1_packages": "4/4",
       "tier2_app_core": "13/12",
       "tier3_screens": "11/11",
-      "tier3_components": "10/10",
+      "tier3_components": "23/23",
       "tier3_stores": "3/3",
       "tier3_actions": "3/3",
-      "tier3_lib": "3/3",
+      "tier3_lib": "5/5",
       "agents": "5/5"
     }
   },
@@ -26,8 +26,15 @@
       "dependents": [
         "apps/web-app/actions/library.ts",
         "apps/web-app/components/Sidebar.tsx",
+        "apps/web-app/components/prompts/FrameworksView.tsx",
+        "apps/web-app/components/prompts/SavedPromptsView.tsx",
+        "apps/web-app/components/workspace/AssetLibrary.tsx",
         "apps/web-app/hooks/useScrollTransition.ts",
         "apps/web-app/hooks/useThemeCycle.ts",
+        "apps/web-app/screens/AINexus.tsx",
+        "apps/web-app/screens/Archive.tsx",
+        "apps/web-app/screens/Library.tsx",
+        "apps/web-app/screens/Settings.tsx",
         "apps/web-app/store/useAppStore.ts",
         "apps/web-app/store/useLibraryStore.ts",
         "apps/web-app/store/usePromptStore.ts",
@@ -109,7 +116,9 @@
       "responsibility": "Входна точка на @brainbox/ui. Експортира визуалните shared компоненти NeuralField и AmbientLight.",
       "dependencies": [],
       "dependents": [
-        "apps/web-app/components/Sidebar.tsx"
+        "apps/web-app/components/NewFolderModal.tsx",
+        "apps/web-app/components/Sidebar.tsx",
+        "apps/web-app/screens/Settings.tsx"
       ],
       "side_effects": [],
       "public_api": [
@@ -160,6 +169,8 @@
       "dependencies": [],
       "dependents": [
         "apps/web-app/components/ApiKeyModal.tsx",
+        "apps/web-app/components/NewChatModal.tsx",
+        "apps/web-app/components/NewFolderModal.tsx",
         "apps/web-app/components/Sidebar.tsx",
         "apps/web-app/components/SmartSwitchModal.tsx",
         "apps/web-app/store/useAppStore.ts",
@@ -290,7 +301,6 @@
       "type": "page",
       "responsibility": "SPA shell — единствената страница на приложението. Рендерира NeuralField (персистира!), AmbientLight, Sidebar, Login overlay и всичките 11 screen компонента условно. Управлява theme auto-cycle и scroll transitions.",
       "dependencies": [
-        "apps/web-app/components/Login.tsx",
         "apps/web-app/components/PersistentShell.tsx",
         "apps/web-app/hooks/useScrollTransition.ts",
         "apps/web-app/hooks/useThemeCycle.ts",
@@ -299,8 +309,7 @@
         "apps/web-app/screens/Dashboard.tsx",
         "apps/web-app/screens/Extension.tsx",
         "apps/web-app/screens/Identity.tsx",
-        "apps/web-app/screens/Library.tsx",
-        "apps/web-app/screens/Prompts.tsx",
+        "apps/web-app/screens/Login.tsx",
         "apps/web-app/screens/Settings.tsx",
         "apps/web-app/store/useAppStore.ts"
       ],
@@ -371,11 +380,19 @@
         "apps/web-app/app/page.tsx",
         "apps/web-app/app/providers.tsx",
         "apps/web-app/components/ApiKeyModal.tsx",
+        "apps/web-app/components/NewChatModal.tsx",
+        "apps/web-app/components/NewFolderModal.tsx",
         "apps/web-app/components/PersistentShell.tsx",
         "apps/web-app/components/Sidebar.tsx",
         "apps/web-app/components/SmartSwitchModal.tsx",
         "apps/web-app/hooks/useScrollTransition.ts",
-        "apps/web-app/hooks/useThemeCycle.ts"
+        "apps/web-app/hooks/useThemeCycle.ts",
+        "apps/web-app/screens/AINexus.tsx",
+        "apps/web-app/screens/Dashboard.tsx",
+        "apps/web-app/screens/Extension.tsx",
+        "apps/web-app/screens/Library.tsx",
+        "apps/web-app/screens/Login.tsx",
+        "apps/web-app/screens/Prompts.tsx"
       ],
       "side_effects": [
         "localStorage persist (skipHydration:true — ръчна рехидратация в providers.tsx)"
@@ -410,7 +427,14 @@
       ],
       "dependents": [
         "apps/web-app/app/providers.tsx",
-        "apps/web-app/components/Sidebar.tsx"
+        "apps/web-app/components/NewChatModal.tsx",
+        "apps/web-app/components/NewFolderModal.tsx",
+        "apps/web-app/components/Sidebar.tsx",
+        "apps/web-app/components/workspace/AssetLibrary.tsx",
+        "apps/web-app/screens/Archive.tsx",
+        "apps/web-app/screens/Library.tsx",
+        "apps/web-app/screens/Prompts.tsx",
+        "apps/web-app/screens/Settings.tsx"
       ],
       "side_effects": [
         "Supabase DB calls чрез Server Actions при всяка мутация"
@@ -490,7 +514,11 @@
       "dependencies": [
         "apps/web-app/lib/supabase/server.ts"
       ],
-      "dependents": [],
+      "dependents": [
+        "apps/web-app/screens/AINexus.tsx",
+        "apps/web-app/screens/Identity.tsx",
+        "apps/web-app/screens/Login.tsx"
+      ],
       "side_effects": [
         "Supabase Auth session write (cookies)"
       ],
@@ -552,7 +580,11 @@
       "type": "module",
       "responsibility": "Wrapper около @google/genai SDK. Мигриран от Vite src/services/gemini.ts. Използва server-only GEMINI_API_KEY.",
       "dependencies": [],
-      "dependents": [],
+      "dependents": [
+        "apps/web-app/components/prompts/RefineView.tsx",
+        "apps/web-app/screens/AINexus.tsx",
+        "apps/web-app/screens/Library.tsx"
+      ],
       "side_effects": [
         "External HTTP call към Google AI API"
       ],
@@ -647,7 +679,8 @@
         "packages/utils/src/index.ts"
       ],
       "dependents": [
-        "apps/web-app/components/PersistentShell.tsx"
+        "apps/web-app/components/PersistentShell.tsx",
+        "apps/web-app/screens/AINexus.tsx"
       ],
       "side_effects": [],
       "public_api": [
@@ -669,7 +702,10 @@
         "packages/utils/src/index.ts"
       ],
       "dependents": [
-        "apps/web-app/components/PersistentShell.tsx"
+        "apps/web-app/components/PersistentShell.tsx",
+        "apps/web-app/components/prompts/RefineView.tsx",
+        "apps/web-app/screens/AINexus.tsx",
+        "apps/web-app/screens/Library.tsx"
       ],
       "side_effects": [
         "localStorage write за API ключове"
@@ -685,7 +721,9 @@
       "type": "component",
       "responsibility": "Custom ReactFlow node с glassmorphism стил. Представлява чат/prompt item на Workspace canvas.",
       "dependencies": [],
-      "dependents": [],
+      "dependents": [
+        "apps/web-app/screens/Workspace.tsx"
+      ],
       "side_effects": [],
       "public_api": [
         "GlassNode(props: NodeProps): JSX.Element"
@@ -698,7 +736,9 @@
       "type": "component",
       "responsibility": "Custom ReactFlow node тип sticky note за бележки на Workspace canvas.",
       "dependencies": [],
-      "dependents": [],
+      "dependents": [
+        "apps/web-app/screens/Workspace.tsx"
+      ],
       "side_effects": [],
       "public_api": [
         "StickyNode(props: NodeProps): JSX.Element"
@@ -724,7 +764,9 @@
       "type": "component",
       "responsibility": "Custom ReactFlow edge с анимирана dash pattern — визуализира връзки между nodes на Workspace.",
       "dependencies": [],
-      "dependents": [],
+      "dependents": [
+        "apps/web-app/screens/Workspace.tsx"
+      ],
       "side_effects": [],
       "public_api": [
         "NeuralEdge(props: EdgeProps): JSX.Element"
@@ -737,7 +779,9 @@
       "type": "component",
       "responsibility": "Side panel в Workspace за AI-assisted анализ на селектиран node.",
       "dependencies": [],
-      "dependents": [],
+      "dependents": [
+        "apps/web-app/screens/Workspace.tsx"
+      ],
       "side_effects": [],
       "public_api": [
         "WhisperPanel({ selectedNode: Node | null }): JSX.Element"
@@ -749,8 +793,13 @@
       "workspace": "web-app",
       "type": "component",
       "responsibility": "Drag source панел вляво в Workspace. Показва items от Library store за drag-and-drop към canvas.",
-      "dependencies": [],
-      "dependents": [],
+      "dependencies": [
+        "apps/web-app/store/useLibraryStore.ts",
+        "packages/types/src/index.ts"
+      ],
+      "dependents": [
+        "apps/web-app/screens/Workspace.tsx"
+      ],
       "side_effects": [],
       "public_api": [
         "AssetLibrary(): JSX.Element"
@@ -762,7 +811,9 @@
       "workspace": "web-app",
       "type": "screen",
       "responsibility": "Начален екран. NeuralField в brain режим. Scroll надолу → Extension. Показва hero текст.",
-      "dependencies": [],
+      "dependencies": [
+        "apps/web-app/store/useAppStore.ts"
+      ],
       "dependents": [
         "apps/web-app/app/page.tsx"
       ],
@@ -777,7 +828,9 @@
       "workspace": "web-app",
       "type": "screen",
       "responsibility": "Информационен екран за Chrome extension. NeuralField в extension режим (scatter particles). Scroll нагоре → Dashboard.",
-      "dependencies": [],
+      "dependencies": [
+        "apps/web-app/store/useAppStore.ts"
+      ],
       "dependents": [
         "apps/web-app/app/page.tsx"
       ],
@@ -792,8 +845,13 @@
       "workspace": "web-app",
       "type": "screen",
       "responsibility": "Login overlay с zoom-out exit анимация. Brutalyst + glassmorphism дизайн. При успех → onLogin() в page.tsx.",
-      "dependencies": [],
-      "dependents": [],
+      "dependencies": [
+        "apps/web-app/actions/auth.ts",
+        "apps/web-app/store/useAppStore.ts"
+      ],
+      "dependents": [
+        "apps/web-app/app/page.tsx"
+      ],
       "side_effects": [
         "Supabase signInWithPassword"
       ],
@@ -807,10 +865,14 @@
       "workspace": "web-app",
       "type": "screen",
       "responsibility": "Управление на чат сесии. Folder tree навигация, search, Gemini summarize/analyze, drag source към Workspace.",
-      "dependencies": [],
-      "dependents": [
-        "apps/web-app/app/page.tsx"
+      "dependencies": [
+        "apps/web-app/components/ApiKeyModal.tsx",
+        "apps/web-app/lib/gemini.ts",
+        "apps/web-app/store/useAppStore.ts",
+        "apps/web-app/store/useLibraryStore.ts",
+        "packages/types/src/index.ts"
       ],
+      "dependents": [],
       "side_effects": [
         "Gemini API call за summarize/analyze"
       ],
@@ -824,10 +886,17 @@
       "workspace": "web-app",
       "type": "screen",
       "responsibility": "Prompt engineering hub с 4 sub-views: Hub (daily prompt + captures), Frameworks (7x7 matrix), Refine (7 Crystals + Gemini), Saved (folder-based list).",
-      "dependencies": [],
-      "dependents": [
-        "apps/web-app/app/page.tsx"
+      "dependencies": [
+        "apps/web-app/components/prompts/CapturesView.tsx",
+        "apps/web-app/components/prompts/FrameworksView.tsx",
+        "apps/web-app/components/prompts/HubView.tsx",
+        "apps/web-app/components/prompts/RefineView.tsx",
+        "apps/web-app/components/prompts/SavedPromptsView.tsx",
+        "apps/web-app/components/prompts/ViewWrapper.tsx",
+        "apps/web-app/store/useAppStore.ts",
+        "apps/web-app/store/useLibraryStore.ts"
       ],
+      "dependents": [],
       "side_effects": [
         "Gemini API call за Refine Crystals"
       ],
@@ -841,7 +910,14 @@
       "workspace": "web-app",
       "type": "screen",
       "responsibility": "AI model selection hub. Избирането на модел мутира глобалната тема. SmartSwitchModal за confirmation. Matte style chat bubbles.",
-      "dependencies": [],
+      "dependencies": [
+        "apps/web-app/actions/auth.ts",
+        "apps/web-app/components/ApiKeyModal.tsx",
+        "apps/web-app/components/SmartSwitchModal.tsx",
+        "apps/web-app/lib/gemini.ts",
+        "apps/web-app/store/useAppStore.ts",
+        "packages/types/src/index.ts"
+      ],
       "dependents": [
         "apps/web-app/app/page.tsx"
       ],
@@ -858,7 +934,13 @@
       "workspace": "web-app",
       "type": "screen",
       "responsibility": "Visual thinking canvas с ReactFlow. Drag-and-drop от AssetLibrary. Custom nodes (GlassNode, StickyNode) и edges (NeuralEdge). Dynamic import — ssr:false.",
-      "dependencies": [],
+      "dependencies": [
+        "apps/web-app/components/workspace/AssetLibrary.tsx",
+        "apps/web-app/components/workspace/GlassNode.tsx",
+        "apps/web-app/components/workspace/NeuralEdge.tsx",
+        "apps/web-app/components/workspace/StickyNode.tsx",
+        "apps/web-app/components/workspace/WhisperPanel.tsx"
+      ],
       "dependents": [],
       "side_effects": [
         "ReactFlow canvas — browser only (dynamic ssr:false)"
@@ -888,7 +970,10 @@
       "workspace": "web-app",
       "type": "screen",
       "responsibility": "The Vault — Echoes (soft deleted) и Artifacts (frozen) items. NeuralField в monochrome + 0.25x speed. Restore или permanent delete.",
-      "dependencies": [],
+      "dependencies": [
+        "apps/web-app/store/useLibraryStore.ts",
+        "packages/types/src/index.ts"
+      ],
       "dependents": [
         "apps/web-app/app/page.tsx"
       ],
@@ -903,7 +988,11 @@
       "workspace": "web-app",
       "type": "screen",
       "responsibility": "Глобални настройки: API ключове, language, auto-sync, data export/clear. Supabase update за user preferences.",
-      "dependencies": [],
+      "dependencies": [
+        "apps/web-app/store/useLibraryStore.ts",
+        "packages/types/src/index.ts",
+        "packages/ui/src/index.ts"
+      ],
       "dependents": [
         "apps/web-app/app/page.tsx"
       ],
@@ -921,7 +1010,9 @@
       "workspace": "web-app",
       "type": "screen",
       "responsibility": "Потребителски профил. IdentitySphere canvas — цвета зависи от най-използвания AI модел. Neural Charge (tokens) и Intelligence Tier метрики.",
-      "dependencies": [],
+      "dependencies": [
+        "apps/web-app/actions/auth.ts"
+      ],
       "dependents": [
         "apps/web-app/app/page.tsx"
       ],
@@ -1021,9 +1112,7 @@
       "type": "component",
       "responsibility": "Login ковъртюр (overlay) с анимации.",
       "dependencies": [],
-      "dependents": [
-        "apps/web-app/app/page.tsx"
-      ],
+      "dependents": [],
       "side_effects": [],
       "public_api": [
         "Login({ onLogin })"
@@ -1047,6 +1136,287 @@
         "TooltipContent",
         "TooltipProvider",
         "TooltipTrigger"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "apps/web-app/components/NewChatModal.tsx",
+      "workspace": "web-app",
+      "type": "component",
+      "responsibility": "Модал за запазване на нов чат в Library. Позволява избор на сорс (ChatGPT, Claude, Gemini) и папка.",
+      "dependencies": [
+        "apps/web-app/components/ui/button.tsx",
+        "apps/web-app/components/ui/dialog.tsx",
+        "apps/web-app/components/ui/input.tsx",
+        "apps/web-app/components/ui/scroll-area.tsx",
+        "apps/web-app/store/useAppStore.ts",
+        "apps/web-app/store/useLibraryStore.ts",
+        "packages/utils/src/index.ts"
+      ],
+      "dependents": [
+        "apps/web-app/components/PersistentShell.tsx"
+      ],
+      "side_effects": [],
+      "public_api": [
+        "NewChatModal(): JSX.Element"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "apps/web-app/components/NewFolderModal.tsx",
+      "workspace": "web-app",
+      "type": "component",
+      "responsibility": "Модал за създаване на нова папка. Позволява избор на икона от ICON_LIBRARY.",
+      "dependencies": [
+        "apps/web-app/components/ui/button.tsx",
+        "apps/web-app/components/ui/dialog.tsx",
+        "apps/web-app/components/ui/input.tsx",
+        "apps/web-app/components/ui/scroll-area.tsx",
+        "apps/web-app/store/useAppStore.ts",
+        "apps/web-app/store/useLibraryStore.ts",
+        "packages/ui/src/index.ts",
+        "packages/utils/src/index.ts"
+      ],
+      "dependents": [
+        "apps/web-app/components/PersistentShell.tsx"
+      ],
+      "side_effects": [],
+      "public_api": [
+        "NewFolderModal(): JSX.Element"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "apps/web-app/components/ui/button.tsx",
+      "workspace": "web-app",
+      "type": "component",
+      "responsibility": "shadcn/ui button компонент.",
+      "dependencies": [
+        "apps/web-app/lib/utils.ts"
+      ],
+      "dependents": [
+        "apps/web-app/components/ApiKeyModal.tsx",
+        "apps/web-app/components/NewChatModal.tsx",
+        "apps/web-app/components/NewFolderModal.tsx",
+        "apps/web-app/components/SmartSwitchModal.tsx",
+        "apps/web-app/components/ui/dialog.tsx"
+      ],
+      "side_effects": [],
+      "public_api": [
+        "Button: React.ForwardRefExoticComponent<...>"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "apps/web-app/components/ui/dialog.tsx",
+      "workspace": "web-app",
+      "type": "component",
+      "responsibility": "shadcn/ui dialog/modal примитиви.",
+      "dependencies": [
+        "apps/web-app/components/ui/button.tsx",
+        "apps/web-app/lib/utils.ts"
+      ],
+      "dependents": [
+        "apps/web-app/components/ApiKeyModal.tsx",
+        "apps/web-app/components/NewChatModal.tsx",
+        "apps/web-app/components/NewFolderModal.tsx",
+        "apps/web-app/components/SmartSwitchModal.tsx"
+      ],
+      "side_effects": [],
+      "public_api": [
+        "Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogTrigger"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "apps/web-app/components/ui/input.tsx",
+      "workspace": "web-app",
+      "type": "component",
+      "responsibility": "shadcn/ui input компонент.",
+      "dependencies": [
+        "apps/web-app/lib/utils.ts"
+      ],
+      "dependents": [
+        "apps/web-app/components/ApiKeyModal.tsx",
+        "apps/web-app/components/NewChatModal.tsx",
+        "apps/web-app/components/NewFolderModal.tsx"
+      ],
+      "side_effects": [],
+      "public_api": [
+        "Input: React.ForwardRefExoticComponent<...>"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "apps/web-app/components/ui/scroll-area.tsx",
+      "workspace": "web-app",
+      "type": "component",
+      "responsibility": "shadcn/ui scroll-area компонент.",
+      "dependencies": [
+        "apps/web-app/lib/utils.ts"
+      ],
+      "dependents": [
+        "apps/web-app/components/ApiKeyModal.tsx",
+        "apps/web-app/components/NewChatModal.tsx",
+        "apps/web-app/components/NewFolderModal.tsx"
+      ],
+      "side_effects": [],
+      "public_api": [
+        "ScrollArea, ScrollBar"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "apps/web-app/components/prompts/HubView.tsx",
+      "workspace": "web-app",
+      "type": "component",
+      "responsibility": "Централен хъб за навигация в Prompts екрана.",
+      "dependencies": [],
+      "dependents": [
+        "apps/web-app/screens/Prompts.tsx"
+      ],
+      "side_effects": [],
+      "public_api": [
+        "HubView({ onNavigate: (view: SubView) => void }): JSX.Element"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "apps/web-app/components/prompts/FrameworksView.tsx",
+      "workspace": "web-app",
+      "type": "component",
+      "responsibility": "Списък с AI prompt frameworks (RTF, CREATE, etc.).",
+      "dependencies": [
+        "apps/web-app/lib/prompts-data.ts",
+        "packages/types/src/index.ts"
+      ],
+      "dependents": [
+        "apps/web-app/screens/Prompts.tsx"
+      ],
+      "side_effects": [],
+      "public_api": [
+        "FrameworksView({ onBack: () => void, setTheme: (t: ThemeName) => void }): JSX.Element"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "apps/web-app/components/prompts/RefineView.tsx",
+      "workspace": "web-app",
+      "type": "component",
+      "responsibility": "AI Refine интерфейс със 7 класа кристали за оптимизация.",
+      "dependencies": [
+        "apps/web-app/components/ApiKeyModal.tsx",
+        "apps/web-app/components/prompts/ScrollHint.tsx",
+        "apps/web-app/lib/gemini.ts",
+        "apps/web-app/lib/prompts-data.ts"
+      ],
+      "dependents": [
+        "apps/web-app/screens/Prompts.tsx"
+      ],
+      "side_effects": [
+        "API calls към Gemini"
+      ],
+      "public_api": [
+        "RefineView({ onBack: () => void, initialInput?: string, onSave: (t: string) => void }): JSX.Element"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "apps/web-app/components/prompts/CapturesView.tsx",
+      "workspace": "web-app",
+      "type": "component",
+      "responsibility": "Вертикален feed за необработени captures от разширението.",
+      "dependencies": [],
+      "dependents": [
+        "apps/web-app/screens/Prompts.tsx"
+      ],
+      "side_effects": [],
+      "public_api": [
+        "CapturesView({ onBack: () => void, onRefine: (t: string) => void, onSaveToPrompts: (t: string) => void, captures: any[], onDrop: (e: DragEvent) => void }): JSX.Element"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "apps/web-app/components/prompts/SavedPromptsView.tsx",
+      "workspace": "web-app",
+      "type": "component",
+      "responsibility": "Списък със запазени промпти.",
+      "dependencies": [
+        "packages/types/src/index.ts"
+      ],
+      "dependents": [
+        "apps/web-app/screens/Prompts.tsx"
+      ],
+      "side_effects": [],
+      "public_api": [
+        "SavedPromptsView(): JSX.Element"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "apps/web-app/components/prompts/ViewWrapper.tsx",
+      "workspace": "web-app",
+      "type": "component",
+      "responsibility": "Анимиран wrapper за преходите в Prompts екрана.",
+      "dependencies": [],
+      "dependents": [
+        "apps/web-app/screens/Prompts.tsx"
+      ],
+      "side_effects": [],
+      "public_api": [
+        "ViewWrapper({ children: ReactNode, id: string }): JSX.Element"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "apps/web-app/lib/utils.ts",
+      "workspace": "web-app",
+      "type": "module",
+      "responsibility": "Локален cn helper за web-app компоненти.",
+      "dependencies": [],
+      "dependents": [
+        "apps/web-app/components/ui/button.tsx",
+        "apps/web-app/components/ui/dialog.tsx",
+        "apps/web-app/components/ui/input.tsx",
+        "apps/web-app/components/ui/scroll-area.tsx",
+        "apps/web-app/components/ui/tooltip.tsx"
+      ],
+      "side_effects": [],
+      "public_api": [
+        "cn(...inputs: ClassValue[]): string"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "apps/web-app/lib/prompts-data.ts",
+      "workspace": "web-app",
+      "type": "module",
+      "responsibility": "Статични данни за Prompts екрана — Crystal дефиниции, Matrix категории и икони.",
+      "dependencies": [],
+      "dependents": [
+        "apps/web-app/components/prompts/FrameworksView.tsx",
+        "apps/web-app/components/prompts/RefineView.tsx"
+      ],
+      "side_effects": [],
+      "public_api": [
+        "MATRIX_DATA",
+        "REFINE_CRYSTALS"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "apps/web-app/components/prompts/ScrollHint.tsx",
+      "workspace": "web-app",
+      "type": "component",
+      "responsibility": "Визуален подсказвач за скролиране в текстови контейнери. Използва ResizeObserver.",
+      "dependencies": [],
+      "dependents": [
+        "apps/web-app/components/prompts/RefineView.tsx"
+      ],
+      "side_effects": [],
+      "public_api": [
+        "useScrollHint(ref, deps)",
+        "ScrollHint({ show })"
       ],
       "status": "active"
     }

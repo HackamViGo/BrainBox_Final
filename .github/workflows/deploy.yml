@@ -16,8 +16,14 @@ jobs:
         with:
           node-version: 20
           cache: 'pnpm'
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm build
-      # Deployment specific step (e.g. Vercel) would go here
-      - name: Deploy Summary
-        run: echo "Production build successful. Ready for deployment."
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm --filter web-app build
+
+      - name: Deploy
+        run: echo "Deploy command goes here (e.g., vercel deploy --prod)"
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
