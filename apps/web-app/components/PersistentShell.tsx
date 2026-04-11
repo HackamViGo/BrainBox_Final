@@ -9,10 +9,16 @@ import { usePathname } from 'next/navigation';
 
 const NeuralField = dynamic(() => import('@brainbox/ui').then(mod => mod.NeuralField), { ssr: false });
 const AmbientLight = dynamic(() => import('@brainbox/ui').then(mod => mod.AmbientLight), { ssr: false });
+import { ApiKeyModal } from './ApiKeyModal';
+import { SmartSwitchModal } from './SmartSwitchModal';
+import { NewFolderModal } from './NewFolderModal';
+import { NewChatModal } from './NewChatModal';
 
 export function PersistentShell({ children }: { children: React.ReactNode }) {
-  const { activeScreen, theme, setActiveScreen } = useAppStore();
-  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+  const { 
+    activeScreen, theme, setActiveScreen,
+    isMobileSidebarOpen, setIsMobileSidebarOpen
+  } = useAppStore();
   const pathname = usePathname();
 
   React.useEffect(() => {
@@ -44,14 +50,17 @@ export function PersistentShell({ children }: { children: React.ReactNode }) {
         </div>
       </header>
       
-      <Sidebar 
-        isMobileOpen={isMobileSidebarOpen}
-        onCloseMobile={() => setIsMobileSidebarOpen(false)}
-      />
+      <Sidebar />
       
       <main className="flex-1 lg:ml-20 relative h-full overflow-hidden pt-16 lg:pt-0">
         {children}
       </main>
+
+      {/* Global Modals */}
+      <SmartSwitchModal />
+      <ApiKeyModal />
+      <NewFolderModal />
+      <NewChatModal />
     </div>
   );
 }

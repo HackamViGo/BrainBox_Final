@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "generated_at": "2026-04-11T07:48:01.492Z",
+    "generated_at": "2026-04-11T08:00:06.672Z",
     "generated_by": "SCRIPT+AGENT",
     "version": "1.0.0",
     "schema_version": "1",
@@ -159,6 +159,9 @@
       "responsibility": "Входна точка на @brainbox/utils. Utility функции споделени между всички workspaces.",
       "dependencies": [],
       "dependents": [
+        "apps/web-app/components/ApiKeyModal.tsx",
+        "apps/web-app/components/Sidebar.tsx",
+        "apps/web-app/components/SmartSwitchModal.tsx",
         "apps/web-app/store/useAppStore.ts",
         "apps/web-app/store/useLibraryStore.ts"
       ],
@@ -249,10 +252,16 @@
       "type": "component",
       "responsibility": "SPA shell wrapper. Управлява персистиращите анимации (NeuralField, AmbientLight), мобилната навигация и синхронизацията на Zustand state с Next.js URL.",
       "dependencies": [
+        "apps/web-app/components/ApiKeyModal.tsx",
+        "apps/web-app/components/NewChatModal.tsx",
+        "apps/web-app/components/NewFolderModal.tsx",
         "apps/web-app/components/Sidebar.tsx",
+        "apps/web-app/components/SmartSwitchModal.tsx",
         "apps/web-app/store/useAppStore.ts"
       ],
-      "dependents": [],
+      "dependents": [
+        "apps/web-app/app/page.tsx"
+      ],
       "side_effects": [
         "useEffect: sync activeScreen with pathname"
       ],
@@ -282,6 +291,7 @@
       "responsibility": "SPA shell — единствената страница на приложението. Рендерира NeuralField (персистира!), AmbientLight, Sidebar, Login overlay и всичките 11 screen компонента условно. Управлява theme auto-cycle и scroll transitions.",
       "dependencies": [
         "apps/web-app/components/Login.tsx",
+        "apps/web-app/components/PersistentShell.tsx",
         "apps/web-app/hooks/useScrollTransition.ts",
         "apps/web-app/hooks/useThemeCycle.ts",
         "apps/web-app/screens/AINexus.tsx",
@@ -360,8 +370,10 @@
       "dependents": [
         "apps/web-app/app/page.tsx",
         "apps/web-app/app/providers.tsx",
+        "apps/web-app/components/ApiKeyModal.tsx",
         "apps/web-app/components/PersistentShell.tsx",
         "apps/web-app/components/Sidebar.tsx",
+        "apps/web-app/components/SmartSwitchModal.tsx",
         "apps/web-app/hooks/useScrollTransition.ts",
         "apps/web-app/hooks/useThemeCycle.ts"
       ],
@@ -442,9 +454,7 @@
       "dependencies": [
         "packages/types/src/index.ts"
       ],
-      "dependents": [
-        "apps/web-app/components/Sidebar.tsx"
-      ],
+      "dependents": [],
       "side_effects": [],
       "public_api": [],
       "status": "active"
@@ -610,9 +620,9 @@
       "dependencies": [
         "apps/web-app/store/useAppStore.ts",
         "apps/web-app/store/useLibraryStore.ts",
-        "apps/web-app/store/usePromptStore.ts",
         "packages/types/src/index.ts",
-        "packages/ui/src/index.ts"
+        "packages/ui/src/index.ts",
+        "packages/utils/src/index.ts"
       ],
       "dependents": [
         "apps/web-app/components/PersistentShell.tsx"
@@ -630,8 +640,15 @@
       "workspace": "web-app",
       "type": "component",
       "responsibility": "Confirmation modal при смяна на AI модел от Sidebar. Появява се когато pendingModelId е setнат.",
-      "dependencies": [],
-      "dependents": [],
+      "dependencies": [
+        "apps/web-app/components/ui/button.tsx",
+        "apps/web-app/components/ui/dialog.tsx",
+        "apps/web-app/store/useAppStore.ts",
+        "packages/utils/src/index.ts"
+      ],
+      "dependents": [
+        "apps/web-app/components/PersistentShell.tsx"
+      ],
       "side_effects": [],
       "public_api": [
         "SmartSwitchModal(): JSX.Element"
@@ -643,8 +660,17 @@
       "workspace": "web-app",
       "type": "component",
       "responsibility": "Modal за въвеждане на API ключове за AI модели. Съхранява в localStorage.",
-      "dependencies": [],
-      "dependents": [],
+      "dependencies": [
+        "apps/web-app/components/ui/button.tsx",
+        "apps/web-app/components/ui/dialog.tsx",
+        "apps/web-app/components/ui/input.tsx",
+        "apps/web-app/components/ui/scroll-area.tsx",
+        "apps/web-app/store/useAppStore.ts",
+        "packages/utils/src/index.ts"
+      ],
+      "dependents": [
+        "apps/web-app/components/PersistentShell.tsx"
+      ],
       "side_effects": [
         "localStorage write за API ключове"
       ],

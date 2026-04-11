@@ -4,11 +4,11 @@
     "generated_by": "HUMAN+AGENT",
     "version": "1.0.0",
     "schema_version": "1",
-    "total_nodes": 16,
+    "total_nodes": 27,
     "coverage": {
       "skills": "6/6",
       "skill_references": "3/3",
-      "rules": "2/2",
+      "rules": "11/11",
       "workflows": "4/4",
       "tasks": "1/1"
     },
@@ -43,12 +43,102 @@
       "type": "rule",
       "responsibility": "Инструкции за Cursor/Antigravity агента. Дефинира Autonomy Rule и насочва към Core и BrainBox специфични правила.",
       "dependencies": [
-        ".agents/rules/GEMINI.md"
+        ".agents/rules/GEMINI.md",
+        ".agents/rules/core/task-management.md",
+        ".agents/rules/core/documentation.md",
+        ".agents/rules/core/testing.md",
+        ".agents/rules/core/commits.md",
+        ".agents/rules/core/ci-cd.md",
+        ".agents/rules/brainbox/code-standards.md",
+        ".agents/rules/brainbox/architecture.md",
+        ".agents/rules/brainbox/hooks.md",
+        ".agents/rules/brainbox/workflows.md"
       ],
       "dependents": [],
       "side_effects": [],
       "public_api": [],
       "status": "active"
+    },
+    {
+      "id": ".agents/rules/core/task-management.md",
+      "workspace": "agents",
+      "type": "rule",
+      "responsibility": "Core Task Management: Plan → Verify → Execute → Document цикъла.",
+      "dependencies": [],
+      "dependents": [".agents/rules/cursorrules.md"],
+      "side_effects": [], "public_api": [], "status": "active"
+    },
+    {
+      "id": ".agents/rules/core/documentation.md",
+      "workspace": "agents",
+      "type": "rule",
+      "responsibility": "Core Documentation: DECISIONS.md (ADR), README.md и inline JSDoc правила.",
+      "dependencies": [],
+      "dependents": [".agents/rules/cursorrules.md"],
+      "side_effects": [], "public_api": [], "status": "active"
+    },
+    {
+      "id": ".agents/rules/core/testing.md",
+      "workspace": "agents",
+      "type": "rule",
+      "responsibility": "Core Testing: Кога се пишат тестове, структура на __tests__ и Playwright E2E.",
+      "dependencies": [],
+      "dependents": [".agents/rules/cursorrules.md"],
+      "side_effects": [], "public_api": [], "status": "active"
+    },
+    {
+      "id": ".agents/rules/core/commits.md",
+      "workspace": "agents",
+      "type": "rule",
+      "responsibility": "Core Commits: Conventional Commits стандарти (feat, fix, chore).",
+      "dependencies": [],
+      "dependents": [".agents/rules/cursorrules.md"],
+      "side_effects": [], "public_api": [], "status": "active"
+    },
+    {
+      "id": ".agents/rules/core/ci-cd.md",
+      "workspace": "agents",
+      "type": "rule",
+      "responsibility": "Core CI/CD: GitHub Actions структура (ci.yml, e2e.yml) и PR правила.",
+      "dependencies": [],
+      "dependents": [".agents/rules/cursorrules.md"],
+      "side_effects": [], "public_api": [], "status": "active"
+    },
+    {
+      "id": ".agents/rules/brainbox/code-standards.md",
+      "workspace": "agents",
+      "type": "rule",
+      "responsibility": "BrainBox Code Standards: Next.js 16.2, monorepo imports, TS strict mode, Tailwind v4.",
+      "dependencies": [],
+      "dependents": [".agents/rules/cursorrules.md"],
+      "side_effects": [], "public_api": [], "status": "active"
+    },
+    {
+      "id": ".agents/rules/brainbox/architecture.md",
+      "workspace": "agents",
+      "type": "rule",
+      "responsibility": "BrainBox Architecture: SPA Shell, NeuralField persistence, Zustand persist/skipHydration.",
+      "dependencies": [],
+      "dependents": [".agents/rules/cursorrules.md"],
+      "side_effects": [], "public_api": [], "status": "active"
+    },
+    {
+      "id": ".agents/rules/brainbox/hooks.md",
+      "workspace": "agents",
+      "type": "rule",
+      "responsibility": "BrainBox Hooks: Кога се прави custom hook и задължителни hooks списък.",
+      "dependencies": [],
+      "dependents": [".agents/rules/cursorrules.md"],
+      "side_effects": [], "public_api": [], "status": "active"
+    },
+    {
+      "id": ".agents/rules/brainbox/workflows.md",
+      "workspace": "agents",
+      "type": "rule",
+      "responsibility": "BrainBox Workflows: Кога се прави workflow и задължителни workflows списък.",
+      "dependencies": [],
+      "dependents": [".agents/rules/cursorrules.md"],
+      "side_effects": [], "public_api": [], "status": "active"
     },
 
     // ─────────────────────────────────────────────

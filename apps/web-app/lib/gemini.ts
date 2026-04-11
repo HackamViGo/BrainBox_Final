@@ -1,0 +1,35 @@
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
+export async function generateGeminiResponse(prompt: string, apiKey: string) {
+  const genAI = new GoogleGenerativeAI(apiKey);
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
+  
+  try {
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    return response.text();
+  } catch (error) {
+    console.error("Gemini API Error:", error);
+    throw error;
+  }
+}
+
+export async function generateBasicResponse(prompt: string, targetModelName: string) {
+  const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+  if (!apiKey) throw new Error("GEMINI_API_KEY is not configured");
+
+  const genAI = new GoogleGenerativeAI(apiKey);
+  const model = genAI.getGenerativeModel({ 
+    model: "gemini-1.5-flash",
+    systemInstruction: `You are acting as ${targetModelName}. Respond in the style and manner of ${targetModelName}. Keep responses concise and helpful.`,
+  });
+  
+  try {
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    return response.text();
+  } catch (error) {
+    console.error("Basic Model Error:", error);
+    throw error;
+  }
+}

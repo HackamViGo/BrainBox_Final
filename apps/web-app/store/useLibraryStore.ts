@@ -25,8 +25,9 @@ interface LibraryActions {
   setLibraryFolders: (folders: Folder[]) => void
   setPromptFolders: (folders: Folder[]) => void
   setItems: (items: Item[]) => void
-  addFolder: (data: Omit<Folder, 'id'>) => Promise<void>
+  createFolder: (data: Omit<Folder, 'id'>) => Promise<void>
   removeFolder: (id: string) => Promise<void>
+  createItem: (data: Omit<Item, 'id'>) => Promise<void>
   saveItem: (item: Item) => Promise<void>
   updateItem: (id: string, updates: Partial<Item>) => void
   updateFolder: (id: string, updates: Partial<Folder>) => void
@@ -68,7 +69,7 @@ export const useLibraryStore = create<LibraryStore>()(
       setPromptFolders: (folders) => set({ promptFolders: folders }),
       setItems: (items) => set({ items: items }),
 
-      addFolder: async (data) => {
+      createFolder: async (data: Omit<Folder, 'id'>) => {
         const tempId = crypto.randomUUID()
         const newFolder: Folder = { ...data, id: tempId }
         
@@ -123,6 +124,24 @@ export const useLibraryStore = create<LibraryStore>()(
             libraryFolders: previousLibraryFolders,
             promptFolders: previousPromptFolders,
           })
+        }
+      },
+
+      createItem: async (data: Omit<Item, 'id'>) => {
+        const tempId = crypto.randomUUID()
+        const newItem: Item = { ...data, id: tempId }
+        
+        const previousItems = get().items
+        set({ items: [...previousItems, newItem] })
+
+        try {
+          const created = await serverUpsertItem(data)
+          set({
+            items: get().items.map((i) => (i.id === tempId ? created : i)),
+          })
+        } catch (error) {
+          console.error('Failed to create item:', error)
+          set({ items: previousItems })
         }
       },
 
