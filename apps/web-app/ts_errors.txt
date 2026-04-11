@@ -1,0 +1,29 @@
+components/Sidebar.tsx(89,5): error TS2339: Property 'activeFolder' does not exist on type 'LibraryState'.
+components/Sidebar.tsx(90,5): error TS2339: Property 'setActiveFolder' does not exist on type 'LibraryState'.
+components/Sidebar.tsx(97,5): error TS2339: Property 'activeFolder' does not exist on type 'PromptState'.
+components/Sidebar.tsx(98,5): error TS2339: Property 'setActiveFolder' does not exist on type 'PromptState'.
+components/Sidebar.tsx(137,16): error TS7006: Parameter 'prev' implicitly has an 'any' type.
+components/Sidebar.tsx(137,16): error TS2554: Expected 0 arguments, but got 1.
+components/Sidebar.tsx(137,33): error TS7006: Parameter 'item' implicitly has an 'any' type.
+components/Sidebar.tsx(145,27): error TS7006: Parameter 'prev' implicitly has an 'any' type.
+components/Sidebar.tsx(145,27): error TS2554: Expected 0 arguments, but got 1.
+components/Sidebar.tsx(145,44): error TS7006: Parameter 'f' implicitly has an 'any' type.
+components/Sidebar.tsx(149,26): error TS7006: Parameter 'prev' implicitly has an 'any' type.
+components/Sidebar.tsx(149,26): error TS2554: Expected 0 arguments, but got 1.
+components/Sidebar.tsx(149,43): error TS7006: Parameter 'f' implicitly has an 'any' type.
+components/Sidebar.tsx(205,10): error TS2375: Type '{ folder: Folder; isActive: boolean; isExpandedInRail: boolean; onToggle: () => void; onClick: () => any; isExpanded: boolean; isPinned: boolean; isMobileOpen: boolean; items: Item[]; onDragStart: ((event: DragEvent<...>, nodeType: string, data: any) => void) | undefined; }' is not assignable to type '{ folder: Folder; isActive: boolean; isExpandedInRail: boolean; onToggle: () => void; onClick: () => void; isExpanded: boolean; isPinned: boolean; isMobileOpen: boolean; items: Item[]; onDragStart?: (event: DragEvent<...>, nodeType: string, data: any) => void; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+components/Sidebar.tsx(231,9): error TS2367: This comparison appears to be unintentional because the types '"library" | "dashboard" | "login" | "settings" | "identity" | "archive" | "prompts" | "ainexus" | "extension" | "mindgraph" | "workspace"' and '"studio"' have no overlap.
+components/Sidebar.tsx(378,19): error TS2367: This comparison appears to be unintentional because the types '"library" | "dashboard" | "login" | "settings" | "identity" | "archive" | "prompts" | "ainexus" | "extension" | "mindgraph" | "workspace"' and '"studio"' have no overlap.
+components/Sidebar.tsx(602,27): error TS2367: This comparison appears to be unintentional because the types '"library" | "dashboard" | "login" | "settings" | "identity" | "archive" | "prompts" | "ainexus" | "extension" | "mindgraph" | "workspace"' and '"studio"' have no overlap.
+components/Sidebar.tsx(859,47): error TS2554: Expected 0 arguments, but got 1.
+components/Sidebar.tsx(861,46): error TS2554: Expected 0 arguments, but got 1.
+components/Sidebar.tsx(936,40): error TS18048: 'theme' is possibly 'undefined'.
+components/Sidebar.tsx(937,62): error TS18048: 'theme' is possibly 'undefined'.
+components/Sidebar.tsx(973,36): error TS2554: Expected 0 arguments, but got 1.
+components/Sidebar.tsx(1067,32): error TS2604: JSX element type 'Icon' does not have any construct or call signatures.
+components/Sidebar.tsx(1067,32): error TS2786: 'Icon' cannot be used as a JSX component.
+components/Sidebar.tsx(1098,41): error TS2554: Expected 0 arguments, but got 1.
+components/Sidebar.tsx(1100,40): error TS2554: Expected 0 arguments, but got 1.
+components/Sidebar.tsx(1175,36): error TS18048: 'theme' is possibly 'undefined'.
+components/Sidebar.tsx(1176,58): error TS18048: 'theme' is possibly 'undefined'.
+components/Sidebar.tsx(1211,32): error TS2554: Expected 0 arguments, but got 1.

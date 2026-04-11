@@ -1,0 +1,225 @@
+{
+  "metadata": {
+    "generated_at": "2026-04-11T00:00:00.000Z",
+    "generated_by": "HUMAN+AGENT",
+    "version": "1.0.0",
+    "schema_version": "1",
+    "total_nodes": 14,
+    "coverage": {
+      "skills": "5/5",
+      "skill_references": "3/3",
+      "rules": "1/1",
+      "workflows": "4/4",
+      "tasks": "1/1"
+    },
+    "notes": "Dependency graph само за .agents/ папката. Документира skills, rules, workflows и техните зависимости. Ръчно поддържан от агента."
+  },
+  "nodes": [
+
+    // ─────────────────────────────────────────────
+    // RULES
+    // ─────────────────────────────────────────────
+
+    {
+      "id": ".agents/rules/GEMINI.md",
+      "workspace": "agents",
+      "type": "rule",
+      "responsibility": "Главен rule файл. Always On. Дефинира task management принципи, code rules, testing, hooks, workflows, CI/CD и naming conventions за целия BrainBox проект.",
+      "dependencies": [],
+      "dependents": [
+        ".agents/skills/brainbox-nextjs-migration/SKILL.md",
+        ".agents/skills/brainbox-screens-migration/SKILL.md",
+        ".agents/skills/brainbox-supabase-schema/SKILL.md",
+        ".agents/skills/brainbox-sidebar-navigation/SKILL.md",
+        ".agents/skills/brainbox-styling-setup/SKILL.md"
+      ],
+      "side_effects": [],
+      "public_api": [],
+      "status": "active"
+    },
+
+    // ─────────────────────────────────────────────
+    // SKILLS
+    // ─────────────────────────────────────────────
+
+    {
+      "id": ".agents/skills/brainbox-nextjs-migration/SKILL.md",
+      "workspace": "agents",
+      "type": "skill",
+      "responsibility": "Главен migration skill. 8-фазов план за конвертиране на BrainBox Vite→Next.js 16.2 монорепо. Дефинира monorepo scaffold, shared packages, App Router архитектура и automation tools.",
+      "dependencies": [
+        ".agents/skills/brainbox-nextjs-migration/references/nextjs16-react19-api.md",
+        ".agents/skills/brainbox-nextjs-migration/references/monorepo-structure.md",
+        ".agents/skills/brainbox-nextjs-migration/references/neural-animation-strategy.md"
+      ],
+      "dependents": [],
+      "side_effects": [],
+      "public_api": [],
+      "status": "active"
+    },
+    {
+      "id": ".agents/skills/brainbox-nextjs-migration/references/nextjs16-react19-api.md",
+      "workspace": "agents",
+      "type": "skill-reference",
+      "responsibility": "Верифицирани API patterns за Next.js 16.2 + React 19.2. Покрива: use client vs useEffect правило, React Compiler, Zustand skipHydration, Supabase SSR setup, Tailwind v4, dynamic imports.",
+      "dependencies": [],
+      "dependents": [
+        ".agents/skills/brainbox-nextjs-migration/SKILL.md"
+      ],
+      "side_effects": [],
+      "public_api": [],
+      "status": "active"
+    },
+    {
+      "id": ".agents/skills/brainbox-nextjs-migration/references/monorepo-structure.md",
+      "workspace": "agents",
+      "type": "skill-reference",
+      "responsibility": "Точна файлова структура на монорепото — всеки файл, всеки package.json, tsconfig, Supabase SQL schema.",
+      "dependencies": [],
+      "dependents": [
+        ".agents/skills/brainbox-nextjs-migration/SKILL.md"
+      ],
+      "side_effects": [],
+      "public_api": [],
+      "status": "active"
+    },
+    {
+      "id": ".agents/skills/brainbox-nextjs-migration/references/neural-animation-strategy.md",
+      "workspace": "agents",
+      "type": "skill-reference",
+      "responsibility": "NeuralField animation стратегия. Документира brain↔wander↔extension transitions, Login overlay pattern, theme auto-cycle, h-dvh fix.",
+      "dependencies": [],
+      "dependents": [
+        ".agents/skills/brainbox-nextjs-migration/SKILL.md"
+      ],
+      "side_effects": [],
+      "public_api": [],
+      "status": "active"
+    },
+    {
+      "id": ".agents/skills/brainbox-screens-migration/SKILL.md",
+      "workspace": "agents",
+      "type": "skill",
+      "responsibility": "Детайлен migration guide за всеки от 11-те BrainBox екрана. Покрива: prop drilling→Zustand, Gemini→Server Action, dynamic imports за D3/ReactFlow, автоматизационен скрипт.",
+      "dependencies": [
+        ".agents/skills/brainbox-nextjs-migration/SKILL.md"
+      ],
+      "dependents": [],
+      "side_effects": [],
+      "public_api": [],
+      "status": "active"
+    },
+    {
+      "id": ".agents/skills/brainbox-supabase-schema/SKILL.md",
+      "workspace": "agents",
+      "type": "skill",
+      "responsibility": "Пълна Supabase интеграция — SQL schema с RLS, client/server/middleware setup, Server Actions CRUD, Zustand+Supabase optimistic updates, localStorage→Supabase migration.",
+      "dependencies": [
+        ".agents/skills/brainbox-nextjs-migration/references/nextjs16-react19-api.md"
+      ],
+      "dependents": [
+        ".agents/skills/brainbox-screens-migration/SKILL.md"
+      ],
+      "side_effects": [],
+      "public_api": [],
+      "status": "active"
+    },
+    {
+      "id": ".agents/skills/brainbox-sidebar-navigation/SKILL.md",
+      "workspace": "agents",
+      "type": "skill",
+      "responsibility": "Sidebar migration от prop drilling към Zustand. SwitchMode state machine (global/folders/feathers/pulse/workspace), store additions, NeuralField в sidebar.",
+      "dependencies": [
+        ".agents/skills/brainbox-nextjs-migration/SKILL.md"
+      ],
+      "dependents": [],
+      "side_effects": [],
+      "public_api": [],
+      "status": "active"
+    },
+    {
+      "id": ".agents/skills/brainbox-styling-setup/SKILL.md",
+      "workspace": "agents",
+      "type": "skill",
+      "responsibility": "Tailwind v4 + shadcn/ui setup. PostCSS конфигурация, пълен globals.css с BrainBox класове, @source директиви за монорепо, shadcn компоненти списък, Inter шрифт.",
+      "dependencies": [
+        ".agents/skills/brainbox-nextjs-migration/SKILL.md"
+      ],
+      "dependents": [],
+      "side_effects": [],
+      "public_api": [],
+      "status": "active"
+    },
+
+    // ─────────────────────────────────────────────
+    // WORKFLOWS
+    // ─────────────────────────────────────────────
+
+    {
+      "id": ".agents/workflows/new-screen.md",
+      "workspace": "agents",
+      "type": "workflow",
+      "responsibility": "Scaffold нов screen: създава файл с 'use client', правилни store imports, placeholder JSX и добавя го в page.tsx.",
+      "dependencies": [
+        ".agents/skills/brainbox-screens-migration/SKILL.md"
+      ],
+      "dependents": [],
+      "side_effects": [],
+      "public_api": [],
+      "status": "active"
+    },
+    {
+      "id": ".agents/workflows/new-server-action.md",
+      "workspace": "agents",
+      "type": "workflow",
+      "responsibility": "Scaffold нов Server Action: 'use server', Zod parse, Supabase createClient, getUser() auth check, error handling.",
+      "dependencies": [
+        ".agents/skills/brainbox-supabase-schema/SKILL.md"
+      ],
+      "dependents": [],
+      "side_effects": [],
+      "public_api": [],
+      "status": "active"
+    },
+    {
+      "id": ".agents/workflows/migrate-screen.md",
+      "workspace": "agents",
+      "type": "workflow",
+      "responsibility": "Стъпки за миграция на съществуващ Vite screen към Next.js: добавя 'use client', сменя imports, премахва props, добавя store hooks.",
+      "dependencies": [
+        ".agents/skills/brainbox-screens-migration/SKILL.md"
+      ],
+      "dependents": [],
+      "side_effects": [],
+      "public_api": [],
+      "status": "active"
+    },
+    {
+      "id": ".agents/workflows/deploy.md",
+      "workspace": "agents",
+      "type": "workflow",
+      "responsibility": "Deploy pipeline: pnpm typecheck → pnpm lint → pnpm test --run → pnpm build → deploy.",
+      "dependencies": [],
+      "dependents": [],
+      "side_effects": [],
+      "public_api": [],
+      "status": "active"
+    },
+
+    // ─────────────────────────────────────────────
+    // TASKS
+    // ─────────────────────────────────────────────
+
+    {
+      "id": "tasks/todo.md",
+      "workspace": "agents",
+      "type": "task-log",
+      "responsibility": "Активен task log. Всяка задача: план → progress tracking → review секция.",
+      "dependencies": [],
+      "dependents": [],
+      "side_effects": [],
+      "public_api": [],
+      "status": "active"
+    }
+  ]
+}

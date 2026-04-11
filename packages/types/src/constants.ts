@@ -1,0 +1,57 @@
+import { Home, BookOpen, Zap, BarChart2, Users, Settings, Fingerprint, Puzzle, Archive, Network, MessageSquare, Cpu, Sparkles, Brain, History, Folder, ChevronRight, ChevronLeft, Hash, Layers, Bot, Eye, Compass, Swords, Telescope, Cloud, Workflow, Activity, Search, Pin, Plus, FileText, Image, Music, Video, Globe, Terminal, Database, Shield, Lock, Unlock, Bell, Mail, Phone, Camera, Map, Calendar, Clock, Star, Heart, Share2, Download, Upload, Trash2, Edit3, Check, X, Filter, List, Grid, Maximize2, Minimize2, ExternalLink, Link2, Paperclip, Scissors, Copy, Clipboard, Save, HardDrive, Monitor, Smartphone, Tablet, Watch, Headphones, Speaker, Mic, Volume2, Sun, Moon, Wind, Droplets, Flame, ZapOff, Anchor, Target, Flag } from 'lucide-react';
+import type { ThemeName, Theme } from './models';
+
+export const THEMES: Record<ThemeName, Theme> = {
+  chatgpt: { name: 'chatgpt', color: '#10a37f', lightPosition: 'top-left' },
+  gemini: { name: 'gemini', color: '#8ab4f8', lightPosition: 'bottom-right' },
+  claude: { name: 'claude', color: '#d97757', lightPosition: 'top-right' },
+  grok: { name: 'grok', color: '#e5e5e5', lightPosition: 'bottom-left' },
+  perplexity: { name: 'perplexity', color: '#22d3ee', lightPosition: 'top-center' },
+  lmarena: { name: 'lmarena', color: '#fbbf24', lightPosition: 'center' },
+  deepseek: { name: 'deepseek', color: '#2563eb', lightPosition: 'bottom-center' },
+  qwen: { name: 'qwen', color: '#a855f7', lightPosition: 'center-right' },
+};
+
+export const THEME_KEYS = Object.keys(THEMES) as ThemeName[];
+
+export const ICON_LIBRARY = [
+  Folder, Hash, Layers, MessageSquare, Zap, Brain, Sparkles, Bot, Eye, Compass,
+  Swords, Telescope, Cloud, Workflow, Activity, FileText, Image, Music, Video, Globe,
+  Terminal, Database, Shield, Lock, Unlock, Bell, Mail, Phone, Camera, Map,
+  Calendar, Clock, Star, Heart, Share2, Download, Upload, Trash2, Edit3, Check,
+  X, Filter, List, Grid, Maximize2, Minimize2, ExternalLink, Link2, Paperclip, Scissors,
+  Copy, Clipboard, Save, HardDrive, Monitor, Smartphone, Tablet, Watch, Headphones, Speaker,
+  Mic, Volume2, Sun, Moon, Wind, Droplets, Flame, ZapOff, Anchor, Target, Flag,
+  Network, Cpu, History, Search, Pin, Home
+];
+
+export const MODELS = [
+  { id: 'chatgpt', name: 'ChatGPT', icon: Brain, color: 'emerald', bg: 'bg-emerald-500/10', border: 'border-emerald-500/30', glow: 'shadow-emerald-500/50', text: 'text-emerald-400', gradient: 'from-emerald-900/40 via-emerald-900/10 to-transparent' },
+  { id: 'gemini', name: 'Gemini', icon: Sparkles, color: 'blue', bg: 'bg-blue-500/10', border: 'border-blue-500/30', glow: 'shadow-blue-500/50', text: 'text-blue-400', gradient: 'from-blue-900/40 via-blue-900/10 to-transparent' },
+  { id: 'claude', name: 'Claude', icon: Bot, color: 'orange', bg: 'bg-orange-500/10', border: 'border-orange-500/30', glow: 'shadow-orange-500/50', text: 'text-orange-400', gradient: 'from-orange-900/40 via-orange-900/10 to-transparent' },
+  { id: 'grok', name: 'Grok', icon: Eye, color: 'gray', bg: 'bg-gray-500/10', border: 'border-gray-500/30', glow: 'shadow-gray-500/50', text: 'text-gray-400', gradient: 'from-gray-900/40 via-gray-900/10 to-transparent' },
+  { id: 'perplexity', name: 'Perplexity', icon: Compass, color: 'cyan', bg: 'bg-cyan-500/10', border: 'border-cyan-500/30', glow: 'shadow-cyan-500/50', text: 'text-cyan-400', gradient: 'from-cyan-900/40 via-cyan-900/10 to-transparent' },
+  { id: 'lmarena', name: 'LM Arena', icon: Swords, color: 'amber', bg: 'bg-amber-500/10', border: 'border-amber-500/30', glow: 'shadow-amber-500/50', text: 'text-amber-400', gradient: 'from-amber-900/40 via-amber-900/10 to-transparent' },
+  { id: 'deepseek', name: 'DeepSeek', icon: Telescope, color: 'blue', bg: 'bg-blue-600/10', border: 'border-blue-600/30', glow: 'shadow-blue-600/50', text: 'text-blue-500', gradient: 'from-blue-900/40 via-blue-900/10 to-transparent' },
+  { id: 'qwen', name: 'Qwen', icon: Cloud, color: 'purple', bg: 'bg-purple-500/10', border: 'border-purple-500/30', glow: 'shadow-purple-500/50', text: 'text-purple-400', gradient: 'from-purple-900/40 via-purple-900/10 to-transparent' }
+];
+
+export const SUMMARIZE_OPTIONS = [
+  { id: 'quick', label: 'Quick Summary', icon: Zap, prompt: 'Provide a concise 2-3 sentence summary of this content.' },
+  { id: 'detailed', label: 'Detailed Analysis', icon: FileText, prompt: 'Provide a comprehensive and detailed summary of this content, covering all major points.' },
+  { id: 'bullets', label: 'Key Bullet Points', icon: List, prompt: 'Extract the most important points from this content and present them as a bulleted list.' },
+  { id: 'takeaways', label: 'Key Takeaways', icon: Target, prompt: 'What are the 3-5 most critical takeaways from this content?' },
+  { id: 'exec', label: 'Executive Summary', icon: BarChart2, prompt: 'Write a professional executive summary suitable for a high-level briefing.' },
+  { id: 'narrative', label: 'Narrative Summary', icon: MessageSquare, prompt: 'Summarize this content in a narrative, storytelling format.' },
+  { id: 'actions', label: 'Action Items', icon: Check, prompt: 'Identify any explicit or implicit action items or next steps mentioned in this content.' },
+];
+
+export const ANALYZE_OPTIONS = [
+  { id: 'sentiment', label: 'Sentiment Analysis', icon: Brain, prompt: 'Analyze the emotional tone and sentiment of this content. Is it positive, negative, neutral, or mixed?' },
+  { id: 'topics', label: 'Topic Modeling', icon: Sparkles, prompt: 'Identify the primary and secondary topics discussed in this content.' },
+  { id: 'entities', label: 'Entity Extraction', icon: Target, prompt: 'Extract all significant entities (people, places, organizations, technologies) mentioned in this content.' },
+  { id: 'intent', label: 'Intent Recognition', icon: Eye, prompt: 'What is the primary intent or purpose of the author in this content?' },
+  { id: 'tone', label: 'Tone Analysis', icon: MessageSquare, prompt: 'Describe the specific tone of this content (e.g., formal, casual, urgent, persuasive).' },
+  { id: 'logic', label: 'Logical Consistency', icon: Activity, prompt: 'Evaluate the logical flow and consistency of the arguments or information presented.' },
+  { id: 'bias', label: 'Bias Detection', icon: Shield, prompt: 'Identify any potential biases, assumptions, or one-sided perspectives in this content.' },
+];

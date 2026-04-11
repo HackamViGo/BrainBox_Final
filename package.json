@@ -1,0 +1,22 @@
+{
+  "name": "brainbox-monorepo",
+  "private": true,
+  "packageManager": "pnpm@9.15.4",
+  "scripts": {
+    "dev": "pnpm --filter web-app dev",
+    "build": "pnpm --filter web-app build",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck",
+    "install:all": "pnpm install"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "devDependencies": {
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "typescript": "^6.0.2",
+    "vitest": "^4.1.4"
+  }
+}
