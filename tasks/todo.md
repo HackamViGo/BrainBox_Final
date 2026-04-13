@@ -1,36 +1,34 @@
-## Task: Create Reference Documentation and Skills
+## Task: Centralized Configuration Management
 
 ### Plan
-- [ ] Create `.agents/reference` base directory structure
-- [ ] Create 16 `SKILL.md` files in `.agents/reference/.agents/skills/`
-    - [ ] context-rules
-    - [ ] logging
-    - [ ] security
-    - [ ] monorepo
-    - [ ] typescript
-    - [ ] supabase-rls
-    - [ ] extension-mv3
-    - [ ] platform-adapters
-    - [ ] nextjs-api
-    - [ ] zustand
-    - [ ] testing
-    - [ ] ai-pipeline
-    - [ ] monitoring
-    - [ ] error-handling
-    - [ ] brainbox-ui
-    - [ ] extension-bridge
-- [ ] Create `docs/BRAINBOX_V2_MASTER_PROMPT_FINAL.md` in `.agents/reference/`
-- [ ] Create test template files in `.agents/reference/`
-    - [ ] `apps/extension/src/content/adapters/__tests__/chatgpt.test.ts`
-    - [ ] `apps/web-app/app/api/chats/[id]/route.test.ts`
-    - [ ] `tests/e2e/extension.spec.ts`
+
+- [x] Create Implementation Plan and get approval
+- [ ] **Step 1: pnpm Catalogs**
+  - [ ] Update `pnpm-workspace.yaml` with `catalog` section
+  - [ ] Replace versions with `catalog:` in all `package.json` files
+  - [ ] Run `pnpm install` and verify
+  - [ ] Run `pnpm typecheck` and verify
+- [ ] **Step 2: .env Strategy (dotenv-cli)**
+  - [ ] Install `dotenv-cli` at root (`-Dw`)
+  - [ ] Update `apps/web-app/package.json` scripts (`dev`, `build`) to use `dotenv-cli`
+  - [ ] Delete `apps/web-app/.env.local`
+  - [ ] Update root `.gitignore` and `.env.example`
+- [ ] **Step 3: packages/config Hub**
+  - [ ] Refine `packages/config/tsconfig.base.json`
+  - [ ] Setup `packages/config/eslint.config.js`
+  - [ ] Sync styles to `packages/config/styles/brainbox.css` from `/brainbox/src/index.css`
+- [ ] **Step 4: Documentation**
+  - [ ] Create `docs/VERCEL_SETUP.md`
+- [ ] **Verification**
+  - [ ] Final `pnpm install --frozen-lockfile`
+  - [ ] Final `pnpm typecheck`
+  - [ ] Verify `pnpm --filter web-app dev` reads env vars
 
 ### Done When
-- [ ] All 20 files are created with the correct content and paths within `.agents/reference/`.
-- [ ] File structure matches the user's "reference" folder requirement.
 
-## Review
-- Завършено: [дата]
-- Какво беше направено: ...
-- Проблеми срещнати: ...
-- Решения: ...
+- [ ] `pnpm-workspace.yaml` has `catalog:` section (20+ packages)
+- [ ] All `package.json` files use `catalog:` references
+- [ ] No `.env.local` files in `apps/`
+- [ ] `web-app` reads root env vars via `dotenv-cli`
+- [ ] `docs/VERCEL_SETUP.md` is present
+- [ ] Typecheck passes monorepo-wide

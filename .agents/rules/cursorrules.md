@@ -30,3 +30,16 @@ trigger: always_on
 - ALWAYS pause for a formal review of the Implementation Plan before starting execution.
 - ONCE the Implementation Plan is approved, proceed with all file writes, terminal commands, and browser tests autonomously without further approval prompts.
 - Only stop if a critical error occurs that requires architectural rethink.
+
+## 🔒 Version Locking (April 11, 2026)
+- **Next.js:** 16.2 (Async params/cookies/headers mandatory)
+- **React:** 19.2 (Activity mode, useEffectEvent)
+- **Vite:** 8.x (Rolldown + Oxc)
+- **Tailwind:** 4.x
+- **CRXJS:** 2.4.x (Vite 8 support)
+
+## 🚫 Forbidden Additions
+- **Extension DOM Injection:** No floating buttons or sidebars. Context menu capture ONLY.
+- **Extension DB Access:** No direct Supabase calls. Sync via Dashboard API ONLY.
+- **Extension Storage:** NO `localStorage`. Use `chrome.storage.local` ONLY.
+- **Next.js 16 Sync Patterns:** No synchronous access to `params`, `searchParams`, `cookies()`, or `headers()`.

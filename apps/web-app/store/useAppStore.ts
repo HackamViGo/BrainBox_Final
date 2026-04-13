@@ -8,6 +8,7 @@ import { STORAGE_KEYS } from '@brainbox/utils'
 interface AppState {
   activeScreen: ScreenName
   theme: ThemeName
+  hoverTheme: ThemeName | null
   isLoggedIn: boolean
   isSidebarExpanded: boolean
   isMobileSidebarOpen: boolean
@@ -34,6 +35,7 @@ interface AppState {
 interface AppActions {
   setActiveScreen: (screen: ScreenName) => void
   setTheme: (theme: ThemeName) => void
+  setHoverTheme: (theme: ThemeName | null) => void
   setIsLoggedIn: (v: boolean) => void
   setPendingModelId: (id: string | null) => void
   setActiveFolder: (id: string | null) => void
@@ -59,6 +61,7 @@ export const useAppStore = create<AppStore>()(
       // State
       activeScreen: 'dashboard',
       theme: 'chatgpt',
+      hoverTheme: null,
       isLoggedIn: false,
       isSidebarExpanded: false,
       isMobileSidebarOpen: false,
@@ -91,9 +94,14 @@ export const useAppStore = create<AppStore>()(
         if (screen !== currentScreen) {
           // Logic for auto-switching modes based on selection
           if (screen === 'library' || screen === 'prompts') {
-            set({ switchMode: 'folders', slideDirection: currentMode === 'global' ? 1 : -1, activeFolder: null });
+            set({ switchMode: 'folders', slideDirection: currentMode === 'global' ? 1 : -1 });
           } else if (screen === 'studio') {
-            set({ switchMode: 'feathers', slideDirection: currentMode === 'global' ? 1 : -1, activeFolder: null });
+            const activeModelId = get().activeModelId;
+            set({ 
+              switchMode: 'feathers', 
+              slideDirection: currentMode === 'global' ? 1 : -1, 
+              theme: activeModelId as ThemeName
+            });
           } else if (screen === 'workspace') {
             set({ switchMode: 'workspace', slideDirection: currentMode === 'global' ? 1 : -1 });
           } else if (currentMode !== 'global') {
@@ -103,6 +111,7 @@ export const useAppStore = create<AppStore>()(
         set({ activeScreen: screen, isMobileSidebarOpen: false });
       },
       setTheme: (theme) => set({ theme }),
+      setHoverTheme: (theme) => set({ hoverTheme: theme }),
       setIsLoggedIn: (v) => set({ isLoggedIn: v }),
       setPendingModelId: (id) => set({ pendingModelId: id }),
       setActiveFolder: (id) => set({ activeFolder: id }),
@@ -142,7 +151,7 @@ export const useAppStore = create<AppStore>()(
           case 'apiKey': set({ isApiKeyModalOpen: open, apiKeyModelId: data?.id, apiKeyModelName: data?.name }); break;
         }
       },
-      setActiveModelId: (id) => set({ activeModelId: id }),
+      setActiveModelId: (id) => set({ activeModelId: id, theme: id as ThemeName }),
       clearPendingModel: () => set({ pendingModelId: null }),
       setApiKeyModel: (id, name) => set({ apiKeyModelId: id, apiKeyModelName: name }),
     }),

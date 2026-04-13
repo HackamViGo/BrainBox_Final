@@ -6,6 +6,7 @@ import { Sidebar } from './Sidebar';
 import { useAppStore } from '../store/useAppStore';
 import dynamic from 'next/dynamic';
 import { usePathname } from 'next/navigation';
+import { motion } from 'motion/react';
 
 const NeuralField = dynamic(() => import('@brainbox/ui').then(mod => mod.NeuralField), { ssr: false });
 const AmbientLight = dynamic(() => import('@brainbox/ui').then(mod => mod.AmbientLight), { ssr: false });
@@ -16,8 +17,9 @@ import { NewChatModal } from './NewChatModal';
 
 export function PersistentShell({ children }: { children: React.ReactNode }) {
   const { 
-    activeScreen, theme, setActiveScreen,
-    isMobileSidebarOpen, setIsMobileSidebarOpen
+    activeScreen, theme, hoverTheme, setActiveScreen,
+    isMobileSidebarOpen, setIsMobileSidebarOpen,
+    isPinned, isSidebarExpanded
   } = useAppStore();
   const pathname = usePathname();
 
@@ -28,11 +30,13 @@ export function PersistentShell({ children }: { children: React.ReactNode }) {
     }
   }, [pathname, setActiveScreen]);
 
+  const effectiveTheme = hoverTheme ?? theme;
+
   return (
     <div className="relative h-full w-full bg-[#050505] text-white font-sans overflow-hidden flex bg-grain blur-0 scale-100">
-      <AmbientLight theme={theme} monochrome={activeScreen === 'archive'} />
+      <AmbientLight theme={effectiveTheme} monochrome={activeScreen === 'archive'} />
       <NeuralField 
-        theme={theme} 
+        theme={effectiveTheme} 
         mode={activeScreen === 'dashboard' ? 'brain' : activeScreen === 'extension' ? 'extension' : 'wander'} 
         speedMultiplier={activeScreen === 'archive' ? 0.25 : 1}
         monochrome={activeScreen === 'archive'}
@@ -52,7 +56,18 @@ export function PersistentShell({ children }: { children: React.ReactNode }) {
       
       <Sidebar />
       
-      <main className="flex-1 lg:ml-20 relative h-full overflow-hidden pt-16 lg:pt-0">
+      <motion.main 
+        initial={false}
+        animate={{ 
+          marginLeft: (isPinned || isSidebarExpanded) ? 256 : 80
+        }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+        className="flex-1 relative h-full overflow-hidden pt-16 lg:pt-0 hidden lg:block"
+      >
+        {children}
+      </motion.main>
+
+      <main className="flex-1 relative h-full overflow-hidden pt-16 lg:hidden">
         {children}
       </main>
 

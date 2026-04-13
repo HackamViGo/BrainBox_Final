@@ -9,7 +9,15 @@ export async function createClient() {
     {
       cookies: {
         getAll: () => cookieStore.getAll(),
-        // Server Components read only — setAll is handled by middleware
+        setAll: (cookiesToSet: { name: string; value: string; options: any }[]) => {
+          try {
+            cookiesToSet.forEach(({ name, value, options }) =>
+              cookieStore.set(name, value, options)
+            )
+          } catch {
+            // Server Components shouldn't write cookies, ignored.
+          }
+        },
       },
     }
   )

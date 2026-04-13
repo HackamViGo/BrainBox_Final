@@ -66,7 +66,7 @@ export function NewFolderModal() {
 
   return (
     <Dialog open={isNewFolderModalOpen} onOpenChange={(open) => setModalOpen('newFolder', open)}>
-      <DialogContent className="max-w-2xl p-0 overflow-hidden bg-[#0a0a0a] border-white/10 rounded-3xl shadow-2xl flex flex-col max-h-[90vh]">
+      <DialogContent aria-describedby={undefined} className="max-w-2xl p-0 overflow-hidden bg-[#0a0a0a] border-white/10 rounded-3xl shadow-2xl flex flex-col max-h-[90vh]">
         <div className="p-6 border-b border-white/10 flex justify-between items-center bg-white/5 shrink-0">
           <DialogTitle className="text-lg font-semibold text-white">Create New Folder</DialogTitle>
         </div>

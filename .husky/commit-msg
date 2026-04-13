@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+# .husky/commit-msg
+# Валидира commit message формата (Conventional Commits)
+
+npx --no -- commitlint --edit "$1"

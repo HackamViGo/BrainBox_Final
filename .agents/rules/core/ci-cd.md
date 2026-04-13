@@ -1,40 +1,37 @@
-# CI/CD Rules
+# Core Rules: CI/CD
 
-Приложимо за: **всички проекти**
+## GitHub Actions Pipeline
 
-## GitHub Actions структура
+### 1. CI (на всеки PR) — `ci.yml`
 
-```text
-.github/workflows/
-├── ci.yml          ← на всеки PR: typecheck + lint + unit tests
-├── e2e.yml         ← на PR към main: E2E tests
-└── deploy.yml      ← на push към main: build + deploy
-```
+- **Trigger**: `push` към `main`/`develop`, `pull_request`.
+- **Jobs**:
+  - `typecheck`: `pnpm typecheck` (0 грешки).
+  - `lint`: `pnpm lint`.
+  - `unit-tests`: `pnpm test --run` (Vitest).
+  - `graph-check`: `npx tsx scripts/generate-graph.ts --check`.
+  - `skills-check`: `node scripts/check-skills.js`.
 
-## ci.yml — задължителни checks
+### 2. E2E (на PR към main) — `e2e.yml`
 
-```yaml
-name: CI
-on:
-  push:
-    branches: [main, develop]
-  pull_request:
+- **Trigger**: `pull_request` към `main`.
+- **Стъпки**: Build → Playwright Install → Playwright Test.
 
-jobs:
-  check:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - # setup package manager
-      - run: [install command]
-      - run: [typecheck command]  # 0 TypeScript errors
-      - run: [lint command]       # Linter
-      - run: [test command]       # Unit tests
-```
+### 3. Deploy — `deploy.yml`
 
-## PR правила
+- **Trigger**: `push` към `main`.
+- **Target**: Vercel (Web App) + Extension Artifacts (GitHub Releases).
 
-- Никой не merge-ва директно в `main` без PR
-- PR трябва да има: описание на промяната, линк към task, скрийншот ако е UI
-- Всички CI checks трябва да минават преди merge
-- Branch naming: `feature/`, `fix/`, `chore/`, `docs/`
+## PR Правила
+
+- Никой не merge-ва директно в `main` без PR.
+- Всички CI checks трябва да са зелени.
+- PR трябва да съдържа описание на промените и скрийншот/видео за UI промени.
+- Използвай labels: `feature`, `bug`, `refactor`, `docs`.
+
+## Branch Naming
+
+- `feature/[name]`
+- `fix/[name]`
+- `chore/[name]`
+- `docs/[name]`

@@ -1,41 +1,34 @@
-# Testing Rules
+# Core Rules: Testing
 
-Приложимо за: **всички проекти**
+## Философия
 
-## Кога се пишат тестове
+**Arrange → Act → Assert**. Тествай поведение, а не детайли на имплементацията.
 
-| Какво | Кога | Тип |
-|-------|------|-----|
-| Store action | Веднага при създаване | Unit |
-| Validation schema | Веднага при създаване | Unit |
-| API/Server функция | Веднага при създаване | Unit + integration |
-| Utility функция | Веднага при създаване | Unit |
-| UI компонент с логика | При PR | Component |
-| Критичен user flow | При PR за тази feature | E2E |
-| Pure presentational компонент | По избор | Пропусни |
+## Unit & Component Tests (Vitest)
 
-**Правило:** Ако пишеш функция с повече от 1 branch (if/else, switch) → пиши тест.
+- Файлове: `__tests__/**/*.test.ts(x)`.
+- **Zustand Stores**: Тествай actions и трансформации на стейта.
+- **Server Actions**: Използвай mocks за Supabase клиента.
+- **UI Components**: Тествай интеракции и accessibility (RTL).
+- **React 19.2**: Тествай `<Activity>` компоненти чрез симулация на `mode` промяна.
 
-## Структура на тестовете
+## E2E Tests (Playwright)
 
-```text
-__tests__/
-├── unit/
-│   ├── store/
-│   ├── actions/
-│   └── utils/
-├── components/
-└── integration/
+- Файлове: `e2e/**/*.spec.ts`.
+- Фокус: Критични user flows (Login, Capture Chat, Sync).
+- **Extension Testing**: Стартирай Playwright с лоуднат extension артефакт.
 
-e2e/
-├── critical-flows.spec.ts
-└── ...
-```
+## Пътна карта на тестването
 
-## Правила за писане на тестове
+| Тип | Кога | Покритие |
+| :--- | :--- | :--- |
+| Logic / Utils | При създаване | 100% |
+| Stores / Actions | При създаване | 90% |
+| UI Components | Преди PR | 80% |
+| User Flow (E2E) | Преди Release | 100% на критичните пътища |
 
-- **Arrange → Act → Assert** структура в всеки тест
-- Mock external dependencies в unit тестове
-- E2E тестове използват test environment
-- Описателни имена: `it('should redirect to login when user is not authenticated')`
-- Не тествай implementation details — тествай behaviour
+## Правила
+
+- Mock-вай всички външни API-та (Supabase, Chrome APIs, Gemini).
+- Не използвай реална база данни в unit тестове.
+- Тестовете не трябва да имат side effects.

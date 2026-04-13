@@ -20,7 +20,7 @@ export function Prompts() {
   const [refineInput, setRefineInput] = useState('');
   const [activeFolder, setActiveFolder] = useState<string | null>(null);
 
-  const { theme, setTheme } = useAppStore();
+  const { theme, setTheme, setHoverTheme } = useAppStore();
   const { libraryFolders, promptFolders, items, addItem, addCapture } = useLibraryStore();
   const folders = [...libraryFolders, ...promptFolders];
   const captures = items.filter(i => i.type === 'capture');
@@ -106,7 +106,7 @@ export function Prompts() {
               activeFolder={activeFolder}
               setActiveFolder={setActiveFolder}
               onNewPrompt={() => handleRefine('')}
-              onSelectTheme={setTheme}
+              onSelectTheme={setHoverTheme}
               promptFolders={filteredPromptFolders}
               items={items}
             />

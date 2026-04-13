@@ -2,12 +2,14 @@
 
 import React, { useState, useRef, useEffect, useCallback, forwardRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import type { LucideIcon
+} from 'lucide-react';
 import { 
   Search, Filter, MessageSquare, MoreVertical, Sparkles, Activity, 
   ChevronRight, ChevronLeft, Loader2, X, Brain, Zap, FileText, 
   List, Target, MessageCircle, BarChart3, ShieldAlert, Eye, 
   Lightbulb, Scale, CheckCircle2, Folder as FolderIcon, LayoutGrid, 
-  Plus, BookOpen, LucideIcon
+  Plus, BookOpen
 } from 'lucide-react';
 
 import { THEMES, ICON_LIBRARY } from '@brainbox/types';
@@ -45,7 +47,8 @@ export function Library() {
   } = useLibraryStore();
   
   const { 
-    setTheme, 
+    setTheme,
+    setHoverTheme,
     activeFolder, 
     setActiveFolder,
     setModalOpen,
@@ -100,7 +103,7 @@ export function Library() {
   };
 
   const activeFolderData = activeFolder ? libraryFolders.find(f => f.id === activeFolder) : null;
-  const ActiveIcon = activeFolderData ? (ICON_LIBRARY[activeFolderData.iconIndex % ICON_LIBRARY.length] as LucideIcon) : BookOpen;
+  const ActiveIcon = activeFolderData ? (ICON_LIBRARY[(activeFolderData.iconIndex || 0) % ICON_LIBRARY.length] as LucideIcon) : BookOpen;
 
   return (
     <div className="h-full flex flex-col p-4 sm:p-8 lg:p-12 z-10 relative overflow-y-auto">
@@ -168,10 +171,10 @@ export function Library() {
                   className="glass-panel p-8 rounded-[2.5rem] border border-white/5 hover:border-white/20 transition-all group text-center flex flex-col items-center gap-4 w-full sm:w-[calc(50%-1.5rem)] lg:w-[calc(33.33%-1.5rem)] max-w-[320px]"
                 >
                   {(() => {
-                    const FolderIconComp = ICON_LIBRARY[folder.iconIndex % ICON_LIBRARY.length] as LucideIcon;
+                    const FolderIconComp = ICON_LIBRARY[(folder.iconIndex || 0) % ICON_LIBRARY.length] as LucideIcon;
                     return (
                       <div className="w-20 h-20 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-white/10 transition-all duration-500 shadow-xl group-hover:shadow-blue-500/10">
-                        <FolderIconComp className="w-10 h-10 text-blue-400 group-hover:scale-110 transition-transform" />
+                        {FolderIconComp && <FolderIconComp className="w-10 h-10 text-blue-400 group-hover:scale-110 transition-transform" />}
                       </div>
                     );
                   })()}
@@ -190,7 +193,7 @@ export function Library() {
                 <ChatCard 
                   key={chat.id} 
                   chat={chat} 
-                  setTheme={setTheme}
+                  setTheme={setHoverTheme}
                   onAction={(option: any) => handleAction(chat, option)}
                   onDelete={() => deleteItem(chat.id)}
                   onClick={() => {
@@ -345,6 +348,7 @@ const ChatCard = forwardRef<HTMLDivElement, any>(({ chat, setTheme, onAction, on
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
       onMouseEnter={() => setTheme(modelId as ThemeName)}
+      onMouseLeave={() => setTheme(null as any)}
       onClick={onClick}
       draggable
       onDragStart={(e: any) => {

@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import type { ThemeName, Folder, Item } from '@brainbox/types';
 import { THEMES, ICON_LIBRARY } from '@brainbox/types';
-import { LucideIcon } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 
 interface SavedPromptsViewProps {
   onBack: () => void;
@@ -45,7 +45,7 @@ export function SavedPromptsView({
   });
 
   const activeFolderData = activeFolder ? promptFolders.find(f => f.id === activeFolder) : null;
-  const ActiveIcon = activeFolderData ? (ICON_LIBRARY[activeFolderData.iconIndex % ICON_LIBRARY.length] as LucideIcon) : Zap;
+  const ActiveIcon = activeFolderData ? (ICON_LIBRARY[(activeFolderData.iconIndex || 0) % ICON_LIBRARY.length] as LucideIcon) : Zap;
 
   return (
     <div className="max-w-5xl mx-auto w-full h-full flex flex-col">
@@ -65,7 +65,7 @@ export function SavedPromptsView({
           </button>
           <div>
             <h2 className="text-3xl font-bold flex items-center gap-4">
-              <ActiveIcon className="w-8 h-8 text-white/20" />
+              {ActiveIcon && <ActiveIcon className="w-8 h-8 text-white/20" />}
               {activeFolderData ? activeFolderData.name : 'Saved Prompts'}
             </h2>
             <p className="text-white/40">{activeFolderData ? 'Viewing items in this folder' : 'Your main prompt collection'}</p>
@@ -106,10 +106,10 @@ export function SavedPromptsView({
                 className="glass-panel p-8 rounded-[2.5rem] border border-white/5 hover:border-white/20 transition-all group text-center flex flex-col items-center gap-4 w-full sm:w-[calc(50%-1.5rem)] lg:w-[calc(33.33%-1.5rem)] max-w-[320px]"
               >
                 {(() => {
-                  const FolderIconComp = ICON_LIBRARY[folder.iconIndex % ICON_LIBRARY.length] as LucideIcon;
+                  const FolderIconComp = ICON_LIBRARY[(folder.iconIndex || 0) % ICON_LIBRARY.length] as LucideIcon;
                   return (
                     <div className="w-20 h-20 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-white/10 transition-all duration-500 shadow-xl group-hover:shadow-amber-500/10">
-                      <FolderIconComp className="w-10 h-10 text-amber-400 group-hover:scale-110 transition-transform" />
+                      {FolderIconComp && <FolderIconComp className="w-10 h-10 text-amber-400 group-hover:scale-110 transition-transform" />}
                     </div>
                   );
                 })()}
@@ -129,6 +129,7 @@ export function SavedPromptsView({
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               onMouseEnter={() => onSelectTheme(((prompt as any).modelId as ThemeName) || 'chatgpt')}
+              onMouseLeave={() => onSelectTheme(null as any)}
               draggable
               onDragStart={(e) => {
                 if (onDragStart) {
@@ -143,14 +144,14 @@ export function SavedPromptsView({
             >
               <div 
                 className="absolute top-0 left-0 w-1 h-full opacity-50 group-hover:opacity-100 transition-opacity"
-                style={{ backgroundColor: THEMES[((prompt as any).modelId as ThemeName) || 'chatgpt'].color }}
+                style={{ backgroundColor: THEMES[((prompt as any).modelId as ThemeName) || 'chatgpt']?.color || '#ffffff' }}
               />
               
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-start gap-4">
                   <div 
                     className="w-10 h-10 rounded-xl flex items-center justify-center bg-white/5 border border-white/10 group-hover:bg-white/10 transition-all duration-500 group-hover:scale-110 shadow-xl"
-                    style={{ color: THEMES[((prompt as any).modelId as ThemeName) || 'chatgpt'].color }}
+                    style={{ color: THEMES[((prompt as any).modelId as ThemeName) || 'chatgpt']?.color || '#ffffff' }}
                   >
                     <Zap className="w-5 h-5" />
                   </div>
@@ -159,7 +160,7 @@ export function SavedPromptsView({
                       {prompt.title}
                       <div 
                         className="w-2 h-2 rounded-full" 
-                        style={{ backgroundColor: THEMES[((prompt as any).modelId as ThemeName) || 'chatgpt'].color, boxShadow: `0 0 10px ${THEMES[((prompt as any).modelId as ThemeName) || 'chatgpt'].color}` }} 
+                        style={{ backgroundColor: THEMES[((prompt as any).modelId as ThemeName) || 'chatgpt']?.color || '#ffffff', boxShadow: `0 0 10px ${THEMES[((prompt as any).modelId as ThemeName) || 'chatgpt']?.color || '#ffffff'}` }} 
                       />
                     </h3>
                     <p className="text-white/50 text-sm">{prompt.description}</p>

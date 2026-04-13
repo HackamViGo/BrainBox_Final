@@ -12,6 +12,7 @@ describe('cn utility', () => {
   });
 
   it('should ignore falsey values', () => {
-    expect(cn('a', false && 'b', undefined, null, 'c')).toBe('a c');
+    const isFalse = false;
+    expect(cn('a', isFalse && 'b', undefined, null, 'c')).toBe('a c');
   });
 });

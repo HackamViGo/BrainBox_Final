@@ -52,7 +52,7 @@ export function ApiKeyModal() {
 
   return (
     <Dialog open={isApiKeyModalOpen} onOpenChange={(open) => setModalOpen('apiKey', open)}>
-      <DialogContent className="max-w-xl p-0 overflow-hidden bg-[#0a0a0a] border-white/10 rounded-3xl">
+      <DialogContent aria-describedby={undefined} className="max-w-xl p-0 overflow-hidden bg-[#0a0a0a] border-white/10 rounded-3xl">
         <div className="p-6 border-b border-white/10 flex justify-between items-center bg-white/5">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400">

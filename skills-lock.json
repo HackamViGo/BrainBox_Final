@@ -1,10 +1,41 @@
 {
-  "version": 1,
+  "version": "2.0.0",
+  "updatedAt": "2026-04-13T16:22:00Z",
   "skills": {
-    "supabase": {
-      "source": "supabase/agent-skills",
-      "sourceType": "github",
-      "computedHash": "cb675a889c60172febe84740e7c22b600c8241c390deaff3d368c408f10dffdf"
+    "ai-pipeline": {
+      "id": "ai-pipeline",
+      "version": "1.0.0",
+      "path": ".agents/skills/ai-pipeline",
+      "description": "Управление на Gemini SDK, стандарти за Prompt Engineering и AI филтри.",
+      "whenToUse": "При работа по AI интеграции, промяна на системни промпти или логика на Gemini."
+    },
+    "brainbox-extension": {
+      "id": "brainbox-extension",
+      "version": "1.0.0",
+      "path": ".agents/skills/brainbox-extension",
+      "description": "Vite 8, CRXJS, MV3 Service Worker и комуникация между разширението и Dashboard.",
+      "whenToUse": "При разработка на Chrome Extension, лонг-поулинг, контекстни менюта или Content Scripts."
+    },
+    "brainbox-web": {
+      "id": "brainbox-web",
+      "version": "1.0.0",
+      "path": ".agents/skills/brainbox-web",
+      "description": "Next.js 16.2 monorepo архитектура, NeuralField canvas и Zustand state управление.",
+      "whenToUse": "При работа по уеб приложението (Dashboard, Library, Prompts) и UI компоненти."
+    },
+    "brainbox-supabase": {
+      "id": "brainbox-supabase",
+      "version": "1.0.0",
+      "path": ".agents/skills/brainbox-supabase",
+      "description": "Postgres schema, RLS политики, Auth setup и Server Actions.",
+      "whenToUse": "При промени по базата данни, създаване на нови Server Actions или проблеми с оторизацията."
+    },
+    "core-standards": {
+      "id": "core-standards",
+      "version": "1.0.0",
+      "path": ".agents/skills/core-standards",
+      "description": "Глобални стандарти за TypeScript, Logging, Error Handling и Monorepo граници.",
+      "whenToUse": "Задължителен за всяка задача за проверка на съответствие с архитектурните правила."
     }
   }
 }

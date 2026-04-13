@@ -1,6 +1,10 @@
 'use client'
 
 import React, { useState, useCallback, useRef } from 'react';
+import type {
+  Connection,
+  Edge,
+  Node} from '@xyflow/react';
 import {
   ReactFlow,
   ReactFlowProvider,
@@ -9,9 +13,6 @@ import {
   useEdgesState,
   Controls,
   Background,
-  Connection,
-  Edge,
-  Node,
   BackgroundVariant,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
@@ -156,7 +157,7 @@ function WorkspaceCanvas() {
 
   return (
     <div className="h-full flex w-full overflow-hidden relative flex-col lg:flex-row">
-      <AssetLibrary onDragStart={onDragStart} />
+      {/* AssetLibrary removed as per user request */}
       
       <div className="flex-1 h-full relative" ref={reactFlowWrapper} onContextMenu={onContextMenu}>
         <ReactFlow

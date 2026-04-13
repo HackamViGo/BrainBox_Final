@@ -1,7 +1,7 @@
 # Node
 node_modules/
 .pnpm-debug.log
-pnpm-lock.yaml
+# pnpm-lock.yaml should be tracked
 
 # Logs
 logs
@@ -15,18 +15,32 @@ pnpm-debug.log*
 .next/
 out/
 build/
+next-env.d.ts
+.next-types/
 
 # Vite
 dist/
 
-# Env
+# Env & Secrets
 .env
 .env.local
-.env.development.local
-.env.test.local
-.env.production.local
-*.env
 .env*.local
+*.env
+!.env.example
+.env.sh
+.envrc
+*.pem
+*.key
+*.cert
+*.crt
+*.pfx
+*.p12
+auth.json
+credentials.json
+secrets.json
+access_token*
+id_rsa*
+*.pub
 
 # OS
 .DS_Store
@@ -45,6 +59,7 @@ Thumbs.db
 .turbo/
 .eslintcache
 .vercel/
+.serverless/
 .vscode/
 .idea/
 *.suo
@@ -70,3 +85,6 @@ playwright/.cache/
 # Local Scratch
 scratch/
 *.txt
+logs/
+.agents/
+brainbox/

@@ -51,7 +51,7 @@ export function NewChatModal() {
 
   return (
     <Dialog open={isNewChatModalOpen} onOpenChange={(open) => setModalOpen('newChat', open)}>
-      <DialogContent className="max-w-md p-0 overflow-hidden bg-[#0a0a0a] border-white/10 rounded-3xl shadow-2xl">
+      <DialogContent aria-describedby={undefined} className="max-w-md p-0 overflow-hidden bg-[#0a0a0a] border-white/10 rounded-3xl shadow-2xl">
         <div className="p-6 border-b border-white/10 flex justify-between items-center bg-white/5">
           <DialogTitle className="text-lg font-semibold text-white">Save New Chat</DialogTitle>
         </div>

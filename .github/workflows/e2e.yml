@@ -4,30 +4,76 @@ on:
   pull_request:
     branches: [main]
 
+concurrency:
+  group: e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '20'
+  PNPM_VERSION: '9'
+
 jobs:
   e2e:
+    name: Playwright E2E
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    env:
+      # Test Supabase проект — отделен от production!
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY }}
+      NEXT_PUBLIC_GEMINI_API_KEY: ${{ secrets.TEST_GEMINI_API_KEY }}
+
     steps:
       - uses: actions/checkout@v4
+
       - uses: pnpm/action-setup@v4
         with:
-          version: 9
+          version: ${{ env.PNPM_VERSION }}
+
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: 'pnpm'
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build
+      # Next.js build cache — спестява ~2мин на всеки run
+      - name: Cache Next.js build
+        uses: actions/cache@v4
+        with:
+          path: |
+            apps/web-app/.next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('apps/web-app/**/*.{ts,tsx}') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-
+
+      - name: Build web-app
         run: pnpm --filter web-app build
-
-      - name: Install Playwright Browsers
-        run: pnpm exec playwright install --with-deps chromium
-
-      - name: Run E2E Tests
-        run: pnpm exec playwright test
         env:
-          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          NEXT_TELEMETRY_DISABLED: 1
+
+      - name: Install Playwright browsers
+        run: pnpm --filter web-app exec playwright install --with-deps chromium
+
+      - name: Run E2E tests
+        run: pnpm --filter web-app exec playwright test
+        env:
+          CI: true
+
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report-${{ github.run_id }}
+          path: apps/web-app/playwright-report/
+          retention-days: 14
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-results-${{ github.run_id }}
+          path: apps/web-app/test-results/
+          retention-days: 7

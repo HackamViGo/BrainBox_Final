@@ -22,7 +22,7 @@ export function SmartSwitchModal() {
 
   return (
     <Dialog open={isSmartSwitchModalOpen} onOpenChange={(open) => setModalOpen('smartSwitch', open)}>
-      <DialogContent className="max-w-lg p-0 overflow-hidden bg-[#0a0a0a] border-white/10 rounded-3xl shadow-2xl">
+      <DialogContent aria-describedby={undefined} className="max-w-lg p-0 overflow-hidden bg-[#0a0a0a] border-white/10 rounded-3xl shadow-2xl">
         <div className={cn("h-2 w-full bg-gradient-to-r", targetModel.gradient || "from-blue-500 to-purple-600")} />
         
         <div className="p-8">

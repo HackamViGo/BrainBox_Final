@@ -40,13 +40,32 @@ interface LibraryActions {
 
 export type LibraryStore = LibraryState & LibraryActions
 
+const MOCK_LIBRARY_FOLDERS: Folder[] = [
+  { id: 'mock-lf-1', name: 'Q1 Launch', iconIndex: 0, level: 0, type: 'library', parentId: null },
+  { id: 'mock-lf-2', name: 'Research', iconIndex: 12, level: 0, type: 'library', parentId: null },
+  { id: 'mock-lf-3', name: 'Deep Dives', iconIndex: 4, level: 1, type: 'library', parentId: 'mock-lf-2' },
+]
+
+const MOCK_PROMPT_FOLDERS: Folder[] = [
+  { id: 'mock-pf-1', name: 'Coding Agents', iconIndex: 8, level: 0, type: 'prompt', parentId: null },
+  { id: 'mock-pf-2', name: 'Writing Styles', iconIndex: 21, level: 0, type: 'prompt', parentId: null }
+]
+
+const MOCK_ITEMS: Item[] = [
+  { id: 'mock-i-1', title: 'Next.js 16 Migration', description: 'Chat about App Router and React 19', type: 'chat', folderId: 'mock-lf-1', content: '', theme: 'chatgpt' },
+  { id: 'mock-i-2', title: 'Supabase RLS Rules', description: 'Debugging policies', type: 'chat', folderId: 'mock-lf-3', content: '', theme: 'claude' },
+  { id: 'mock-i-3', title: 'Vite vs Farm', description: 'Performance comparison', type: 'chat', folderId: null, content: '', theme: 'gemini' }, // unassigned
+  { id: 'mock-i-4', title: 'Senior Frontend Dev', description: 'System prompt with strict rules', type: 'prompt', folderId: 'mock-pf-1', content: 'You are...', theme: 'deepseek' },
+  { id: 'mock-i-5', title: 'Creative Writer', description: 'Tone and voice guidelines', type: 'prompt', folderId: 'mock-pf-2', content: 'Write with flair...', theme: 'claude' }
+]
+
 export const useLibraryStore = create<LibraryStore>()(
   persist(
     (set, get) => ({
       // State
-      libraryFolders: [],
-      promptFolders: [],
-      items: [],
+      libraryFolders: MOCK_LIBRARY_FOLDERS,
+      promptFolders: MOCK_PROMPT_FOLDERS,
+      items: MOCK_ITEMS,
       isLoading: false,
 
       // Actions
@@ -55,10 +74,17 @@ export const useLibraryStore = create<LibraryStore>()(
         try {
           const data = await loadUserData()
           if (data) {
+            // Merge data with deduplication by ID
+            const mergeById = <T extends { id: string }>(...arrays: T[][]) => {
+              const map = new Map<string, T>()
+              arrays.flat().forEach(item => map.set(item.id, item))
+              return Array.from(map.values())
+            }
+
             set({
-              libraryFolders: data.libraryFolders,
-              promptFolders: data.promptFolders,
-              items: data.items,
+              libraryFolders: mergeById<Folder>(data.libraryFolders, MOCK_LIBRARY_FOLDERS, get().libraryFolders),
+              promptFolders: mergeById<Folder>(data.promptFolders, MOCK_PROMPT_FOLDERS, get().promptFolders),
+              items: mergeById<Item>(data.items, MOCK_ITEMS, get().items),
             })
           }
         } catch (error) {

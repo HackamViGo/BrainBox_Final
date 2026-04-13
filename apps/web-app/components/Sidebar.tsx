@@ -19,7 +19,7 @@ import { ICON_LIBRARY } from '@brainbox/ui'
 import { NeuralField } from '@brainbox/ui'
 import { useAppStore } from '@/store/useAppStore'
 import { useLibraryStore } from '@/store/useLibraryStore'
-import { ScreenName, Folder as FolderData, Item } from '@brainbox/types'
+import type { ScreenName, Folder as FolderData, Item } from '@brainbox/types'
 import { cn } from '@brainbox/utils'
 
 const ICON_CATEGORIES = [
@@ -127,7 +127,7 @@ export function Sidebar() {
           items={items.filter(i => i.folderId === folder.id && (!searchQuery || i.title.toLowerCase().includes(searchQuery.toLowerCase())))}
         />
         {(expandedFolders.includes(folder.id) || !!searchQuery) && (isExpanded || isPinned || isMobileOpen) && (
-          <div className="ml-3 border-l border-white/5 pl-1">
+          <div className="ml-3 border-l border-white/10 pl-1">
             {renderFolders(folders, folder.id)}
           </div>
         )}
@@ -186,13 +186,13 @@ export function Sidebar() {
         onMouseEnter={() => !isPinned && !isMobileOpen && setIsExpanded(true)}
         onMouseLeave={() => !isPinned && !isMobileOpen && setIsExpanded(false)}
         className={cn(
-          "absolute inset-y-0 left-0 z-[100] lg:z-50 flex flex-col glass-panel border-r border-white/10 transition-all duration-300 overflow-hidden",
-          isMobileOpen ? 'translate-x-0 w-64' : '-translate-x-full lg:translate-x-0',
-          isExpanded || isPinned || isMobileOpen ? 'lg:w-64 shadow-2xl shadow-black/50' : 'lg:w-20 shadow-none'
+          "absolute inset-y-0 left-0 z-[100] lg:z-50 flex flex-col transition-all duration-300 overflow-hidden",
+          isMobileOpen ? 'translate-x-0 w-64 glass-panel bg-black/80' : '-translate-x-full lg:translate-x-0',
+          isExpanded || isPinned || isMobileOpen ? 'lg:w-64 shadow-2xl shadow-black/80 glass-panel bg-[#080808]/95' : 'lg:w-20 shadow-none glass-panel'
         )}
         initial={false}
       >
-        <div className="absolute inset-0 z-[-1] opacity-20 pointer-events-none">
+        <div className="absolute inset-0 z-[-1] opacity-30 pointer-events-none">
           <NeuralField 
             theme={theme} 
             mode="wander" 
@@ -279,7 +279,7 @@ export function Sidebar() {
                 animate="center"
                 exit="exit"
                 transition={{ duration: 0.3 }}
-                className="py-6 flex flex-col gap-2 px-3 h-full"
+                className="py-6 flex flex-col gap-2 px-3 min-h-full"
               >
                 <div className="flex-1 space-y-2">
                   {globalItems.map((item) => (
@@ -306,7 +306,7 @@ export function Sidebar() {
                 animate="center"
                 exit="exit"
                 transition={{ duration: 0.3 }}
-                className="py-6 flex flex-col gap-1 px-3 h-full"
+                className="py-6 flex flex-col gap-1 px-3 min-h-full"
               >
                 <button 
                   onClick={() => setSwitchMode('global')}
@@ -357,7 +357,7 @@ export function Sidebar() {
                       onClick={() => setActiveFolder(null)}
                       className={cn(
                         "flex items-center transition-all relative group rounded-xl",
-                        !activeFolder ? 'bg-white/10 text-white shadow-sm border border-white/10' : 'text-white/50 hover:bg-white/5 hover:text-white',
+                        !activeFolder ? 'bg-white/10 text-white shadow-sm border border-white/10' : 'text-white/50 hover:bg-white/5 hover:text-white border border-transparent',
                         isExpanded || isPinned || isMobileOpen ? 'w-full p-3 justify-start px-4' : 'w-12 h-12 justify-center mx-auto'
                       )}
                     >
@@ -388,7 +388,7 @@ export function Sidebar() {
                     </button>
                     
                     {!activeFolder && (isExpanded || isPinned || isMobileOpen) && (
-                      <div className="ml-8 mt-1 space-y-1 max-h-[105px] overflow-y-auto scrollbar-hide">
+                      <div className="ml-8 mt-1 space-y-1">
                         {items.filter(i => (i.folderId === null || i.folderId === 'root' || !i.folderId) && i.type === (activeScreen === 'library' ? 'chat' : 'prompt') && (!searchQuery || i.title.toLowerCase().includes(searchQuery.toLowerCase()))).map(item => (
                           <div
                             key={item.id}
@@ -415,7 +415,7 @@ export function Sidebar() {
                 animate="center"
                 exit="exit"
                 transition={{ duration: 0.3 }}
-                className="py-6 flex flex-col gap-2 px-3 h-full"
+                className="py-6 flex flex-col gap-2 px-3 min-h-full"
               >
                 <button 
                   onClick={() => setSwitchMode('global')}
@@ -465,9 +465,11 @@ export function Sidebar() {
                           if (activeModelId === feather.id) return;
                           setModalOpen('smartSwitch', true, feather);
                         }}
+                        onMouseEnter={() => useAppStore.getState().setHoverTheme(feather.id as any)}
+                        onMouseLeave={() => useAppStore.getState().setHoverTheme(null)}
                         className={cn(
                           "flex items-center border transition-all relative group rounded-xl",
-                          isActive ? 'bg-white/10 border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)]' : 'bg-white/5 border-white/5 hover:bg-white/10',
+                          isActive ? 'bg-white/10 border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)]' : 'bg-white/5 border border-transparent hover:bg-white/10 hover:border-white/5',
                           isExpanded || isPinned || isMobileOpen ? 'w-full p-3 justify-start px-4' : 'w-12 h-12 justify-center mx-auto'
                         )}
                       >
@@ -509,7 +511,7 @@ export function Sidebar() {
                 animate="center"
                 exit="exit"
                 transition={{ duration: 0.3 }}
-                className="py-6 flex flex-col gap-2 px-3 h-full"
+                className="py-6 flex flex-col gap-2 px-3 min-h-full"
               >
                 <button 
                   onClick={() => setSwitchMode('feathers')}
@@ -534,7 +536,7 @@ export function Sidebar() {
                 {[1, 2, 3].map((i) => (
                   <button key={i} className={cn(
                     "flex items-center rounded-xl text-white/50 hover:bg-white/5 hover:text-white transition-all",
-                    isExpanded || isPinned || isMobileOpen ? 'w-full p-3 justify-start px-4' : 'w-12 h-12 justify-center mx-auto'
+                    isExpanded || isPinned || isMobileOpen ? 'w-full p-3 justify-start px-4 border border-transparent hover:border-white/10' : 'w-12 h-12 justify-center mx-auto border border-transparent'
                   )}>
                     <MessageSquare className="w-6 h-6 shrink-0" />
                     <div className={cn("text-left transition-all duration-300 overflow-hidden", (isExpanded || isPinned || isMobileOpen) ? 'opacity-100 ml-4 max-w-[200px]' : 'opacity-0 ml-0 max-w-0')}>
@@ -555,7 +557,7 @@ export function Sidebar() {
                 animate="center"
                 exit="exit"
                 transition={{ duration: 0.3 }}
-                className="py-6 flex flex-col gap-0 px-3 h-full"
+                className="py-6 flex flex-col gap-0 px-3 min-h-full"
               >
                 <button 
                   onClick={() => setSwitchMode('global')}
@@ -714,7 +716,7 @@ function FolderItem({
           onClick={onClick}
           className={cn(
             "flex items-center rounded-xl transition-all relative",
-            isActive ? 'bg-white/10 text-white shadow-sm border border-white/10' : 'text-white/50 hover:bg-white/5 hover:text-white',
+            isActive ? 'bg-white/10 text-white shadow-sm border border-white/10' : 'text-white/50 hover:bg-white/5 hover:text-white border border-transparent',
             isExpanded || isPinned || isMobileOpen ? 'flex-1 p-2 justify-start' : 'w-12 h-12 justify-center mx-auto'
           )}
         >
@@ -743,7 +745,7 @@ function FolderItem({
       </div>
 
       {isExpandedInRail && (isExpanded || isPinned || isMobileOpen) && items.length > 0 && (
-        <div className="ml-8 mt-1 space-y-1 max-h-[105px] overflow-y-auto scrollbar-hide">
+        <div className="ml-8 mt-1 space-y-1">
           {items.map((item: any) => {
             const theme = item.source ? SOURCE_THEMES[item.source] || SOURCE_THEMES.other : null;
             const ItemIcon = theme ? theme.icon : (item.type === 'chat' ? MessageSquare : Zap);
@@ -774,7 +776,7 @@ function NavItem({ item, isActive, onClick, isExpanded, isPinned, isMobileOpen }
       onClick={onClick}
       className={cn(
         "relative flex items-center rounded-xl transition-all duration-200",
-        isActive ? 'bg-white/10 text-white shadow-lg shadow-white/5 border border-white/10' : 'text-white/50 lg:hover:bg-white/5 hover:text-white',
+        isActive ? 'bg-white/10 text-white shadow-lg shadow-white/5 border border-white/10' : 'text-white/50 lg:hover:bg-white/5 hover:text-white border border-transparent',
         isExpanded || isPinned || isMobileOpen ? 'w-full p-3 justify-start px-4' : 'w-12 h-12 justify-center mx-auto'
       )}
     >

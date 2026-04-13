@@ -66,12 +66,29 @@ function extractImports(filePath: string): string[] {
   if (!existsSync(join(ROOT, filePath))) return []
   const content = readFileSync(join(ROOT, filePath), 'utf-8')
   const imports: string[] = []
+  
+  // Match standard static imports: import { x } from 'path'
   const re = /^import\s+.*?from\s+['"]([^'"]+)['"]/gm
   let m: RegExpExecArray | null
   while ((m = re.exec(content)) !== null) {
     const resolved = resolveImport(filePath, m[1])
     if (resolved) imports.push(resolved)
   }
+
+  // Match dynamic imports: import('path')
+  const dynamicRe = /import\s*\(\s*['"]([^'"]+)['"]\s*\)/g
+  while ((m = dynamicRe.exec(content)) !== null) {
+    const resolved = resolveImport(filePath, m[1])
+    if (resolved) imports.push(resolved)
+  }
+
+  // Match side-effect imports: import 'path'
+  const effectRe = /^import\s+['"]([^'"]+)['"]/gm
+  while ((m = effectRe.exec(content)) !== null) {
+    const resolved = resolveImport(filePath, m[1])
+    if (resolved) imports.push(resolved)
+  }
+
   return [...new Set(imports)]
 }
 

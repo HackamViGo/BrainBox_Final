@@ -1,23 +1,45 @@
 {
   "name": "brainbox-monorepo",
   "private": true,
+  "type": "module",
   "packageManager": "pnpm@9.15.4",
   "scripts": {
     "dev": "pnpm --filter web-app dev",
     "build": "pnpm --filter web-app build",
     "lint": "pnpm -r lint",
     "typecheck": "pnpm -r typecheck",
-    "install:all": "pnpm install"
+    "install:all": "pnpm install",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   },
   "workspaces": [
     "apps/*",
     "packages/*"
   ],
   "devDependencies": {
-    "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3",
+    "@commitlint/cli": "^20.5.0",
+    "@commitlint/config-conventional": "^20.5.0",
+    "@eslint/js": "^10.0.1",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@typescript-eslint/eslint-plugin": "^8.58.1",
+    "@typescript-eslint/parser": "^8.58.1",
+    "babel-plugin-react-compiler": "^1.0.0",
+    "dotenv-cli": "^11.0.0",
+    "eslint": "^10.2.0",
+    "eslint-config-next": "^16.2.3",
+    "globals": "^17.5.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.2",
+    "prettier": "^3.8.2",
     "tsx": "^4.21.0",
-    "typescript": "^6.0.2",
-    "vitest": "^4.1.4"
+    "typescript": "catalog:",
+    "typescript-eslint": "^8.58.1",
+    "vitest": "catalog:"
   }
 }

@@ -1,4 +1,5 @@
-import { BaseEdge, EdgeProps, getBezierPath, Edge } from '@xyflow/react';
+import type { EdgeProps, Edge } from '@xyflow/react';
+import { BaseEdge, getBezierPath } from '@xyflow/react';
 
 export function NeuralEdge({
   sourceX,

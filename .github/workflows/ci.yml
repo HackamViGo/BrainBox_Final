@@ -2,34 +2,124 @@ name: CI
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main]
   pull_request:
-    branches: [main, develop]
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '20'
+  PNPM_VERSION: '9'
 
 jobs:
-  check:
+  # ─────────────────────────────────────────
+  # Job 1: Typecheck (всички workspaces)
+  # ─────────────────────────────────────────
+  typecheck:
+    name: TypeScript
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+
       - uses: pnpm/action-setup@v4
         with:
-          version: 9
+          version: ${{ env.PNPM_VERSION }}
+
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: 'pnpm'
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Typecheck
+      - name: Typecheck all workspaces
         run: pnpm typecheck
 
-      - name: Lint
+  # ─────────────────────────────────────────
+  # Job 2: Lint
+  # ─────────────────────────────────────────
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint all workspaces
         run: pnpm lint
 
-      - name: Unit Tests
+  # ─────────────────────────────────────────
+  # Job 3: Unit тестове (Vitest)
+  # ─────────────────────────────────────────
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run unit tests
         run: pnpm test --run
 
-      - name: Graph Check
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report
+          path: apps/web-app/coverage/
+          retention-days: 7
+
+  # ─────────────────────────────────────────
+  # Job 4: GRAPH.json валидация
+  # ─────────────────────────────────────────
+  graph-check:
+    name: Dependency Graph
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate dependency graph
         run: npx tsx scripts/generate-graph.ts --check
+        working-directory: apps/web-app

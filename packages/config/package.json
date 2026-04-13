@@ -2,5 +2,6 @@
   "name": "@brainbox/config",
   "version": "0.0.1",
   "private": true,
-  "main": "./package.json"
+  "main": "./package.json",
+  "type": "module"
 }

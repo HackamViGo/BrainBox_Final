@@ -1,13 +1,13 @@
 {
   "metadata": {
-    "generated_at": "2026-04-11T00:00:00.000Z",
+    "generated_at": "2026-04-11T17:26:00.000Z",
     "generated_by": "HUMAN+AGENT",
     "version": "1.0.0",
     "schema_version": "1",
     "total_nodes": 27,
     "coverage": {
-      "skills": "6/6",
-      "skill_references": "3/3",
+      "skills": "5/5",
+      "skill_references": "6/6",
       "rules": "11/11",
       "workflows": "4/4",
       "tasks": "1/1"
@@ -15,11 +15,6 @@
     "notes": "Dependency graph само за .agents/ папката. Документира skills, rules, workflows и техните зависимости. Ръчно поддържан от агента."
   },
   "nodes": [
-
-    // ─────────────────────────────────────────────
-    // RULES
-    // ─────────────────────────────────────────────
-
     {
       "id": ".agents/rules/GEMINI.md",
       "workspace": "agents",
@@ -27,11 +22,9 @@
       "responsibility": "Главен rule файл. Always On. Дефинира task management принципи, code rules, testing, hooks, workflows, CI/CD и naming conventions за целия BrainBox проект.",
       "dependencies": [],
       "dependents": [
-        ".agents/skills/brainbox-nextjs-migration/SKILL.md",
-        ".agents/skills/brainbox-screens-migration/SKILL.md",
-        ".agents/skills/brainbox-supabase-schema/SKILL.md",
-        ".agents/skills/brainbox-sidebar-navigation/SKILL.md",
-        ".agents/skills/brainbox-styling-setup/SKILL.md"
+        ".agents/skills/brainbox-web/SKILL.md",
+        ".agents/skills/brainbox-supabase/SKILL.md",
+        ".agents/skills/core-standards/SKILL.md"
       ],
       "side_effects": [],
       "public_api": [],
@@ -66,7 +59,9 @@
       "responsibility": "Core Task Management: Plan → Verify → Execute → Document цикъла.",
       "dependencies": [],
       "dependents": [".agents/rules/cursorrules.md"],
-      "side_effects": [], "public_api": [], "status": "active"
+      "side_effects": [],
+      "public_api": [],
+      "status": "active"
     },
     {
       "id": ".agents/rules/core/documentation.md",
@@ -75,7 +70,9 @@
       "responsibility": "Core Documentation: DECISIONS.md (ADR), README.md и inline JSDoc правила.",
       "dependencies": [],
       "dependents": [".agents/rules/cursorrules.md"],
-      "side_effects": [], "public_api": [], "status": "active"
+      "side_effects": [],
+      "public_api": [],
+      "status": "active"
     },
     {
       "id": ".agents/rules/core/testing.md",
@@ -84,7 +81,9 @@
       "responsibility": "Core Testing: Кога се пишат тестове, структура на __tests__ и Playwright E2E.",
       "dependencies": [],
       "dependents": [".agents/rules/cursorrules.md"],
-      "side_effects": [], "public_api": [], "status": "active"
+      "side_effects": [],
+      "public_api": [],
+      "status": "active"
     },
     {
       "id": ".agents/rules/core/commits.md",
@@ -93,7 +92,9 @@
       "responsibility": "Core Commits: Conventional Commits стандарти (feat, fix, chore).",
       "dependencies": [],
       "dependents": [".agents/rules/cursorrules.md"],
-      "side_effects": [], "public_api": [], "status": "active"
+      "side_effects": [],
+      "public_api": [],
+      "status": "active"
     },
     {
       "id": ".agents/rules/core/ci-cd.md",
@@ -102,7 +103,9 @@
       "responsibility": "Core CI/CD: GitHub Actions структура (ci.yml, e2e.yml) и PR правила.",
       "dependencies": [],
       "dependents": [".agents/rules/cursorrules.md"],
-      "side_effects": [], "public_api": [], "status": "active"
+      "side_effects": [],
+      "public_api": [],
+      "status": "active"
     },
     {
       "id": ".agents/rules/brainbox/code-standards.md",
@@ -111,7 +114,9 @@
       "responsibility": "BrainBox Code Standards: Next.js 16.2, monorepo imports, TS strict mode, Tailwind v4.",
       "dependencies": [],
       "dependents": [".agents/rules/cursorrules.md"],
-      "side_effects": [], "public_api": [], "status": "active"
+      "side_effects": [],
+      "public_api": [],
+      "status": "active"
     },
     {
       "id": ".agents/rules/brainbox/architecture.md",
@@ -120,7 +125,9 @@
       "responsibility": "BrainBox Architecture: SPA Shell, NeuralField persistence, Zustand persist/skipHydration.",
       "dependencies": [],
       "dependents": [".agents/rules/cursorrules.md"],
-      "side_effects": [], "public_api": [], "status": "active"
+      "side_effects": [],
+      "public_api": [],
+      "status": "active"
     },
     {
       "id": ".agents/rules/brainbox/hooks.md",
@@ -129,7 +136,9 @@
       "responsibility": "BrainBox Hooks: Кога се прави custom hook и задължителни hooks списък.",
       "dependencies": [],
       "dependents": [".agents/rules/cursorrules.md"],
-      "side_effects": [], "public_api": [], "status": "active"
+      "side_effects": [],
+      "public_api": [],
+      "status": "active"
     },
     {
       "id": ".agents/rules/brainbox/workflows.md",
@@ -138,147 +147,147 @@
       "responsibility": "BrainBox Workflows: Кога се прави workflow и задължителни workflows списък.",
       "dependencies": [],
       "dependents": [".agents/rules/cursorrules.md"],
-      "side_effects": [], "public_api": [], "status": "active"
+      "side_effects": [],
+      "public_api": [],
+      "status": "active"
     },
-
-    // ─────────────────────────────────────────────
-    // SKILLS
-    // ─────────────────────────────────────────────
-
     {
-      "id": ".agents/skills/brainbox-nextjs-migration/SKILL.md",
+      "id": ".agents/skills/ai-pipeline/SKILL.md",
       "workspace": "agents",
       "type": "skill",
-      "responsibility": "Главен migration skill. 8-фазов план за конвертиране на BrainBox Vite→Next.js 16.2 монорепо. Дефинира monorepo scaffold, shared packages, App Router архитектура и automation tools.",
-      "dependencies": [
-        ".agents/skills/brainbox-nextjs-migration/references/nextjs16-react19-api.md",
-        ".agents/skills/brainbox-nextjs-migration/references/monorepo-structure.md",
-        ".agents/skills/brainbox-nextjs-migration/references/neural-animation-strategy.md"
-      ],
+      "responsibility": "Gemini 2.0 SDK and Prompt Engineering Standards.",
+      "dependencies": [],
       "dependents": [],
       "side_effects": [],
       "public_api": [],
       "status": "active"
     },
     {
-      "id": ".agents/skills/brainbox-nextjs-migration/references/nextjs16-react19-api.md",
+      "id": ".agents/skills/brainbox-extension/SKILL.md",
+      "workspace": "agents",
+      "type": "skill",
+      "responsibility": "Vite 8, CRXJS, MV3 Background Worker, DOM Injection constraints and Platform Adapters.",
+      "dependencies": [],
+      "dependents": [],
+      "side_effects": [],
+      "public_api": [],
+      "status": "active"
+    },
+    {
+      "id": ".agents/skills/brainbox-supabase/SKILL.md",
+      "workspace": "agents",
+      "type": "skill",
+      "responsibility": "Full Supabase integration (RLS, schema, auth, server actions, optimistic UI updates).",
+      "dependencies": [],
+      "dependents": [".agents/workflows/new-server-action.md"],
+      "side_effects": [],
+      "public_api": [],
+      "status": "active"
+    },
+    {
+      "id": ".agents/skills/brainbox-web/SKILL.md",
+      "workspace": "agents",
+      "type": "skill",
+      "responsibility": "Next.js 16.2 / React 19 web app migration guidelines. Overarching UI, logic, styles, and architecture.",
+      "dependencies": [
+        ".agents/skills/brainbox-web/references/nextjs16-react19-api.md",
+        ".agents/skills/brainbox-web/references/monorepo-structure.md",
+        ".agents/skills/brainbox-web/references/neural-animation-strategy.md",
+        ".agents/skills/brainbox-web/references/screens-migration.md",
+        ".agents/skills/brainbox-web/references/sidebar-navigation.md",
+        ".agents/skills/brainbox-web/references/styling-setup.md"
+      ],
+      "dependents": [
+        ".agents/workflows/new-screen.md",
+        ".agents/workflows/migrate-screen.md"
+      ],
+      "side_effects": [],
+      "public_api": [],
+      "status": "active"
+    },
+    {
+      "id": ".agents/skills/core-standards/SKILL.md",
+      "workspace": "agents",
+      "type": "skill",
+      "responsibility": "Monorepo boundaries, Strict TS, Vitest/Playwright, Context rules, Error handling, Logging, and Sentry monitoring.",
+      "dependencies": [],
+      "dependents": [],
+      "side_effects": [],
+      "public_api": [],
+      "status": "active"
+    },
+    {
+      "id": ".agents/skills/brainbox-web/references/nextjs16-react19-api.md",
       "workspace": "agents",
       "type": "skill-reference",
-      "responsibility": "Верифицирани API patterns за Next.js 16.2 + React 19.2. Покрива: use client vs useEffect правило, React Compiler, Zustand skipHydration, Supabase SSR setup, Tailwind v4, dynamic imports.",
+      "responsibility": "Reference docs for brainbox-web.",
       "dependencies": [],
-      "dependents": [
-        ".agents/skills/brainbox-nextjs-migration/SKILL.md"
-      ],
+      "dependents": [".agents/skills/brainbox-web/SKILL.md"],
       "side_effects": [],
       "public_api": [],
       "status": "active"
     },
     {
-      "id": ".agents/skills/brainbox-nextjs-migration/references/monorepo-structure.md",
+      "id": ".agents/skills/brainbox-web/references/monorepo-structure.md",
       "workspace": "agents",
       "type": "skill-reference",
-      "responsibility": "Точна файлова структура на монорепото — всеки файл, всеки package.json, tsconfig, Supabase SQL schema.",
+      "responsibility": "Reference docs for brainbox-web.",
       "dependencies": [],
-      "dependents": [
-        ".agents/skills/brainbox-nextjs-migration/SKILL.md"
-      ],
+      "dependents": [".agents/skills/brainbox-web/SKILL.md"],
       "side_effects": [],
       "public_api": [],
       "status": "active"
     },
     {
-      "id": ".agents/skills/brainbox-nextjs-migration/references/neural-animation-strategy.md",
+      "id": ".agents/skills/brainbox-web/references/neural-animation-strategy.md",
       "workspace": "agents",
       "type": "skill-reference",
-      "responsibility": "NeuralField animation стратегия. Документира brain↔wander↔extension transitions, Login overlay pattern, theme auto-cycle, h-dvh fix.",
+      "responsibility": "Reference docs for brainbox-web.",
       "dependencies": [],
-      "dependents": [
-        ".agents/skills/brainbox-nextjs-migration/SKILL.md"
-      ],
+      "dependents": [".agents/skills/brainbox-web/SKILL.md"],
       "side_effects": [],
       "public_api": [],
       "status": "active"
     },
     {
-      "id": ".agents/skills/brainbox-screens-migration/SKILL.md",
+      "id": ".agents/skills/brainbox-web/references/screens-migration.md",
       "workspace": "agents",
-      "type": "skill",
-      "responsibility": "Детайлен migration guide за всеки от 11-те BrainBox екрана. Покрива: prop drilling→Zustand, Gemini→Server Action, dynamic imports за D3/ReactFlow, автоматизационен скрипт.",
-      "dependencies": [
-        ".agents/skills/brainbox-nextjs-migration/SKILL.md"
-      ],
-      "dependents": [],
-      "side_effects": [],
-      "public_api": [],
-      "status": "active"
-    },
-    {
-      "id": ".agents/skills/brainbox-supabase-schema/SKILL.md",
-      "workspace": "agents",
-      "type": "skill",
-      "responsibility": "Пълна Supabase интеграция — SQL schema с RLS, client/server/middleware setup, Server Actions CRUD, Zustand+Supabase optimistic updates, localStorage→Supabase migration.",
-      "dependencies": [
-        ".agents/skills/brainbox-nextjs-migration/references/nextjs16-react19-api.md"
-      ],
-      "dependents": [
-        ".agents/skills/brainbox-screens-migration/SKILL.md"
-      ],
-      "side_effects": [],
-      "public_api": [],
-      "status": "active"
-    },
-    {
-      "id": ".agents/skills/brainbox-sidebar-navigation/SKILL.md",
-      "workspace": "agents",
-      "type": "skill",
-      "responsibility": "Sidebar migration от prop drilling към Zustand. SwitchMode state machine (global/folders/feathers/pulse/workspace), store additions, NeuralField в sidebar.",
-      "dependencies": [
-        ".agents/skills/brainbox-nextjs-migration/SKILL.md"
-      ],
-      "dependents": [],
-      "side_effects": [],
-      "public_api": [],
-      "status": "active"
-    },
-    {
-      "id": ".agents/skills/brainbox-styling-setup/SKILL.md",
-      "workspace": "agents",
-      "type": "skill",
-      "responsibility": "Tailwind v4 + shadcn/ui setup. PostCSS конфигурация, пълен globals.css с BrainBox класове, @source директиви за монорепо, shadcn компоненти списък, Inter шрифт.",
-      "dependencies": [
-        ".agents/skills/brainbox-nextjs-migration/SKILL.md"
-      ],
-      "dependents": [],
-      "side_effects": [],
-      "public_api": [],
-      "status": "active"
-    },
-    {
-      "id": ".agents/skills/supabase/SKILL.md",
-      "workspace": "agents",
-      "type": "skill",
-      "responsibility": "Общ Supabase skill. Покрива CLI, сигурност (RLS), documentationFetching стратегия и най-добри практики за Supabase MCP.",
+      "type": "skill-reference",
+      "responsibility": "Reference docs for brainbox-web.",
       "dependencies": [],
-      "dependents": [
-        ".agents/skills/brainbox-supabase-schema/SKILL.md"
-      ],
+      "dependents": [".agents/skills/brainbox-web/SKILL.md"],
       "side_effects": [],
       "public_api": [],
       "status": "active"
     },
-
-    // ─────────────────────────────────────────────
-    // WORKFLOWS
-    // ─────────────────────────────────────────────
-
+    {
+      "id": ".agents/skills/brainbox-web/references/sidebar-navigation.md",
+      "workspace": "agents",
+      "type": "skill-reference",
+      "responsibility": "Reference docs for brainbox-web.",
+      "dependencies": [],
+      "dependents": [".agents/skills/brainbox-web/SKILL.md"],
+      "side_effects": [],
+      "public_api": [],
+      "status": "active"
+    },
+    {
+      "id": ".agents/skills/brainbox-web/references/styling-setup.md",
+      "workspace": "agents",
+      "type": "skill-reference",
+      "responsibility": "Reference docs for brainbox-web.",
+      "dependencies": [],
+      "dependents": [".agents/skills/brainbox-web/SKILL.md"],
+      "side_effects": [],
+      "public_api": [],
+      "status": "active"
+    },
     {
       "id": ".agents/workflows/new-screen.md",
       "workspace": "agents",
       "type": "workflow",
       "responsibility": "Scaffold нов screen: създава файл с 'use client', правилни store imports, placeholder JSX и добавя го в page.tsx.",
-      "dependencies": [
-        ".agents/skills/brainbox-screens-migration/SKILL.md"
-      ],
+      "dependencies": [".agents/skills/brainbox-screens-migration/SKILL.md"],
       "dependents": [],
       "side_effects": [],
       "public_api": [],
@@ -289,9 +298,7 @@
       "workspace": "agents",
       "type": "workflow",
       "responsibility": "Scaffold нов Server Action: 'use server', Zod parse, Supabase createClient, getUser() auth check, error handling.",
-      "dependencies": [
-        ".agents/skills/brainbox-supabase-schema/SKILL.md"
-      ],
+      "dependencies": [".agents/skills/brainbox-supabase-schema/SKILL.md"],
       "dependents": [],
       "side_effects": [],
       "public_api": [],
@@ -302,9 +309,7 @@
       "workspace": "agents",
       "type": "workflow",
       "responsibility": "Стъпки за миграция на съществуващ Vite screen към Next.js: добавя 'use client', сменя imports, премахва props, добавя store hooks.",
-      "dependencies": [
-        ".agents/skills/brainbox-screens-migration/SKILL.md"
-      ],
+      "dependencies": [".agents/skills/brainbox-screens-migration/SKILL.md"],
       "dependents": [],
       "side_effects": [],
       "public_api": [],
@@ -321,11 +326,6 @@
       "public_api": [],
       "status": "active"
     },
-
-    // ─────────────────────────────────────────────
-    // TASKS
-    // ─────────────────────────────────────────────
-
     {
       "id": "tasks/todo.md",
       "workspace": "agents",
