@@ -108,7 +108,7 @@ export const useAppStore = create<AppStore>()(
             set({ switchMode: 'global', slideDirection: -1 });
           }
         }
-        set({ activeScreen: screen, isMobileSidebarOpen: false });
+        set({ activeScreen: screen, isMobileSidebarOpen: false, activeFolder: null });
       },
       setTheme: (theme) => set({ theme }),
       setHoverTheme: (theme) => set({ hoverTheme: theme }),

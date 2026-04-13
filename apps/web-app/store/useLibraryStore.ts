@@ -82,9 +82,9 @@ export const useLibraryStore = create<LibraryStore>()(
             }
 
             set({
-              libraryFolders: mergeById<Folder>(data.libraryFolders, MOCK_LIBRARY_FOLDERS, get().libraryFolders),
-              promptFolders: mergeById<Folder>(data.promptFolders, MOCK_PROMPT_FOLDERS, get().promptFolders),
-              items: mergeById<Item>(data.items, MOCK_ITEMS, get().items),
+              libraryFolders: mergeById<Folder>(data.libraryFolders),
+              promptFolders: mergeById<Folder>(data.promptFolders),
+              items: mergeById<Item>(data.items),
             })
           }
         } catch (error) {
