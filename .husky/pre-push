@@ -13,7 +13,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # Unit тестове (без watch mode)
-pnpm test --run
+pnpm run test --run
 if [ $? -ne 0 ]; then
   echo "❌ Unit tests failed. Push aborted."
   exit 1
