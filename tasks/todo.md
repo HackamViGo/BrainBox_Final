@@ -32,3 +32,19 @@
 - [ ] `web-app` reads root env vars via `dotenv-cli`
 - [ ] `docs/VERCEL_SETUP.md` is present
 - [ ] Typecheck passes monorepo-wide
+
+## Fix: Runtime development script and MCP configuration
+
+### Plan
+
+- [x] Fix apps/web-app/package.json dev/build scripts (env var placement)
+- [x] Fix mcp_config.json vercel-mcp entry (binary name mismatch)
+- [x] Fix mcp_config.json supabase-mcp entry (binary name mismatch)
+- [x] Verify pnpm run dev success
+
+### Review
+
+- Завършено: 2026-04-13
+- Какво беше направено: Коригирани са скриптовете за разработка и MCP конфигурациите.
+- Проблеми срещнати: pnpm dev гърмеше заради грешно поставен NODE_OPTIONS; npx не намираше vercel-mcp поради разминаване в името на пакета и бинарния файл.
+- Решения: Преместен NODE_OPTIONS в началото; добавен -p флаг в npx.
