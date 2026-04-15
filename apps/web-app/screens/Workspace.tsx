@@ -19,6 +19,7 @@ import '@xyflow/react/dist/style.css';
 import { motion, AnimatePresence } from 'motion/react';
 import { StickyNote, MessageSquare, Zap, Plus, X, GripVertical, Save, Trash2, Maximize2, Minimize2, MousePointer2, Hand, ZoomIn, ZoomOut, Brain, Sparkles, Folder } from 'lucide-react';
 import { useLibraryStore } from '@/store/useLibraryStore';
+import { useShallow } from 'zustand/react/shallow';
 
 import { GlassNode } from '@/components/workspace/GlassNode';
 import { StickyNode } from '@/components/workspace/StickyNode';
@@ -47,7 +48,7 @@ function WorkspaceCanvas() {
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
 
   const [isWhisperOpen, setIsWhisperOpen] = useState(false);
-  const { items } = useLibraryStore();
+  const { items } = useLibraryStore(useShallow(s => ({ items: s.items })));
 
   useEffect(() => {
     if (nodes.length === 0 && items.length > 0) {

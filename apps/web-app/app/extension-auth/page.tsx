@@ -16,10 +16,10 @@ export default function ExtensionAuth() {
 
   useEffect(() => {
     async function checkAuth() {
-      // SECURITY: Always use getUser() — never getSession() (validates with Supabase Auth server)
-      const { data: { user }, error } = await supabase.auth.getUser()
+      // 1. SECURITY: Always use getUser() FIRST — validates with Supabase Auth server
+      const { data: { user }, error: authError } = await supabase.auth.getUser()
       
-      if (error || !user) {
+      if (authError || !user) {
         setStatus('unauthorized')
         return
       }
@@ -28,13 +28,18 @@ export default function ExtensionAuth() {
 
       // Listen for handshake from extension
       const handleMessage = async (event: MessageEvent) => {
-        // Security: Ensure the message is from a trusted source if possible,
-        // but since we're in the same window (iframe or popup), we check the type.
         if (event.data?.type === 'BRAINBOX_EXT_REQUEST_TOKEN') {
-          const { data: { session } } = await supabase.auth.refreshSession()
+          // 2. REFRESH/GET SESSION: Only after user is verified
+          const { data: { session }, error: sessionError } = await supabase.auth.refreshSession()
+          
+          if (sessionError || !session) {
+            window.parent.postMessage({ type: 'BRAINBOX_EXT_AUTH_ERROR', error: 'Session refresh failed' }, '*')
+            return
+          }
+
           window.parent.postMessage({
             type: 'BRAINBOX_EXT_RECEIVE_TOKEN',
-            token: session?.access_token,
+            token: session.access_token,
             user: {
               id: user.id,
               email: user.email

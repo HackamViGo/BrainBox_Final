@@ -16,6 +16,7 @@ import { MODELS } from '@brainbox/types';
 import { getUser } from '@/actions/auth';
 import { useAppStore } from '@/store/useAppStore';
 import { useAINexusStore } from '@/store/useAINexusStore';
+import { useShallow } from 'zustand/react/shallow';
 import { logger } from '@brainbox/utils';
 import type { User } from '@supabase/supabase-js';
 
@@ -32,7 +33,12 @@ export function AINexus() {
     setActiveModelId, 
     pendingModelId, 
     clearPendingModel 
-  } = useAppStore();
+  } = useAppStore(useShallow(s => ({
+    activeModelId: s.activeModelId,
+    setActiveModelId: s.setActiveModelId,
+    pendingModelId: s.pendingModelId,
+    clearPendingModel: s.clearPendingModel
+  })));
 
   const {
     messages,
@@ -42,7 +48,15 @@ export function AINexus() {
     setIsGenerating,
     modelVersion,
     setModelVersion
-  } = useAINexusStore();
+  } = useAINexusStore(useShallow(s => ({
+    messages: s.messages,
+    setMessages: s.setMessages,
+    addMessage: s.addMessage,
+    isGenerating: s.isGenerating,
+    setIsGenerating: s.setIsGenerating,
+    modelVersion: s.modelVersion,
+    setModelVersion: s.setModelVersion
+  })));
 
   const [user, setUser] = useState<User | null>(null);
   const [input, setInput] = useState('');

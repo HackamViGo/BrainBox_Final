@@ -3,11 +3,17 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import { ChevronDown, Sparkles, Zap, Brain, MessageSquare, Download, Layers } from 'lucide-react';
+import { useShallow } from 'zustand/react/shallow';
 import { useAppStore } from '@/store/useAppStore';
 import { useLibraryStore } from '@/store/useLibraryStore';
 
 export function Dashboard() {
   const { setActiveScreen } = useAppStore();
+  const { libraryFolders, promptFolders, items } = useLibraryStore(useShallow(s => ({
+    libraryFolders: s.libraryFolders,
+    promptFolders: s.promptFolders,
+    items: s.items
+  })));
   const [showHint, setShowHint] = useState(true);
   const [touchStart, setTouchStart] = useState(0);
 
@@ -66,7 +72,7 @@ export function Dashboard() {
           className="text-4xl sm:text-5xl lg:text-7xl font-bold tracking-tight leading-[1.05] mb-8"
         >
           Вторият ти мозък,<br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white/80 to-white/40">подреден до съвършенство.</span>
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white/80 to-white/40">подреден до съвършенство</span>
         </motion.h1>
 
         <motion.div
@@ -76,47 +82,11 @@ export function Dashboard() {
           className="space-y-8 text-white/60 font-medium max-w-xl"
         >
           <p className="text-base sm:text-lg lg:text-xl font-light leading-relaxed">
-            Тишина вместо хаос. Контрол вместо разсейване. Една система, създадена специално за твоя интелектуален поток.
+            Тишина вместо хаос. Контрол вместо разсейване. Една система, създадена специално за твоя интелектуален поток
           </p>
           
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <button 
-              onClick={() => setActiveScreen('library')}
-              className="p-6 rounded-3xl glass-panel border border-white/5 hover:border-white/20 transition-all text-left group relative overflow-hidden shadow-2xl"
-            >
-              <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-blue-500/40 to-transparent" />
-              <Layers className="w-5 h-5 text-blue-400 mb-2 opacity-50 group-hover:opacity-100 transition-opacity" />
-              <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-400 mb-1 font-mono">Библиотека</div>
-              <div className="text-sm font-bold text-white uppercase tracking-wider">{useLibraryStore.getState().libraryFolders.length + useLibraryStore.getState().promptFolders.length} нишки</div>
-            </button>
-            <button 
-              onClick={() => setActiveScreen('prompts')}
-              className="p-6 rounded-3xl glass-panel border border-white/5 hover:border-white/20 transition-all text-left group relative overflow-hidden shadow-2xl"
-            >
-              <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-amber-500/40 to-transparent" />
-              <Zap className="w-5 h-5 text-amber-500 mb-2 opacity-50 group-hover:opacity-100 transition-opacity" />
-              <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-amber-500 mb-1 font-mono">Промптове</div>
-              <div className="text-sm font-bold text-white uppercase tracking-wider">{useLibraryStore.getState().items.filter(i => i.type === 'prompt').length} запазени</div>
-            </button>
-            <button 
-              onClick={() => setActiveScreen('prompts')}
-              className="p-6 rounded-3xl glass-panel border border-white/5 hover:border-white/20 transition-all text-left group relative overflow-hidden shadow-2xl"
-            >
-              <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-purple-500/40 to-transparent" />
-              <MessageSquare className="w-5 h-5 text-purple-400 mb-2 opacity-50 group-hover:opacity-100 transition-opacity" />
-              <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-purple-400 mb-1 font-mono">Студио</div>
-              <div className="text-sm font-bold text-white uppercase tracking-wider">7 кристала</div>
-            </button>
-            <button 
-              onClick={() => setActiveScreen('prompts')}
-              className="p-6 rounded-3xl glass-panel border border-white/5 hover:border-white/20 transition-all text-left group relative overflow-hidden shadow-2xl"
-            >
-              <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-emerald-500/40 to-transparent" />
-              <Download className="w-5 h-5 text-emerald-400 mb-2 opacity-50 group-hover:opacity-100 transition-opacity" />
-              <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-500 mb-1 font-mono">Трафик</div>
-              <div className="text-sm font-bold text-white uppercase tracking-wider">{useLibraryStore.getState().items.filter(i => i.type === 'capture').length} улова</div>
-            </button>
-          </div>
+          {/* Redundant navigation icons removed for a cleaner, focused BrainBox experience */}
+
         </motion.div>
       </div>
 
@@ -129,7 +99,7 @@ export function Dashboard() {
         onClick={() => setActiveScreen('extension')}
       >
         <span className="text-[10px] font-bold uppercase tracking-[0.5em] text-white/20 group-hover:text-white/60 transition-all duration-500 transform group-hover:translate-y-[-2px]">
-          И да — това е само началото.
+          И да — това е само началото
         </span>
         <motion.div
           animate={showHint ? { y: [0, 8, 0] } : { y: 0 }}

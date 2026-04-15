@@ -16,6 +16,7 @@ import { THEMES, ICON_LIBRARY } from '@brainbox/types';
 import type { ThemeName, Folder, Item } from '@brainbox/types';
 import { useLibraryStore } from '@/store/useLibraryStore';
 import { useAppStore } from '@/store/useAppStore';
+import { useShallow } from 'zustand/react/shallow';
 import { ApiKeyModal } from '@/components/ApiKeyModal';
 import { generateGeminiResponse } from '@/lib/gemini';
 
@@ -44,7 +45,11 @@ export function Library() {
     libraryFolders, 
     items, 
     deleteItem 
-  } = useLibraryStore();
+  } = useLibraryStore(useShallow(s => ({
+    libraryFolders: s.libraryFolders,
+    items: s.items,
+    deleteItem: s.deleteItem
+  })));
   
   const { 
     setTheme,
@@ -53,7 +58,14 @@ export function Library() {
     setActiveFolder,
     setModalOpen,
     isApiKeyModalOpen
-  } = useAppStore();
+  } = useAppStore(useShallow(s => ({
+    setTheme: s.setTheme,
+    setHoverTheme: s.setHoverTheme,
+    activeFolder: s.activeFolder,
+    setActiveFolder: s.setActiveFolder,
+    setModalOpen: s.setModalOpen,
+    isApiKeyModalOpen: s.isApiKeyModalOpen
+  })));
 
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedChatId, setExpandedChatId] = useState<string | null>(null);

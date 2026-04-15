@@ -5,10 +5,18 @@ import { motion } from 'motion/react';
 import { Fingerprint, Github, Apple, Chrome, CheckCircle2, Zap, Code2, Palette, Box, Layers, Globe, LogOut } from 'lucide-react';
 import { getUser, signOut } from '@/actions/auth';
 import { useAppStore } from '@/store/useAppStore';
+import { useLibraryStore } from '@/store/useLibraryStore';
+import { useShallow } from 'zustand/react/shallow';
 import type { User } from '@supabase/supabase-js';
 
 export function Identity() {
-  const { user, setUser } = useAppStore();
+  const { user, setUser } = useAppStore(useShallow(s => ({ user: s.user, setUser: s.setUser })));
+  const { libraryFolders, promptFolders, items } = useLibraryStore(useShallow(s => ({
+    libraryFolders: s.libraryFolders,
+    promptFolders: s.promptFolders,
+    items: s.items
+  })));
+  
   const [loading, setLoading] = useState(!user);
   
   // AI Fingerprint State (Mock usage percentages for visuals)
@@ -232,19 +240,19 @@ export function Identity() {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="glass-panel p-6 rounded-2xl border border-white/5 hover:bg-white/[0.03] transition-all shadow-lg group">
                   <Box className="w-5 h-5 text-indigo-400 mb-4 group-hover:scale-110 transition-transform" />
-                  <div className="text-3xl font-bold text-white mb-1">124</div>
+                  <div className="text-3xl font-bold text-white mb-1">{items.length}</div>
                   <div className="text-[10px] font-bold text-white/40 uppercase tracking-widest">Synapses</div>
                 </div>
                 
                 <div className="glass-panel p-6 rounded-2xl border border-white/5 hover:bg-white/[0.03] transition-all shadow-lg group">
                   <Layers className="w-5 h-5 text-emerald-400 mb-4 group-hover:scale-110 transition-transform" />
-                  <div className="text-3xl font-bold text-white mb-1">18</div>
+                  <div className="text-3xl font-bold text-white mb-1">{libraryFolders.length + promptFolders.length}</div>
                   <div className="text-[10px] font-bold text-white/40 uppercase tracking-widest">Patterns</div>
                 </div>
                 
                 <div className="glass-panel p-6 rounded-2xl border border-white/5 hover:bg-white/[0.03] transition-all shadow-lg group">
                   <Globe className="w-5 h-5 text-amber-400 mb-4 group-hover:scale-110 transition-transform" />
-                  <div className="text-3xl font-bold text-white mb-1">42</div>
+                  <div className="text-3xl font-bold text-white mb-1">{items.filter(i => i.type === 'capture').length}</div>
                   <div className="text-[10px] font-bold text-white/40 uppercase tracking-widest">Captures</div>
                 </div>
               </div>

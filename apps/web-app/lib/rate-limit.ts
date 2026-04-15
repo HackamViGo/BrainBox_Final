@@ -1,8 +1,4 @@
-/**
- * Central Rate Limiter Utility
- * Used to protect API endpoints from abuse.
- * Default: 30 requests per minute per user.
- */
+import { logger } from '@brainbox/utils'
 
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
 const DEFAULT_LIMIT = 30
@@ -31,6 +27,7 @@ export function isRateLimited(
 
   // Already at/above limit?
   if (entry.count >= limit) {
+    logger.warn('RateLimit', `User ${userId} exceeded limit of ${limit} req/${windowMs}ms`)
     return true
   }
 

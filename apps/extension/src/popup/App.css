@@ -1,4 +1,4 @@
-@import "../../../packages/config/styles/brainbox.css";
+@import "../../../../packages/config/styles/brainbox.css";
 
 :root {
   --background: oklch(0.06 0 0);
@@ -13,7 +13,7 @@ body {
   margin: 0;
   background-color: var(--background);
   color: var(--foreground);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: "Inter", system-ui, sans-serif;
   overflow-x: hidden;
 }
 

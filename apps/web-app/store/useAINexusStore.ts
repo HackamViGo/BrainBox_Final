@@ -27,9 +27,7 @@ export type AINexusStore = AINexusState & AINexusActions
 
 export const useAINexusStore = create<AINexusStore>((set) => ({
   // State
-  messages: [
-    { id: 'msg-1', role: 'assistant', content: 'Hello. Nexus Core is synchronized. How shall we begin?' }
-  ],
+  messages: [],
   isGenerating: false,
   modelVersion: 'basic',
 
@@ -38,7 +36,5 @@ export const useAINexusStore = create<AINexusStore>((set) => ({
   addMessage: (message) => set((state) => ({ messages: [...state.messages, message] })),
   setIsGenerating: (isGenerating) => set({ isGenerating }),
   setModelVersion: (version) => set({ modelVersion: version }),
-  clearMessages: () => set({ 
-    messages: [{ id: 'msg-1', role: 'assistant', content: 'Hello. Nexus Core is synchronized. How shall we begin?' }] 
-  }),
+  clearMessages: () => set({ messages: [] }),
 }))

@@ -26,12 +26,8 @@ export function PersistentShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const hasHydrated = useHasHydrated();
 
-  React.useEffect(() => {
-    if (pathname) {
-      const screen = pathname.replace('/', '') || 'dashboard';
-      setActiveScreen(screen as any);
-    }
-  }, [pathname, setActiveScreen]);
+  // Removed URL sync to enable pure state-based navigation in SPA mode
+
 
   if (!hasHydrated) {
     return (

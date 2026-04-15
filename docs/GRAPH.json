@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "generated_at": "2026-04-15T08:10:30.354Z",
+    "generated_at": "2026-04-15T10:05:28.086Z",
     "generated_by": "SCRIPT+AGENT",
     "version": "1.0.0",
     "schema_version": "1",
@@ -64,9 +64,7 @@
       "type": "module",
       "responsibility": "TypeScript интерфейси за основните domain обекти на приложението.",
       "dependencies": [],
-      "dependents": [
-        "packages/types/src/constants.ts"
-      ],
+      "dependents": ["packages/types/src/constants.ts"],
       "side_effects": [],
       "public_api": [
         "interface Folder { id, name, iconIndex, parentId, type, level }",
@@ -81,9 +79,7 @@
       "workspace": "@brainbox/types",
       "type": "module",
       "responsibility": "Runtime константи — THEMES map, THEME_KEYS array, MODELS array с AI model метаданни и ICON_LIBRARY с 77 Lucide икони.",
-      "dependencies": [
-        "packages/types/src/models.ts"
-      ],
+      "dependencies": ["packages/types/src/models.ts"],
       "dependents": [],
       "side_effects": [],
       "public_api": [
@@ -122,10 +118,7 @@
         "apps/web-app/screens/Settings.tsx"
       ],
       "side_effects": [],
-      "public_api": [
-        "NeuralField",
-        "AmbientLight"
-      ],
+      "public_api": ["NeuralField", "AmbientLight"],
       "status": "active"
     },
     {
@@ -133,9 +126,7 @@
       "workspace": "@brainbox/ui",
       "type": "component",
       "responsibility": "Интерактивна canvas particle анимация. Режими: brain (dashboard), wander (всички останали екрани), extension (scatter). Реагира на mouse movement. Персистира между screen смени — само mode prop се сменя.",
-      "dependencies": [
-        "packages/types/src/index.ts"
-      ],
+      "dependencies": ["packages/types/src/index.ts"],
       "dependents": [],
       "side_effects": [
         "canvas 2D context — requestAnimationFrame loop",
@@ -152,9 +143,7 @@
       "workspace": "@brainbox/ui",
       "type": "component",
       "responsibility": "Анимиран radial gradient blob зад цялото приложение. Позицията и цвета се определят от активната тема.",
-      "dependencies": [
-        "packages/types/src/index.ts"
-      ],
+      "dependencies": ["packages/types/src/index.ts"],
       "dependents": [],
       "side_effects": [],
       "public_api": [
@@ -199,9 +188,7 @@
       "dependencies": [],
       "dependents": [],
       "side_effects": [],
-      "public_api": [
-        "cn(...inputs: ClassValue[]): string"
-      ],
+      "public_api": ["cn(...inputs: ClassValue[]): string"],
       "status": "active"
     },
     {
@@ -222,9 +209,7 @@
       "workspace": "@brainbox/utils",
       "type": "module",
       "responsibility": "Helper функции за theme системата — извличане на цвят и следваща рандомна тема.",
-      "dependencies": [
-        "packages/types/src/index.ts"
-      ],
+      "dependencies": ["packages/types/src/index.ts"],
       "dependents": [],
       "side_effects": [],
       "public_api": [
@@ -250,9 +235,7 @@
       "type": "stylesheet",
       "responsibility": "Споделени BrainBox CSS класове — glass-panel, glass-panel-light, bg-grain, neural-edge-path анимации.",
       "dependencies": [],
-      "dependents": [
-        "apps/web-app/app/globals.css"
-      ],
+      "dependents": ["apps/web-app/app/globals.css"],
       "side_effects": [],
       "public_api": [
         ".glass-panel",
@@ -278,15 +261,9 @@
         "apps/web-app/store/useAppStore.ts",
         "packages/ui/src/index.ts"
       ],
-      "dependents": [
-        "apps/web-app/app/page.tsx"
-      ],
-      "side_effects": [
-        "useEffect: sync activeScreen with pathname"
-      ],
-      "public_api": [
-        "PersistentShell({ children: ReactNode }): JSX.Element"
-      ],
+      "dependents": ["apps/web-app/app/page.tsx"],
+      "side_effects": ["useEffect: sync activeScreen with pathname"],
+      "public_api": ["PersistentShell({ children: ReactNode }): JSX.Element"],
       "status": "active"
     },
     {
@@ -342,17 +319,13 @@
         "apps/web-app/store/useAppStore.ts",
         "apps/web-app/store/useLibraryStore.ts"
       ],
-      "dependents": [
-        "apps/web-app/app/layout.tsx"
-      ],
+      "dependents": ["apps/web-app/app/layout.tsx"],
       "side_effects": [
         "useEffect: rehydrate useAppStore.persist",
         "useEffect: rehydrate useLibraryStore.persist",
         "useEffect: loadData() при isLoggedIn промяна"
       ],
-      "public_api": [
-        "Providers({ children: ReactNode }): JSX.Element"
-      ],
+      "public_api": ["Providers({ children: ReactNode }): JSX.Element"],
       "status": "active"
     },
     {
@@ -360,9 +333,7 @@
       "workspace": "web-app",
       "type": "stylesheet",
       "responsibility": "Tailwind v4 entry point. Импортира tw, brainbox.css, Inter font variable, shadcn CSS vars. @source директиви за packages/ui и packages/utils.",
-      "dependencies": [
-        "packages/config/styles/brainbox.css"
-      ],
+      "dependencies": ["packages/config/styles/brainbox.css"],
       "dependents": [],
       "side_effects": [],
       "public_api": [],
@@ -407,6 +378,7 @@
         "apps/web-app/screens/Archive.tsx",
         "apps/web-app/screens/Dashboard.tsx",
         "apps/web-app/screens/Extension.tsx",
+        "apps/web-app/screens/Identity.tsx",
         "apps/web-app/screens/Library.tsx",
         "apps/web-app/screens/Login.tsx",
         "apps/web-app/screens/Prompts.tsx",
@@ -451,6 +423,7 @@
         "apps/web-app/components/workspace/AssetLibrary.tsx",
         "apps/web-app/screens/Archive.tsx",
         "apps/web-app/screens/Dashboard.tsx",
+        "apps/web-app/screens/Identity.tsx",
         "apps/web-app/screens/Library.tsx",
         "apps/web-app/screens/MindGraph.tsx",
         "apps/web-app/screens/Prompts.tsx",
@@ -480,9 +453,7 @@
       "type": "store",
       "responsibility": "Управлява AI model selection в AINexus screen. pendingModelId задейства SmartSwitchModal преди потвърждение.",
       "dependencies": [],
-      "dependents": [
-        "apps/web-app/screens/AINexus.tsx"
-      ],
+      "dependents": ["apps/web-app/screens/AINexus.tsx"],
       "side_effects": [],
       "public_api": [
         "activeModelId: string",
@@ -498,9 +469,7 @@
       "workspace": "web-app",
       "type": "store",
       "responsibility": "Zustand store за prompt management и Refine функционалност.",
-      "dependencies": [
-        "packages/types/src/index.ts"
-      ],
+      "dependencies": ["packages/types/src/index.ts"],
       "dependents": [],
       "side_effects": [],
       "public_api": [],
@@ -516,9 +485,7 @@
         "packages/types/src/index.ts"
       ],
       "dependents": [],
-      "side_effects": [
-        "Supabase DB write операции"
-      ],
+      "side_effects": ["Supabase DB write операции"],
       "public_api": [
         "createFolder(data: unknown): Promise<Folder>",
         "deleteFolder(id: string): Promise<void>",
@@ -534,17 +501,13 @@
       "workspace": "web-app",
       "type": "server-action",
       "responsibility": "Server Actions за Supabase Auth — login, logout, get current user.",
-      "dependencies": [
-        "apps/web-app/lib/supabase/server.ts"
-      ],
+      "dependencies": ["apps/web-app/lib/supabase/server.ts"],
       "dependents": [
         "apps/web-app/screens/AINexus.tsx",
         "apps/web-app/screens/Identity.tsx",
         "apps/web-app/screens/Login.tsx"
       ],
-      "side_effects": [
-        "Supabase Auth session write (cookies)"
-      ],
+      "side_effects": ["Supabase Auth session write (cookies)"],
       "public_api": [
         "signIn(email: string, password: string): Promise<void>",
         "signOut(): Promise<void>",
@@ -559,9 +522,7 @@
       "responsibility": "Server Actions за Gemini AI. API ключът е server-only (не NEXT_PUBLIC_). Рефинира промпти с 7 Crystal типа, анализира чат съдържание.",
       "dependencies": [],
       "dependents": [],
-      "side_effects": [
-        "External API call към Google Gemini"
-      ],
+      "side_effects": ["External API call към Google Gemini"],
       "public_api": [
         "refinePromptWithCrystal(prompt: string, crystalId: CrystalId): Promise<string>",
         "analyzeContent(content: string, promptTemplate: string): Promise<string>"
@@ -576,9 +537,7 @@
       "dependencies": [],
       "dependents": [],
       "side_effects": [],
-      "public_api": [
-        "createClient(): SupabaseClient"
-      ],
+      "public_api": ["createClient(): SupabaseClient"],
       "status": "active"
     },
     {
@@ -592,9 +551,7 @@
         "apps/web-app/actions/library.ts"
       ],
       "side_effects": [],
-      "public_api": [
-        "createClient(): Promise<SupabaseClient>"
-      ],
+      "public_api": ["createClient(): Promise<SupabaseClient>"],
       "status": "active"
     },
     {
@@ -602,17 +559,13 @@
       "workspace": "web-app",
       "type": "module",
       "responsibility": "Wrapper около @google/genai SDK. Мигриран от Vite src/services/gemini.ts. Използва server-only GEMINI_API_KEY.",
-      "dependencies": [
-        "packages/utils/src/index.ts"
-      ],
+      "dependencies": ["packages/utils/src/index.ts"],
       "dependents": [
         "apps/web-app/components/prompts/RefineView.tsx",
         "apps/web-app/screens/AINexus.tsx",
         "apps/web-app/screens/Library.tsx"
       ],
-      "side_effects": [
-        "External HTTP call към Google AI API"
-      ],
+      "side_effects": ["External HTTP call към Google AI API"],
       "public_api": [
         "generateGeminiResponse(prompt: string, apiKey: string): Promise<string>",
         "generateBasicResponse(prompt: string, targetModelName: string): Promise<string>"
@@ -628,15 +581,11 @@
         "apps/web-app/store/useAppStore.ts",
         "packages/types/src/index.ts"
       ],
-      "dependents": [
-        "apps/web-app/app/page.tsx"
-      ],
+      "dependents": ["apps/web-app/app/page.tsx"],
       "side_effects": [
         "setInterval (15000ms) — cleanup при unmount или screen change"
       ],
-      "public_api": [
-        "useThemeCycle(): void"
-      ],
+      "public_api": ["useThemeCycle(): void"],
       "status": "active"
     },
     {
@@ -648,9 +597,7 @@
         "apps/web-app/store/useAppStore.ts",
         "packages/types/src/index.ts"
       ],
-      "dependents": [
-        "apps/web-app/app/page.tsx"
-      ],
+      "dependents": ["apps/web-app/app/page.tsx"],
       "side_effects": [
         "wheel event listener",
         "touchstart/touchend event listeners"
@@ -685,15 +632,9 @@
         "packages/ui/src/index.ts",
         "packages/utils/src/index.ts"
       ],
-      "dependents": [
-        "apps/web-app/components/PersistentShell.tsx"
-      ],
-      "side_effects": [
-        "NeuralField canvas инстанция вътре в sidebar панела"
-      ],
-      "public_api": [
-        "Sidebar(): JSX.Element"
-      ],
+      "dependents": ["apps/web-app/components/PersistentShell.tsx"],
+      "side_effects": ["NeuralField canvas инстанция вътре в sidebar панела"],
+      "public_api": ["Sidebar(): JSX.Element"],
       "status": "active"
     },
     {
@@ -712,9 +653,7 @@
         "apps/web-app/screens/AINexus.tsx"
       ],
       "side_effects": [],
-      "public_api": [
-        "SmartSwitchModal(): JSX.Element"
-      ],
+      "public_api": ["SmartSwitchModal(): JSX.Element"],
       "status": "active"
     },
     {
@@ -736,9 +675,7 @@
         "apps/web-app/screens/AINexus.tsx",
         "apps/web-app/screens/Library.tsx"
       ],
-      "side_effects": [
-        "localStorage write за API ключове"
-      ],
+      "side_effects": ["localStorage write за API ключове"],
       "public_api": [
         "ApiKeyModal({ isOpen: boolean, onClose(): void, modelId: string }): JSX.Element"
       ],
@@ -750,13 +687,9 @@
       "type": "component",
       "responsibility": "Custom ReactFlow node с glassmorphism стил. Представлява чат/prompt item на Workspace canvas.",
       "dependencies": [],
-      "dependents": [
-        "apps/web-app/screens/Workspace.tsx"
-      ],
+      "dependents": ["apps/web-app/screens/Workspace.tsx"],
       "side_effects": [],
-      "public_api": [
-        "GlassNode(props: NodeProps): JSX.Element"
-      ],
+      "public_api": ["GlassNode(props: NodeProps): JSX.Element"],
       "status": "active"
     },
     {
@@ -765,13 +698,9 @@
       "type": "component",
       "responsibility": "Custom ReactFlow node тип sticky note за бележки на Workspace canvas.",
       "dependencies": [],
-      "dependents": [
-        "apps/web-app/screens/Workspace.tsx"
-      ],
+      "dependents": ["apps/web-app/screens/Workspace.tsx"],
       "side_effects": [],
-      "public_api": [
-        "StickyNode(props: NodeProps): JSX.Element"
-      ],
+      "public_api": ["StickyNode(props: NodeProps): JSX.Element"],
       "status": "active"
     },
     {
@@ -781,9 +710,7 @@
       "responsibility": "Supabase database schema. Дефинира folders и items таблици, RLS политики и updated_at triggers.",
       "dependencies": [],
       "dependents": [],
-      "side_effects": [
-        "Дефинира структурата на базата данни в Supabase"
-      ],
+      "side_effects": ["Дефинира структурата на базата данни в Supabase"],
       "public_api": [],
       "status": "active"
     },
@@ -793,13 +720,9 @@
       "type": "component",
       "responsibility": "Custom ReactFlow edge с анимирана dash pattern — визуализира връзки между nodes на Workspace.",
       "dependencies": [],
-      "dependents": [
-        "apps/web-app/screens/Workspace.tsx"
-      ],
+      "dependents": ["apps/web-app/screens/Workspace.tsx"],
       "side_effects": [],
-      "public_api": [
-        "NeuralEdge(props: EdgeProps): JSX.Element"
-      ],
+      "public_api": ["NeuralEdge(props: EdgeProps): JSX.Element"],
       "status": "active"
     },
     {
@@ -811,9 +734,7 @@
         "apps/web-app/store/useAppStore.ts",
         "packages/utils/src/index.ts"
       ],
-      "dependents": [
-        "apps/web-app/screens/Workspace.tsx"
-      ],
+      "dependents": ["apps/web-app/screens/Workspace.tsx"],
       "side_effects": [],
       "public_api": [
         "WhisperPanel({ selectedNode: Node | null }): JSX.Element"
@@ -829,13 +750,9 @@
         "apps/web-app/store/useLibraryStore.ts",
         "packages/types/src/index.ts"
       ],
-      "dependents": [
-        "apps/web-app/screens/Workspace.tsx"
-      ],
+      "dependents": ["apps/web-app/screens/Workspace.tsx"],
       "side_effects": [],
-      "public_api": [
-        "AssetLibrary(): JSX.Element"
-      ],
+      "public_api": ["AssetLibrary(): JSX.Element"],
       "status": "active"
     },
     {
@@ -847,13 +764,9 @@
         "apps/web-app/store/useAppStore.ts",
         "apps/web-app/store/useLibraryStore.ts"
       ],
-      "dependents": [
-        "apps/web-app/app/page.tsx"
-      ],
+      "dependents": ["apps/web-app/app/page.tsx"],
       "side_effects": [],
-      "public_api": [
-        "Dashboard(): JSX.Element"
-      ],
+      "public_api": ["Dashboard(): JSX.Element"],
       "status": "active"
     },
     {
@@ -865,13 +778,9 @@
         "apps/web-app/store/useAppStore.ts",
         "apps/web-app/store/useExtensionStore.ts"
       ],
-      "dependents": [
-        "apps/web-app/app/page.tsx"
-      ],
+      "dependents": ["apps/web-app/app/page.tsx"],
       "side_effects": [],
-      "public_api": [
-        "Extension(): JSX.Element"
-      ],
+      "public_api": ["Extension(): JSX.Element"],
       "status": "active"
     },
     {
@@ -883,15 +792,9 @@
         "apps/web-app/actions/auth.ts",
         "apps/web-app/store/useAppStore.ts"
       ],
-      "dependents": [
-        "apps/web-app/app/page.tsx"
-      ],
-      "side_effects": [
-        "Supabase signInWithPassword"
-      ],
-      "public_api": [
-        "Login({ onLogin(): void }): JSX.Element"
-      ],
+      "dependents": ["apps/web-app/app/page.tsx"],
+      "side_effects": ["Supabase signInWithPassword"],
+      "public_api": ["Login({ onLogin(): void }): JSX.Element"],
       "status": "active"
     },
     {
@@ -906,15 +809,9 @@
         "apps/web-app/store/useLibraryStore.ts",
         "packages/types/src/index.ts"
       ],
-      "dependents": [
-        "apps/web-app/app/page.tsx"
-      ],
-      "side_effects": [
-        "Gemini API call за summarize/analyze"
-      ],
-      "public_api": [
-        "Library(): JSX.Element"
-      ],
+      "dependents": ["apps/web-app/app/page.tsx"],
+      "side_effects": ["Gemini API call за summarize/analyze"],
+      "public_api": ["Library(): JSX.Element"],
       "status": "active"
     },
     {
@@ -932,15 +829,9 @@
         "apps/web-app/store/useAppStore.ts",
         "apps/web-app/store/useLibraryStore.ts"
       ],
-      "dependents": [
-        "apps/web-app/app/page.tsx"
-      ],
-      "side_effects": [
-        "Gemini API call за Refine Crystals"
-      ],
-      "public_api": [
-        "Prompts(): JSX.Element"
-      ],
+      "dependents": ["apps/web-app/app/page.tsx"],
+      "side_effects": ["Gemini API call за Refine Crystals"],
+      "public_api": ["Prompts(): JSX.Element"],
       "status": "active"
     },
     {
@@ -958,15 +849,9 @@
         "packages/types/src/index.ts",
         "packages/utils/src/index.ts"
       ],
-      "dependents": [
-        "apps/web-app/app/page.tsx"
-      ],
-      "side_effects": [
-        "Промяна на глобалната тема при model select"
-      ],
-      "public_api": [
-        "AINexus(): JSX.Element"
-      ],
+      "dependents": ["apps/web-app/app/page.tsx"],
+      "side_effects": ["Промяна на глобалната тема при model select"],
+      "public_api": ["AINexus(): JSX.Element"],
       "status": "active"
     },
     {
@@ -982,15 +867,9 @@
         "apps/web-app/components/workspace/WhisperPanel.tsx",
         "apps/web-app/store/useLibraryStore.ts"
       ],
-      "dependents": [
-        "apps/web-app/app/page.tsx"
-      ],
-      "side_effects": [
-        "ReactFlow canvas — browser only (dynamic ssr:false)"
-      ],
-      "public_api": [
-        "Workspace(): JSX.Element"
-      ],
+      "dependents": ["apps/web-app/app/page.tsx"],
+      "side_effects": ["ReactFlow canvas — browser only (dynamic ssr:false)"],
+      "public_api": ["Workspace(): JSX.Element"],
       "status": "active"
     },
     {
@@ -998,18 +877,12 @@
       "workspace": "web-app",
       "type": "screen",
       "responsibility": "D3 force-directed knowledge graph. Визуализира връзките между chats и prompts. AI Mix Matrix и Topic Heatmap analytics. Dynamic import — ssr:false.",
-      "dependencies": [
-        "apps/web-app/store/useLibraryStore.ts"
-      ],
-      "dependents": [
-        "apps/web-app/app/page.tsx"
-      ],
+      "dependencies": ["apps/web-app/store/useLibraryStore.ts"],
+      "dependents": ["apps/web-app/app/page.tsx"],
       "side_effects": [
         "D3 DOM manipulation — browser only (dynamic ssr:false)"
       ],
-      "public_api": [
-        "MindGraph(): JSX.Element"
-      ],
+      "public_api": ["MindGraph(): JSX.Element"],
       "status": "active"
     },
     {
@@ -1022,13 +895,9 @@
         "apps/web-app/store/useLibraryStore.ts",
         "packages/types/src/index.ts"
       ],
-      "dependents": [
-        "apps/web-app/app/page.tsx"
-      ],
+      "dependents": ["apps/web-app/app/page.tsx"],
       "side_effects": [],
-      "public_api": [
-        "Archive(): JSX.Element"
-      ],
+      "public_api": ["Archive(): JSX.Element"],
       "status": "active"
     },
     {
@@ -1042,16 +911,12 @@
         "packages/types/src/index.ts",
         "packages/ui/src/index.ts"
       ],
-      "dependents": [
-        "apps/web-app/app/page.tsx"
-      ],
+      "dependents": ["apps/web-app/app/page.tsx"],
       "side_effects": [
         "localStorage write за API ключове",
         "Supabase update за user preferences"
       ],
-      "public_api": [
-        "Settings(): JSX.Element"
-      ],
+      "public_api": ["Settings(): JSX.Element"],
       "status": "active"
     },
     {
@@ -1060,17 +925,13 @@
       "type": "screen",
       "responsibility": "Потребителски профил. IdentitySphere canvas — цвета зависи от най-използвания AI модел. Neural Charge (tokens) и Intelligence Tier метрики.",
       "dependencies": [
-        "apps/web-app/actions/auth.ts"
+        "apps/web-app/actions/auth.ts",
+        "apps/web-app/store/useAppStore.ts",
+        "apps/web-app/store/useLibraryStore.ts"
       ],
-      "dependents": [
-        "apps/web-app/app/page.tsx"
-      ],
-      "side_effects": [
-        "canvas IdentitySphere animation"
-      ],
-      "public_api": [
-        "Identity(): JSX.Element"
-      ],
+      "dependents": ["apps/web-app/app/page.tsx"],
+      "side_effects": ["canvas IdentitySphere animation"],
+      "public_api": ["Identity(): JSX.Element"],
       "status": "active"
     },
     {
@@ -1092,9 +953,7 @@
       "dependencies": [],
       "dependents": [],
       "side_effects": [],
-      "public_api": [
-        "Login({ onLogin })"
-      ],
+      "public_api": ["Login({ onLogin })"],
       "status": "active"
     },
     {
@@ -1102,12 +961,8 @@
       "workspace": "web-app",
       "type": "component",
       "responsibility": "shadcn/ui Tooltip primitive.",
-      "dependencies": [
-        "apps/web-app/lib/utils.ts"
-      ],
-      "dependents": [
-        "apps/web-app/app/layout.tsx"
-      ],
+      "dependencies": ["apps/web-app/lib/utils.ts"],
+      "dependents": ["apps/web-app/app/layout.tsx"],
       "side_effects": [],
       "public_api": [
         "Tooltip",
@@ -1131,13 +986,9 @@
         "apps/web-app/store/useLibraryStore.ts",
         "packages/utils/src/index.ts"
       ],
-      "dependents": [
-        "apps/web-app/components/PersistentShell.tsx"
-      ],
+      "dependents": ["apps/web-app/components/PersistentShell.tsx"],
       "side_effects": [],
-      "public_api": [
-        "NewChatModal(): JSX.Element"
-      ],
+      "public_api": ["NewChatModal(): JSX.Element"],
       "status": "active"
     },
     {
@@ -1155,13 +1006,9 @@
         "packages/ui/src/index.ts",
         "packages/utils/src/index.ts"
       ],
-      "dependents": [
-        "apps/web-app/components/PersistentShell.tsx"
-      ],
+      "dependents": ["apps/web-app/components/PersistentShell.tsx"],
       "side_effects": [],
-      "public_api": [
-        "NewFolderModal(): JSX.Element"
-      ],
+      "public_api": ["NewFolderModal(): JSX.Element"],
       "status": "active"
     },
     {
@@ -1169,9 +1016,7 @@
       "workspace": "web-app",
       "type": "component",
       "responsibility": "shadcn/ui button компонент.",
-      "dependencies": [
-        "apps/web-app/lib/utils.ts"
-      ],
+      "dependencies": ["apps/web-app/lib/utils.ts"],
       "dependents": [
         "apps/web-app/components/ApiKeyModal.tsx",
         "apps/web-app/components/NewChatModal.tsx",
@@ -1180,9 +1025,7 @@
         "apps/web-app/components/ui/dialog.tsx"
       ],
       "side_effects": [],
-      "public_api": [
-        "Button: React.ForwardRefExoticComponent<...>"
-      ],
+      "public_api": ["Button: React.ForwardRefExoticComponent<...>"],
       "status": "active"
     },
     {
@@ -1211,18 +1054,14 @@
       "workspace": "web-app",
       "type": "component",
       "responsibility": "shadcn/ui input компонент.",
-      "dependencies": [
-        "apps/web-app/lib/utils.ts"
-      ],
+      "dependencies": ["apps/web-app/lib/utils.ts"],
       "dependents": [
         "apps/web-app/components/ApiKeyModal.tsx",
         "apps/web-app/components/NewChatModal.tsx",
         "apps/web-app/components/NewFolderModal.tsx"
       ],
       "side_effects": [],
-      "public_api": [
-        "Input: React.ForwardRefExoticComponent<...>"
-      ],
+      "public_api": ["Input: React.ForwardRefExoticComponent<...>"],
       "status": "active"
     },
     {
@@ -1230,18 +1069,14 @@
       "workspace": "web-app",
       "type": "component",
       "responsibility": "shadcn/ui scroll-area компонент.",
-      "dependencies": [
-        "apps/web-app/lib/utils.ts"
-      ],
+      "dependencies": ["apps/web-app/lib/utils.ts"],
       "dependents": [
         "apps/web-app/components/ApiKeyModal.tsx",
         "apps/web-app/components/NewChatModal.tsx",
         "apps/web-app/components/NewFolderModal.tsx"
       ],
       "side_effects": [],
-      "public_api": [
-        "ScrollArea, ScrollBar"
-      ],
+      "public_api": ["ScrollArea, ScrollBar"],
       "status": "active"
     },
     {
@@ -1250,9 +1085,7 @@
       "type": "component",
       "responsibility": "Централен хъб за навигация в Prompts екрана.",
       "dependencies": [],
-      "dependents": [
-        "apps/web-app/screens/Prompts.tsx"
-      ],
+      "dependents": ["apps/web-app/screens/Prompts.tsx"],
       "side_effects": [],
       "public_api": [
         "HubView({ onNavigate: (view: SubView) => void }): JSX.Element"
@@ -1268,9 +1101,7 @@
         "apps/web-app/lib/prompts-data.ts",
         "packages/types/src/index.ts"
       ],
-      "dependents": [
-        "apps/web-app/screens/Prompts.tsx"
-      ],
+      "dependents": ["apps/web-app/screens/Prompts.tsx"],
       "side_effects": [],
       "public_api": [
         "FrameworksView({ onBack: () => void, setTheme: (t: ThemeName) => void }): JSX.Element"
@@ -1290,12 +1121,8 @@
         "apps/web-app/store/useAppStore.ts",
         "packages/utils/src/index.ts"
       ],
-      "dependents": [
-        "apps/web-app/screens/Prompts.tsx"
-      ],
-      "side_effects": [
-        "API calls към Gemini"
-      ],
+      "dependents": ["apps/web-app/screens/Prompts.tsx"],
+      "side_effects": ["API calls към Gemini"],
       "public_api": [
         "RefineView({ onBack: () => void, initialInput?: string, onSave: (t: string) => void }): JSX.Element"
       ],
@@ -1307,9 +1134,7 @@
       "type": "component",
       "responsibility": "Вертикален feed за необработени captures от разширението.",
       "dependencies": [],
-      "dependents": [
-        "apps/web-app/screens/Prompts.tsx"
-      ],
+      "dependents": ["apps/web-app/screens/Prompts.tsx"],
       "side_effects": [],
       "public_api": [
         "CapturesView({ onBack: () => void, onRefine: (t: string) => void, onSaveToPrompts: (t: string) => void, captures: any[], onDrop: (e: DragEvent) => void }): JSX.Element"
@@ -1321,16 +1146,10 @@
       "workspace": "web-app",
       "type": "component",
       "responsibility": "Списък със запазени промпти.",
-      "dependencies": [
-        "packages/types/src/index.ts"
-      ],
-      "dependents": [
-        "apps/web-app/screens/Prompts.tsx"
-      ],
+      "dependencies": ["packages/types/src/index.ts"],
+      "dependents": ["apps/web-app/screens/Prompts.tsx"],
       "side_effects": [],
-      "public_api": [
-        "SavedPromptsView(): JSX.Element"
-      ],
+      "public_api": ["SavedPromptsView(): JSX.Element"],
       "status": "active"
     },
     {
@@ -1339,9 +1158,7 @@
       "type": "component",
       "responsibility": "Анимиран wrapper за преходите в Prompts екрана.",
       "dependencies": [],
-      "dependents": [
-        "apps/web-app/screens/Prompts.tsx"
-      ],
+      "dependents": ["apps/web-app/screens/Prompts.tsx"],
       "side_effects": [],
       "public_api": [
         "ViewWrapper({ children: ReactNode, id: string }): JSX.Element"
@@ -1362,9 +1179,7 @@
         "apps/web-app/components/ui/tooltip.tsx"
       ],
       "side_effects": [],
-      "public_api": [
-        "cn(...inputs: ClassValue[]): string"
-      ],
+      "public_api": ["cn(...inputs: ClassValue[]): string"],
       "status": "active"
     },
     {
@@ -1378,10 +1193,7 @@
         "apps/web-app/components/prompts/RefineView.tsx"
       ],
       "side_effects": [],
-      "public_api": [
-        "MATRIX_DATA",
-        "REFINE_CRYSTALS"
-      ],
+      "public_api": ["MATRIX_DATA", "REFINE_CRYSTALS"],
       "status": "active"
     },
     {
@@ -1390,14 +1202,9 @@
       "type": "component",
       "responsibility": "Визуален подсказвач за скролиране в текстови контейнери. Използва ResizeObserver.",
       "dependencies": [],
-      "dependents": [
-        "apps/web-app/components/prompts/RefineView.tsx"
-      ],
+      "dependents": ["apps/web-app/components/prompts/RefineView.tsx"],
       "side_effects": [],
-      "public_api": [
-        "useScrollHint(ref, deps)",
-        "ScrollHint({ show })"
-      ],
+      "public_api": ["useScrollHint(ref, deps)", "ScrollHint({ show })"],
       "status": "active"
     },
     {
@@ -1406,13 +1213,9 @@
       "type": "hook",
       "responsibility": "Zustand SSR-safety: връща true след като клиентът се е хидратирал.",
       "dependencies": [],
-      "dependents": [
-        "apps/web-app/components/PersistentShell.tsx"
-      ],
+      "dependents": ["apps/web-app/components/PersistentShell.tsx"],
       "side_effects": [],
-      "public_api": [
-        "useHasHydrated(): boolean"
-      ],
+      "public_api": ["useHasHydrated(): boolean"],
       "status": "active"
     },
     {
@@ -1420,18 +1223,10 @@
       "workspace": "web-app",
       "type": "store",
       "responsibility": "State за Extension Bridge: статус на връзката, версия, последна синхронизация.",
-      "dependencies": [
-        "packages/utils/src/index.ts"
-      ],
-      "dependents": [
-        "apps/web-app/screens/Extension.tsx"
-      ],
-      "side_effects": [
-        "localStorage persist"
-      ],
-      "public_api": [
-        "useExtensionStore"
-      ],
+      "dependencies": ["packages/utils/src/index.ts"],
+      "dependents": ["apps/web-app/screens/Extension.tsx"],
+      "side_effects": ["localStorage persist"],
+      "public_api": ["useExtensionStore"],
       "status": "active"
     },
     {
@@ -1440,9 +1235,7 @@
       "type": "task-log",
       "responsibility": "Пълен одит на състоянието на Web App и Extension към 2026-04-14.",
       "dependencies": [],
-      "dependents": [
-        "tasks/completion-plan.md"
-      ],
+      "dependents": ["tasks/completion-plan.md"],
       "side_effects": [],
       "public_api": [],
       "status": "active"
@@ -1452,9 +1245,7 @@
       "workspace": "agents",
       "type": "task-log",
       "responsibility": "План в 5 фази за довършване на BrainBox до production-ready състояние.",
-      "dependencies": [
-        "tasks/audit-report.md"
-      ],
+      "dependencies": ["tasks/audit-report.md"],
       "dependents": [],
       "side_effects": [],
       "public_api": [],

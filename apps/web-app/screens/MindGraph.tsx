@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import * as d3 from 'd3';
 import { useLibraryStore } from '@/store/useLibraryStore';
+import { useShallow } from 'zustand/react/shallow';
 
 // --- Types ---
 interface Node extends d3.SimulationNodeDatum {
@@ -93,7 +94,11 @@ export function MindGraph() {
   const [timeValue, setTimeValue] = useState(100);
   const [isFullScreen, setIsFullScreen] = useState(false);
 
-  const { items, libraryFolders, promptFolders } = useLibraryStore();
+  const { items, libraryFolders, promptFolders } = useLibraryStore(useShallow(s => ({
+    items: s.items,
+    libraryFolders: s.libraryFolders,
+    promptFolders: s.promptFolders
+  })));
   const graphData = useMemo(() => 
     transformToGraphData([...libraryFolders, ...promptFolders], items),
   [items, libraryFolders, promptFolders]);

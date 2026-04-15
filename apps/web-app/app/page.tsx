@@ -35,7 +35,18 @@ export default function Page() {
   const {
     activeScreen,
     isLoggedIn,
+    _hasHydrated,
   } = useAppStore();
+
+  // 1. HYDRATION BRIDGE: Wait for Zustand persist to load
+  if (!_hasHydrated) {
+    return (
+      <div className="h-dvh w-full bg-[#050505] flex items-center justify-center relative overflow-hidden">
+        {/* Placeholder AmbientLight/NeuralField can go here if needed, but PersistentShell handles it too */}
+        <div className="text-white/20 animate-pulse font-mono uppercase tracking-[0.3em]">Neural Bridge Initializing...</div>
+      </div>
+    );
+  }
 
   return (
     <div 

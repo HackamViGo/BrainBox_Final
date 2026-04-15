@@ -4,11 +4,11 @@
   "type": "module",
   "packageManager": "pnpm@9.15.4",
   "scripts": {
-    "dev": "pnpm --filter web-app dev",
-    "build": "pnpm --filter web-app build",
-    "lint": "pnpm -r lint",
-    "typecheck": "pnpm -r typecheck",
-    "test": "pnpm --recursive --if-present run test --",
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "test": "turbo test",
+    "typecheck": "turbo typecheck",
+    "lint": "turbo lint",
     "install:all": "pnpm install",
     "prepare": "husky"
   },
@@ -23,6 +23,7 @@
     "packages/*"
   ],
   "devDependencies": {
+    "turbo": "^2.4.4",
     "@commitlint/cli": "^20.5.0",
     "@commitlint/config-conventional": "^20.5.0",
     "@eslint/js": "^10.0.1",
@@ -33,8 +34,8 @@
     "@typescript-eslint/parser": "^8.58.1",
     "babel-plugin-react-compiler": "^1.0.0",
     "dotenv-cli": "^11.0.0",
-    "eslint": "^10.2.0",
-    "eslint-config-next": "^16.2.3",
+    "eslint": "catalog:",
+    "eslint-config-next": "catalog:",
     "globals": "^17.5.0",
     "husky": "^9.1.7",
     "lint-staged": "^15.5.2",

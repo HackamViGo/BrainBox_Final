@@ -61,6 +61,7 @@ interface AppActions {
   getApiKey: (modelId: string) => string | null
   /** Save an API key for a given model id. */
   setApiKey: (modelId: string, key: string) => void
+  setHasHydrated: (v: boolean) => void
 }
 
 export type AppStore = AppState & AppActions
@@ -176,6 +177,7 @@ export const useAppStore = create<AppStore>()(
       setApiKey: (modelId, key): void => {
         set(state => ({ apiKeys: { ...state.apiKeys, [modelId]: key } }))
       },
+      setHasHydrated: (v) => set({ _hasHydrated: v }),
     }),
     {
       name: STORAGE_KEYS.APP_STORE,
@@ -190,8 +192,8 @@ export const useAppStore = create<AppStore>()(
         expandedFolders: state.expandedFolders,
         apiKeys: state.apiKeys,  // API keys persisted in Zustand (NOT raw localStorage)
       }),
-      onRehydrateStorage: () => () => {
-        useAppStore.setState({ _hasHydrated: true })
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true)
       },
     }
   )
