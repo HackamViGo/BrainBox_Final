@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { Fingerprint, Github, Apple, Chrome, CheckCircle2, Zap, Code2, Palette, Box, Layers, Globe, LogOut } from 'lucide-react';
 import { getUser, signOut } from '@/actions/auth';
+import { useAppStore } from '@/store/useAppStore';
 import type { User } from '@supabase/supabase-js';
 
 export function Identity() {

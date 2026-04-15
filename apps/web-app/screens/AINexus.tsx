@@ -103,7 +103,7 @@ export function AINexus() {
         if (!apiKey) {
           useAppStore.getState().setApiKeyModel(activeModelId, activeModel.name);
           useAppStore.getState().setModalOpen('apiKey', true);
-          setMessages(prev => prev.slice(0, -1));
+          setMessages(messages.slice(0, -1));
           setIsGenerating(false);
           return;
         }

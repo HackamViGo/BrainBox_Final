@@ -3,56 +3,53 @@ import { useAINexusStore } from '../../../store/useAINexusStore';
 
 describe('useAINexusStore', () => {
   beforeEach(() => {
-    // Reset store state manually if needed, but for simple stores
-    // we just use the default state each time if we don't persist it.
-    // AINexusStore is not persisted in the current implementation.
-    const state = useAINexusStore.getState();
+    // Reset store state manually
     useAINexusStore.setState({
-      activeModelId: 'chatgpt',
-      pendingModelId: null,
+      messages: [
+        { id: 'msg-1', role: 'assistant', content: 'Hello. Nexus Core is synchronized. How shall we begin?' }
+      ],
+      isGenerating: false,
+      modelVersion: 'basic',
     });
   });
 
   it('should have default state', () => {
     const state = useAINexusStore.getState();
-    expect(state.activeModelId).toBe('chatgpt');
-    expect(state.pendingModelId).toBeNull();
+    expect(state.messages).toHaveLength(1);
+    expect(state.isGenerating).toBe(false);
+    expect(state.modelVersion).toBe('basic');
   });
 
-  it('should set pendingModelId when selectModel is called', () => {
-    const { selectModel } = useAINexusStore.getState();
-    selectModel('gemini');
+  it('should add a message', () => {
+    const { addMessage } = useAINexusStore.getState();
+    addMessage({ id: 'msg-2', role: 'user', content: 'Test message' });
     
-    expect(useAINexusStore.getState().pendingModelId).toBe('gemini');
-    expect(useAINexusStore.getState().activeModelId).toBe('chatgpt');
+    const state = useAINexusStore.getState();
+    expect(state.messages).toHaveLength(2);
+    expect(state.messages[1]!.content).toBe('Test message');
   });
 
-  it('should update activeModelId and clear pendingModelId on confirmModel', () => {
-    const { selectModel, confirmModel } = useAINexusStore.getState();
+  it('should set isGenerating state', () => {
+    const { setIsGenerating } = useAINexusStore.getState();
+    setIsGenerating(true);
     
-    selectModel('gemini');
-    confirmModel();
-    
-    expect(useAINexusStore.getState().activeModelId).toBe('gemini');
-    expect(useAINexusStore.getState().pendingModelId).toBeNull();
+    expect(useAINexusStore.getState().isGenerating).toBe(true);
   });
 
-  it('should clear pendingModelId on cancelModel', () => {
-    const { selectModel, cancelModel } = useAINexusStore.getState();
+  it('should set modelVersion', () => {
+    const { setModelVersion } = useAINexusStore.getState();
+    setModelVersion('latest');
     
-    selectModel('claude');
-    cancelModel();
-    
-    expect(useAINexusStore.getState().activeModelId).toBe('chatgpt');
-    expect(useAINexusStore.getState().pendingModelId).toBeNull();
+    expect(useAINexusStore.getState().modelVersion).toBe('latest');
   });
 
-  it('should keep current activeModelId if confirmModel is called without pending', () => {
-    const { confirmModel } = useAINexusStore.getState();
+  it('should clear messages but keep initial welcome message', () => {
+    const { addMessage, clearMessages } = useAINexusStore.getState();
+    addMessage({ id: 'msg-2', role: 'user', content: 'Test message' });
+    clearMessages();
     
-    confirmModel();
-    
-    expect(useAINexusStore.getState().activeModelId).toBe('chatgpt');
-    expect(useAINexusStore.getState().pendingModelId).toBeNull();
+    const state = useAINexusStore.getState();
+    expect(state.messages).toHaveLength(1);
+    expect(state.messages[0]!.id).toBe('msg-1');
   });
 });

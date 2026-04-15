@@ -64,7 +64,16 @@ export function Prompts() {
       <AnimatePresence mode="wait">
         {currentView === 'hub' && (
           <ViewWrapper key="hub" id="hub">
-            <HubView onNavigate={setCurrentView} />
+            <HubView 
+              onNavigate={setCurrentView} 
+              onUseTemplate={handleRefine}
+              stats={{
+                frameworks: promptFolders.length,
+                saved: items.filter(i => i.type === 'prompt').length,
+                refine: 7, // Gemini crystals
+                captures: captures.length
+              }}
+            />
           </ViewWrapper>
         )}
 
@@ -73,6 +82,7 @@ export function Prompts() {
             <FrameworksView 
               onBack={() => setCurrentView('hub')} 
               setTheme={setTheme}
+              onUseTemplate={handleRefine}
             />
           </ViewWrapper>
         )}
