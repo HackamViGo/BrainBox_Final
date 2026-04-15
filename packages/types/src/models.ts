@@ -17,8 +17,10 @@ export interface Item {
   updatedAt?: string;
   url?: string;
   source?: string;
-  theme?: ThemeName;
+  sourceId?: string;
+  platform?: ThemeName;
   content?: string;
+  messages?: any[];
   tags?: string[];
   isFrozen?: boolean;
   isPermanent?: boolean;

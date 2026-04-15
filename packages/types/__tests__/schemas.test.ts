@@ -49,6 +49,21 @@ describe('schemas', () => {
       expect(() => ItemSchema.parse(chatItem)).not.toThrow();
       expect(() => ItemSchema.parse(promptItem)).not.toThrow();
     });
+
+    it('should validate extension-specific fields', () => {
+      const extensionItem = {
+        id: '125',
+        title: 'Captured Chat',
+        description: 'From platform',
+        type: 'chat',
+        folderId: null,
+        sourceId: 'conv_123',
+        platform: 'chatgpt',
+        url: 'https://chatgpt.com/c/123',
+        messages: [{ role: 'user', content: 'hello' }],
+      };
+      expect(() => ItemSchema.parse(extensionItem)).not.toThrow();
+    });
   });
 
   describe('ThemeNameSchema', () => {

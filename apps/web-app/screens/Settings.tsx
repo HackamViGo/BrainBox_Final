@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { ICON_LIBRARY } from '@brainbox/ui';
 import { useLibraryStore } from '@/store/useLibraryStore';
+import { useAppStore } from '@/store/useAppStore';
 import { z } from 'zod';
 import type { Folder } from '@brainbox/types';
 
@@ -31,22 +32,31 @@ const ApiKeysSchema = z.object({
 
 export function Settings() {
   const { promptFolders: allFolders } = useLibraryStore();
+  const { getApiKey, setApiKey } = useAppStore();
   const [autoSync, setAutoSync] = useState(true);
+
+  // Selected folders for extension quick-access — Zustand persisted
   const [selectedFolders, setSelectedFolders] = useState<string[]>(() => {
-    if (typeof window === 'undefined') return [];
-    const saved = localStorage.getItem('brainbox_extension_selected_folders');
-    return saved ? JSON.parse(saved) : ['prm-1', 'prm-2'];
+    // Safe SSR init: read from appStore apiKeys map using a dedicated key
+    const saved = useAppStore.getState().getApiKey('__ext_selected_folders')
+    return saved ? JSON.parse(saved) : []
   });
-  const [apiKeys, setApiKeys] = useState({ 
-    openai: (typeof window !== 'undefined' && localStorage.getItem('CHATGPT_API_KEY')) || '', 
-    claude: (typeof window !== 'undefined' && localStorage.getItem('CLAUDE_API_KEY')) || '', 
-    gemini: (typeof window !== 'undefined' && localStorage.getItem('GEMINI_API_KEY')) || '' 
+
+  // API keys — read from Zustand, NOT localStorage directly
+  const [apiKeys, setApiKeys] = useState({
+    openai: getApiKey('chatgpt') || '',
+    claude: getApiKey('claude') || '',
+    gemini: getApiKey('gemini') || ''
   });
   const [showKeys, setShowKeys] = useState({ openai: false, claude: false, gemini: false });
   const [isSaving, setIsSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [autoDeleteDays, setAutoDeleteDays] = useState(() => (typeof window !== 'undefined' && localStorage.getItem('vault_retention_days')) || '30');
+
+  // Retention days — persisted in Zustand (via dedicated key slot)
+  const [autoDeleteDays, setAutoDeleteDays] = useState(() => {
+    return useAppStore.getState().getApiKey('__vault_retention_days') || '30'
+  });
 
   // Only top-level prompt folders for quick access
   const promptFolders = allFolders.filter((f: Folder) => f.parentId === null);
@@ -56,9 +66,8 @@ export function Settings() {
       ? selectedFolders.filter(f => f !== id) 
       : [...selectedFolders, id];
     setSelectedFolders(newSelected);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('brainbox_extension_selected_folders', JSON.stringify(newSelected));
-    }
+    // Persist via Zustand (special key slot for extension folder prefs)
+    setApiKey('__ext_selected_folders', JSON.stringify(newSelected));
   };
 
   const handleSave = async () => {
@@ -72,15 +81,13 @@ export function Settings() {
       return;
     }
 
-    // Simulate saving and real localStorage update
     await new Promise(resolve => setTimeout(resolve, 800));
     
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('CHATGPT_API_KEY', apiKeys.openai);
-      localStorage.setItem('CLAUDE_API_KEY', apiKeys.claude);
-      localStorage.setItem('GEMINI_API_KEY', apiKeys.gemini);
-      localStorage.setItem('vault_retention_days', autoDeleteDays);
-    }
+    // Persist API keys via Zustand store (stored in apiKeys map, persisted by partialize)
+    setApiKey('chatgpt', apiKeys.openai);
+    setApiKey('claude', apiKeys.claude);
+    setApiKey('gemini', apiKeys.gemini);
+    setApiKey('__vault_retention_days', autoDeleteDays);
 
     setIsSaving(false);
     setSaved(true);

@@ -1,4 +1,5 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { logger } from '@brainbox/utils'
 
 export async function generateGeminiResponse(prompt: string, apiKey: string) {
   const genAI = new GoogleGenerativeAI(apiKey);
@@ -9,7 +10,7 @@ export async function generateGeminiResponse(prompt: string, apiKey: string) {
     const response = await result.response;
     return response.text();
   } catch (error) {
-    console.error("Gemini API Error:", error);
+    logger.error('Gemini', 'generateGeminiResponse failed', error)
     throw error;
   }
 }
@@ -29,7 +30,7 @@ export async function generateBasicResponse(prompt: string, targetModelName: str
     const response = await result.response;
     return response.text();
   } catch (error) {
-    console.error("Basic Model Error:", error);
+    logger.error('Gemini', 'generateBasicResponse failed', error)
     throw error;
   }
 }

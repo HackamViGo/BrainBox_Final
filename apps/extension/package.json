@@ -11,24 +11,26 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "react": "catalog:",
-    "react-dom": "catalog:",
     "@brainbox/types": "workspace:*",
     "@brainbox/utils": "workspace:*",
     "lucide-react": "catalog:",
+    "motion": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
     "zustand": "catalog:"
   },
   "devDependencies": {
+    "@crxjs/vite-plugin": "2.0.0-beta.33",
+    "@testing-library/react": "catalog:",
+    "@types/chrome": "^0.0.300",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@vitejs/plugin-react": "catalog:",
+    "jsdom": "^25.0.0",
     "typescript": "catalog:",
     "vite": "^8.0.0",
-    "vitest": "catalog:",
-    "@testing-library/react": "catalog:",
-    "jsdom": "^25.0.0",
     "vite-tsconfig-paths": "^5.0.0",
-    "@types/chrome": "^0.0.300"
+    "vitest": "catalog:"
   }
 }

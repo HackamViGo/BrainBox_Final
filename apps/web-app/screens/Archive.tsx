@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   Snowflake, 
@@ -14,22 +14,19 @@ import {
   AlertTriangle
 } from 'lucide-react';
 import { useLibraryStore } from '@/store/useLibraryStore';
+import { useAppStore } from '@/store/useAppStore';
 import type { Item } from '@brainbox/types';
 
 export function Archive() {
   const { items: allItems, deleteItem, freezeItem } = useLibraryStore();
   const [activeLayer, setActiveLayer] = useState<'echoes' | 'artifacts'>('echoes');
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
-  const [retentionDays, setRetentionDays] = useState(30);
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const savedDays = localStorage.getItem('vault_retention_days');
-      if (savedDays && savedDays !== 'never') {
-        setRetentionDays(parseInt(savedDays, 10));
-      }
-    }
-  }, []);
+  // Retention days read from Zustand store (persisted via __vault_retention_days key)
+  const retentionDays = parseInt(
+    useAppStore.getState().getApiKey('__vault_retention_days') || '30',
+    10
+  );
 
   // Filter items that are "deleted" (in Archive)
   const archivedItems = allItems.filter((item: Item) => !!item.deletedAt);

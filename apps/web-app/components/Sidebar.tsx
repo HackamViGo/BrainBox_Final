@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import dynamic from 'next/dynamic'
 import { motion, AnimatePresence } from 'motion/react'
 import { 
   Home, BookOpen, Zap, BarChart2, Users, Settings, Fingerprint, Puzzle, Archive, Network,
@@ -16,7 +17,11 @@ import {
 } from 'lucide-react'
 
 import { ICON_LIBRARY } from '@brainbox/ui'
-import { NeuralField } from '@brainbox/ui'
+
+const NeuralField = dynamic(
+  () => import('@brainbox/ui').then(m => ({ default: m.NeuralField })),
+  { ssr: false }
+)
 import { useAppStore } from '@/store/useAppStore'
 import { useLibraryStore } from '@/store/useLibraryStore'
 import type { ScreenName, Folder as FolderData, Item } from '@brainbox/types'

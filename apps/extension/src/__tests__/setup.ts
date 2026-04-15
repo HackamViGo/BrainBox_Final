@@ -15,6 +15,10 @@ global.chrome = {
       set: vi.fn(),
       remove: vi.fn(),
     },
+    onChanged: {
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+    },
   },
   contextMenus: {
     create: vi.fn(),

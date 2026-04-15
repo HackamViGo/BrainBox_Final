@@ -39,7 +39,7 @@ export function Prompts() {
       description: text.substring(0, 100) + '...',
       content: text,
       folderId: activeFolder,
-      theme: theme
+      platform: theme   // 'platform' is the ThemeName field on Item
     });
     setCurrentView('saved-prompts');
   };

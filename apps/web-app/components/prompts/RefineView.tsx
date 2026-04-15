@@ -9,6 +9,8 @@ import { useScrollHint, ScrollHint } from './ScrollHint';
 import { ApiKeyModal } from '../ApiKeyModal';
 import { generateGeminiResponse } from '@/lib/gemini';
 import { REFINE_CRYSTALS } from '@/lib/prompts-data';
+import { useAppStore } from '@/store/useAppStore';
+import { logger } from '@brainbox/utils';
 
 interface RefineViewProps {
   onBack: () => void;
@@ -33,7 +35,8 @@ export function RefineView({ onBack, initialInput = '', onSave }: RefineViewProp
   const handleRefine = async (mode: any) => {
     if (!input) return;
     
-    const apiKey = localStorage.getItem('GEMINI_API_KEY');
+    // API key stored in Zustand store (not raw localStorage)
+    const apiKey = useAppStore.getState().getApiKey('gemini')
     if (!apiKey) {
       setApiKeyModalOpen(true);
       return;
@@ -63,7 +66,7 @@ Please provide ONLY the final refined prompt. Do not include any explanations, g
       setOutput(result);
       
     } catch (error) {
-      console.error("Error refining prompt:", error);
+      logger.error('RefineView', 'handleRefine failed', error)
       setIsRefining(false);
       setOutput("Error: Failed to refine prompt. Please check your API key and try again.");
     }

@@ -9,6 +9,7 @@ import {
   Maximize2, Minimize2, Filter, Info, ShieldAlert
 } from 'lucide-react';
 import * as d3 from 'd3';
+import { useLibraryStore } from '@/store/useLibraryStore';
 
 // --- Types ---
 interface Node extends d3.SimulationNodeDatum {
@@ -26,41 +27,40 @@ interface Link extends d3.SimulationLinkDatum<Node> {
   value: number;
 }
 
-// --- Mock Data Generator ---
-const generateGraphData = () => {
+// --- Data Transformation ---
+const transformToGraphData = (folders: any[], items: any[]) => {
   const nodes: Node[] = [
     { id: 'root', name: 'Neural Core', color: '#ffffff', size: 40, type: 'folder', val: 100 },
-    { id: 'f1', name: 'Research', color: '#10a37f', size: 30, type: 'folder', val: 80 },
-    { id: 'f2', name: 'Development', color: '#8ab4f8', size: 35, type: 'folder', val: 90 },
-    { id: 'f3', name: 'Creative', color: '#d97757', size: 25, type: 'folder', val: 70 },
-    { id: 'f4', name: 'Personal', color: '#fbbf24', size: 20, type: 'folder', val: 60 },
-    { id: 'f5', name: 'Archive', color: '#a855f7', size: 22, type: 'folder', val: 65 },
   ];
+  const links: Link[] = [];
 
-  const links: Link[] = [
-    { source: 'root', target: 'f1', value: 2 },
-    { source: 'root', target: 'f2', value: 2 },
-    { source: 'root', target: 'f3', value: 2 },
-    { source: 'root', target: 'f4', value: 2 },
-    { source: 'root', target: 'f5', value: 2 },
-    { source: 'f1', target: 'f2', value: 1 },
-    { source: 'f2', target: 'f3', value: 1 },
-  ];
+  // Add Folders
+  folders.forEach(f => {
+    nodes.push({
+      id: f.id,
+      name: f.name,
+      color: f.type === 'library' ? '#10a37f' : '#d97757',
+      size: 30,
+      type: 'folder',
+      val: 80
+    });
+    links.push({ source: f.parentId || 'root', target: f.id, value: 2 });
+  });
 
-  nodes.forEach(parent => {
-    if (parent.id === 'root') return;
-    const count = Math.floor(Math.random() * 5) + 3;
-    for (let i = 0; i < count; i++) {
-      const id = `${parent.id}-sub-${i}`;
-      nodes.push({
-        id,
-        name: `${parent.name} Node ${i + 1}`,
-        color: parent.color,
-        size: 12 + Math.random() * 8,
-        type: Math.random() > 0.5 ? 'chat' : 'prompt',
-        val: 30 + Math.random() * 20
-      });
-      links.push({ source: parent.id, target: id, value: 1 });
+  // Add Items
+  items.forEach(i => {
+    nodes.push({
+      id: i.id,
+      name: i.title,
+      color: i.type === 'chat' ? '#8ab4f8' : '#fbbf24',
+      size: 15,
+      type: i.type,
+      val: 40
+    });
+    if (i.folderId) {
+      links.push({ source: i.folderId, target: i.id, value: 1 });
+    } else {
+      links.push({ source: 'root', target: i.id, value: 1 });
     }
   });
 
@@ -92,7 +92,11 @@ export function MindGraph() {
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
   const [timeValue, setTimeValue] = useState(100);
   const [isFullScreen, setIsFullScreen] = useState(false);
-  const [graphData] = useState(generateGraphData());
+
+  const { items, libraryFolders, promptFolders } = useLibraryStore();
+  const graphData = useMemo(() => 
+    transformToGraphData([...libraryFolders, ...promptFolders], items),
+  [items, libraryFolders, promptFolders]);
 
   useEffect(() => {
     if (!svgRef.current || !containerRef.current) return;

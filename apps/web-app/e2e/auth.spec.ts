@@ -21,7 +21,11 @@ test.describe('Navigation', () => {
         state: { 
           isLoggedIn: true, 
           theme: 'chatgpt',
-          activeScreen: 'dashboard'
+          activeModelId: 'chatgpt',
+          isPinned: false,
+          isSidebarExpanded: false,
+          expandedFolders: [],
+          apiKeys: {}
         },
         version: 0
       };
@@ -32,18 +36,19 @@ test.describe('Navigation', () => {
   test('should switch between library and prompts', async ({ page }) => {
     await page.goto('/');
     
-    // Wait for the login overlay to disappear (AnimatePresence)
-    await expect(page.getByText('Initialize Session')).toBeHidden({ timeout: 10000 });
-    
-    // Check if Dashboard is visible
-    await expect(page.getByText(/Вторият ти мозък/i)).toBeVisible();
+    // Wait for Zustand rehydration to set isLoggedIn=true → overlay removed from DOM
+    await page.locator('[data-testid="login-overlay"]').waitFor({ state: 'detached', timeout: 15000 });
+
+    // Wait for the Sidebar to appear (indicates successful login/hydration)
+    const libraryBtn = page.locator('button').filter({ hasText: 'Library' }).first();
+    await expect(libraryBtn).toBeVisible({ timeout: 15000 });
     
     // Switch to Library
-    await page.locator('button').filter({ hasText: 'Library' }).first().click();
-    await expect(page.getByText('Main Library')).toBeVisible();
+    await libraryBtn.click();
+    await expect(page.getByText('Main Library').first()).toBeVisible();
     
     // Switch to Prompts
     await page.locator('button').filter({ hasText: 'Prompts' }).first().click();
-    await expect(page.getByText('Main Prompts')).toBeVisible();
+    await expect(page.getByText('Main Prompts').first()).toBeVisible();
   });
 });

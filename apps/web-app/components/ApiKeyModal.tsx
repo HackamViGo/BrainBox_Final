@@ -26,11 +26,12 @@ export function ApiKeyModal() {
   const [apiKey, setApiKey] = useState('')
   const [showTutorial, setShowTutorial] = useState(true)
 
-  const storageKey = apiKeyModelId ? `${apiKeyModelId.toUpperCase()}_API_KEY` : ''
+  const storageKey = apiKeyModelId ?? ''
 
   useEffect(() => {
     if (isApiKeyModalOpen && storageKey) {
-      const savedKey = localStorage.getItem(storageKey)
+      // Read from Zustand store (persisted) — NOT raw localStorage
+      const savedKey = useAppStore.getState().getApiKey(storageKey)
       if (savedKey) {
         setApiKey(savedKey)
         setShowTutorial(false)
@@ -43,7 +44,8 @@ export function ApiKeyModal() {
 
   const handleSave = () => {
     if (apiKey.trim() && storageKey) {
-      localStorage.setItem(storageKey, apiKey.trim())
+      // Save via Zustand store (persisted to localStorage via partialize)
+      useAppStore.getState().setApiKey(storageKey, apiKey.trim())
       setModalOpen('apiKey', false)
     }
   }

@@ -8,12 +8,14 @@ import dynamic from 'next/dynamic';
 import { usePathname } from 'next/navigation';
 import { motion } from 'motion/react';
 
-const NeuralField = dynamic(() => import('@brainbox/ui').then(mod => mod.NeuralField), { ssr: false });
-const AmbientLight = dynamic(() => import('@brainbox/ui').then(mod => mod.AmbientLight), { ssr: false });
+const NeuralField = dynamic(() => import('@brainbox/ui').then(mod => ({ default: mod.NeuralField })), { ssr: false });
+const AmbientLight = dynamic(() => import('@brainbox/ui').then(mod => ({ default: mod.AmbientLight })), { ssr: false });
 import { ApiKeyModal } from './ApiKeyModal';
 import { SmartSwitchModal } from './SmartSwitchModal';
 import { NewFolderModal } from './NewFolderModal';
 import { NewChatModal } from './NewChatModal';
+import { useHasHydrated } from '../hooks/useHasHydrated';
+import { Loader2 } from 'lucide-react';
 
 export function PersistentShell({ children }: { children: React.ReactNode }) {
   const { 
@@ -22,6 +24,7 @@ export function PersistentShell({ children }: { children: React.ReactNode }) {
     isPinned, isSidebarExpanded
   } = useAppStore();
   const pathname = usePathname();
+  const hasHydrated = useHasHydrated();
 
   React.useEffect(() => {
     if (pathname) {
@@ -29,6 +32,16 @@ export function PersistentShell({ children }: { children: React.ReactNode }) {
       setActiveScreen(screen as any);
     }
   }, [pathname, setActiveScreen]);
+
+  if (!hasHydrated) {
+    return (
+      <div className="h-dvh w-full bg-[#050505] flex items-center justify-center relative overflow-hidden">
+        <AmbientLight theme="chatgpt" />
+        <NeuralField theme="chatgpt" mode="wander" />
+        <Loader2 className="w-8 h-8 text-white/20 animate-spin relative z-10" />
+      </div>
+    );
+  }
 
   const effectiveTheme = hoverTheme ?? theme;
 

@@ -15,6 +15,8 @@ import { SmartSwitchModal } from '../components/SmartSwitchModal';
 import { MODELS } from '@brainbox/types';
 import { getUser } from '@/actions/auth';
 import { useAppStore } from '@/store/useAppStore';
+import { useAINexusStore } from '@/store/useAINexusStore';
+import { logger } from '@brainbox/utils';
 import type { User } from '@supabase/supabase-js';
 
 interface Message {
@@ -32,14 +34,18 @@ export function AINexus() {
     clearPendingModel 
   } = useAppStore();
 
+  const {
+    messages,
+    setMessages,
+    addMessage,
+    isGenerating,
+    setIsGenerating,
+    modelVersion,
+    setModelVersion
+  } = useAINexusStore();
+
   const [user, setUser] = useState<User | null>(null);
   const [input, setInput] = useState('');
-  const [messages, setMessages] = useState<Message[]>([
-    { id: 'msg-1', role: 'assistant', content: 'Hello. Nexus Core is synchronized. How shall we begin?' }
-  ]);
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [apiKeyModalOpen, setApiKeyModalOpen] = useState(false);
-  const [modelVersion, setModelVersion] = useState<'basic' | 'latest'>('basic');
   
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -64,16 +70,15 @@ export function AINexus() {
   }, [messages, isGenerating]);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const key = localStorage.getItem(`${activeModelId.toUpperCase()}_API_KEY`);
-      setModelVersion(key ? 'latest' : 'basic');
-    }
-  }, [activeModelId]);
+    // API key presence is managed by useAppStore — check via store, not localStorage directly
+    const key = useAppStore.getState().getApiKey(activeModelId)
+    setModelVersion(key ? 'latest' : 'basic')
+  }, [activeModelId])
 
   const handleVersionSwitch = (version: 'basic' | 'latest') => {
     if (version === 'latest') {
-      const key = localStorage.getItem(`${activeModelId.toUpperCase()}_API_KEY`);
-      if (key) setModelVersion('latest');
+      const key = useAppStore.getState().getApiKey(activeModelId)
+      if (key) setModelVersion('latest')
       else {
         useAppStore.getState().setApiKeyModel(activeModelId, activeModel.name);
         useAppStore.getState().setModalOpen('apiKey', true);
@@ -88,12 +93,12 @@ export function AINexus() {
 
     const userMsg = input.trim();
     setInput('');
-    setMessages(prev => [...prev, { id: Date.now().toString(), role: 'user', content: userMsg }]);
+    addMessage({ id: Date.now().toString(), role: 'user', content: userMsg });
     setIsGenerating(true);
 
     try {
       if (modelVersion === 'latest') {
-        const apiKey = localStorage.getItem(`${activeModelId.toUpperCase()}_API_KEY`);
+        const apiKey = useAppStore.getState().getApiKey(activeModelId)
         
         if (!apiKey) {
           useAppStore.getState().setApiKeyModel(activeModelId, activeModel.name);
@@ -106,19 +111,23 @@ export function AINexus() {
         if (activeModelId === 'gemini') {
           const result = await generateGeminiResponse(userMsg, apiKey);
           const isCode = result.includes('```');
-          setMessages(prev => [...prev, { id: (Date.now() + 1).toString(), role: 'assistant', content: result, isCode }]);
+          const { content, error } = { content: result, error: null };
+
+          if (error) throw new Error(error);
+
+          addMessage({ id: Date.now().toString(), role: 'assistant', content });
         } else {
           await new Promise(resolve => setTimeout(resolve, 1500));
           const response = `I am ${activeModel.name}. Neural synchronization complete. [SIMULATED_RESPONSE]`;
-          setMessages(prev => [...prev, { id: (Date.now() + 1).toString(), role: 'assistant', content: response }]);
+          addMessage({ id: Date.now().toString(), role: 'assistant', content: response });
         }
       } else {
-        const result = await generateBasicResponse(userMsg, activeModel.name);
-        setMessages(prev => [...prev, { id: (Date.now() + 1).toString(), role: 'assistant', content: result }]);
+        const response = await generateBasicResponse(userMsg, activeModel.name);
+        addMessage({ id: Date.now().toString(), role: 'assistant', content: response });
       }
-    } catch (error) {
-      console.error('Generation error:', error);
-      setMessages(prev => [...prev, { id: (Date.now() + 1).toString(), role: 'assistant', content: "Neural link interrupted." }]);
+    } catch (err: any) {
+      logger.error('AINexus', 'Generation failed', err);
+      addMessage({ id: Date.now().toString(), role: 'assistant', content: 'Error: Connection lost. Re-synchronizing...' });
     } finally {
       setIsGenerating(false);
     }

@@ -9,8 +9,11 @@
  */
 
 import { readFileSync, writeFileSync, existsSync } from 'fs'
-import { resolve, relative, dirname, join } from 'path'
+import { fileURLToPath } from 'url'
+import { dirname, resolve, relative, join } from 'path'
 
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 const ROOT = resolve(__dirname, '..')  // монорепо root
 const GRAPH_PATH = join(ROOT, 'docs/GRAPH.json')
 const DRY_RUN = process.argv.includes('--check')

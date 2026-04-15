@@ -1,10 +1,16 @@
-import { createClient } from '@/utils/supabase/server';
+import { createClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 import { ItemSchema } from '@brainbox/types';
+import { logger } from '@brainbox/utils';
+
+import { isRateLimited } from '@/lib/rate-limit';
+
+const RATE_LIMIT = 30;
+const RATE_WINDOW_MS = 60 * 1000;
 
 /**
- * Extension Sync API
- * Receives captured chats from the Chrome Extension.
+ * Extension Sync API (ADR-012)
+ * Receives captured chats from the Chrome Extension with isolated platform tracking.
  */
 export async function POST(request: Request) {
   try {
@@ -15,19 +21,31 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    // Rate limit: 30 req/min per user
+    if (isRateLimited(user.id)) {
+      logger.warn('API:extension:sync', 'Rate limit exceeded', { userId: user.id })
+      return NextResponse.json({ error: 'Too many requests' }, { status: 429 });
+    }
+
     const body = await request.json();
     
-    // Validate incoming data
-    const validatedData = ItemSchema.parse({
+    // Validate incoming data (Chat objects from extension)
+    const result = ItemSchema.safeParse({
       ...body,
       type: 'chat',
-      folderId: body.folderId || null,
     });
+
+    if (!result.success) {
+      logger.warn('API:extension:sync', 'Validation failed', result.error.flatten());
+      return NextResponse.json({ error: 'Validation failed', details: result.error.flatten() }, { status: 400 });
+    }
+
+    const { data: validatedData } = result;
 
     // Save to Supabase (map camelCase to snake_case)
     const { data, error } = await supabase
       .from('items')
-      .insert({
+      .upsert({
         id: validatedData.id,
         user_id: user.id,
         title: validatedData.title,
@@ -35,20 +53,30 @@ export async function POST(request: Request) {
         type: validatedData.type,
         folder_id: validatedData.folderId,
         content: validatedData.content,
-        theme: validatedData.theme,
+        theme: validatedData.theme || validatedData.platform, // Fallback to platform if theme missing
         tags: validatedData.tags,
         is_frozen: validatedData.isFrozen,
         deleted_at: validatedData.deletedAt,
+        // Extension Specific Fields
+        source_id: validatedData.sourceId,
+        platform: validatedData.platform,
+        url: validatedData.url,
+        messages: validatedData.messages
+      }, {
+        onConflict: 'user_id, source_id, platform'
       })
       .select()
       .single();
 
-    if (error) throw error;
+    if (error) {
+      logger.error('API:extension:sync', 'Database upsert failed', error);
+      throw error;
+    }
 
     return NextResponse.json({ success: true, item: data });
 
   } catch (error: any) {
-    console.error('[API_EXTENSION_SYNC]', error);
+    logger.error('API:extension:sync', 'Sync failed', error);
     return NextResponse.json(
       { error: error.message || 'Internal Server Error' }, 
       { status: error.status || 500 }

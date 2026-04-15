@@ -336,6 +336,28 @@
       "side_effects": [],
       "public_api": [],
       "status": "active"
+    },
+    {
+      "id": ".agents/skills/SKILLS_INDEX.md",
+      "workspace": "agents",
+      "type": "skill",
+      "responsibility": "Централен индекс за всички налични skills в BrainBox Agent.",
+      "dependencies": [],
+      "dependents": [],
+      "side_effects": [],
+      "public_api": [],
+      "status": "active"
+    },
+    {
+      "id": ".agents/workflows/new-store.md",
+      "workspace": "agents",
+      "type": "workflow",
+      "responsibility": "Scaffold нов Zustand store с persist, skipHydration и optimistic updates.",
+      "dependencies": [],
+      "dependents": [],
+      "side_effects": [],
+      "public_api": [],
+      "status": "active"
     }
   ]
 }

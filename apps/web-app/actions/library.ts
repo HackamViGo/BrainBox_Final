@@ -8,7 +8,7 @@ import { revalidatePath } from 'next/cache'
  * FOLDERS
  */
 
-export async function createFolder(data: unknown) {
+export async function createFolder(data: unknown): Promise<any> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) throw new Error('Unauthorized')
@@ -32,7 +32,7 @@ export async function createFolder(data: unknown) {
   return folder
 }
 
-export async function deleteFolder(id: string) {
+export async function deleteFolder(id: string): Promise<void> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) throw new Error('Unauthorized')
@@ -51,7 +51,7 @@ export async function deleteFolder(id: string) {
  * ITEMS
  */
 
-export async function upsertItem(data: unknown) {
+export async function upsertItem(data: unknown): Promise<any> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) throw new Error('Unauthorized')
@@ -80,7 +80,7 @@ export async function upsertItem(data: unknown) {
   return item
 }
 
-export async function softDeleteItem(id: string) {
+export async function softDeleteItem(id: string): Promise<void> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) throw new Error('Unauthorized')
@@ -95,7 +95,7 @@ export async function softDeleteItem(id: string) {
   revalidatePath('/')
 }
 
-export async function freezeItem(id: string) {
+export async function freezeItem(id: string): Promise<void> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) throw new Error('Unauthorized')
@@ -114,7 +114,7 @@ export async function freezeItem(id: string) {
  * LOAD ALL DATA
  */
 
-export async function loadUserData() {
+export async function loadUserData(): Promise<any> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return null

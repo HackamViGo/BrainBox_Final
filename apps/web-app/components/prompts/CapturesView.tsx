@@ -83,13 +83,13 @@ export function CapturesView({ onBack, onRefine, onSaveToPrompts, captures, onDr
                   <div className="flex items-center gap-4">
                     <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                       <button 
-                        onClick={() => onRefine(capture.text)}
+                        onClick={() => onRefine(capture.content || capture.description)}
                         className="px-3 py-1.5 rounded-lg bg-purple-500/20 text-purple-300 hover:bg-purple-500/40 hover:text-white transition-colors flex items-center gap-2 text-[10px] font-bold shadow-lg backdrop-blur-md border border-purple-500/30"
                       >
                         <Rocket className="w-3 h-3" /> Refine
                       </button>
                       <button 
-                        onClick={() => onSaveToPrompts(capture.text)}
+                        onClick={() => onSaveToPrompts(capture.content || capture.description)}
                         className="px-3 py-1.5 rounded-lg bg-amber-500/20 text-amber-300 hover:bg-amber-500/40 hover:text-white transition-colors flex items-center gap-2 text-[10px] font-bold shadow-lg backdrop-blur-md border border-amber-500/30"
                       >
                         <Star className="w-3 h-3" /> Save
@@ -101,7 +101,7 @@ export function CapturesView({ onBack, onRefine, onSaveToPrompts, captures, onDr
                 
                 <div className="p-6">
                   <p className="font-mono text-sm text-white/80 leading-relaxed">
-                    {capture.text}
+                    {capture.content || capture.description}
                   </p>
                 </div>
               </div>

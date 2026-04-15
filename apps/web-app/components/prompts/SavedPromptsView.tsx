@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
-  ChevronLeft, Plus, Search, BookOpen, Zap, Copy, Edit2
+  ChevronLeft, Plus, Search, BookOpen, Zap, Copy, Edit2, Trash2
 } from 'lucide-react';
 import type { ThemeName, Folder, Item } from '@brainbox/types';
 import { THEMES, ICON_LIBRARY } from '@brainbox/types';
@@ -18,11 +18,14 @@ interface SavedPromptsViewProps {
   promptFolders: Folder[];
   items: Item[];
   onDragStart?: (event: React.DragEvent, nodeType: string, data: any) => void;
+  onDeletePrompt?: (id: string) => void;
+  onEditPrompt?: (item: Item) => void;
 }
 
 export function SavedPromptsView({ 
   onBack, activeFolder, setActiveFolder, onNewPrompt, 
-  onSelectTheme, promptFolders, items, onDragStart 
+  onSelectTheme, promptFolders, items, onDragStart,
+  onDeletePrompt, onEditPrompt
 }: SavedPromptsViewProps) {
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -74,6 +77,7 @@ export function SavedPromptsView({
         
         <button 
           onClick={onNewPrompt}
+          title="Create New Prompt"
           className="px-6 py-3 rounded-xl bg-amber-500 text-black font-bold hover:bg-amber-400 transition-all flex items-center gap-2 shadow-lg shadow-amber-500/20"
         >
           <Plus className="w-5 h-5" /> New Prompt
@@ -167,11 +171,35 @@ export function SavedPromptsView({
                   </div>
                 </div>
                 <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button className="p-2 rounded-lg hover:bg-white/10 transition-colors" onClick={e => e.stopPropagation()}>
+                  <button 
+                    className="p-2 rounded-lg hover:bg-white/10 transition-colors" 
+                    title="Copy Prompt"
+                    onClick={e => {
+                      e.stopPropagation();
+                      navigator.clipboard.writeText(prompt.content || prompt.description || '');
+                    }}
+                  >
                     <Copy className="w-4 h-4" />
                   </button>
-                  <button className="p-2 rounded-lg hover:bg-white/10 transition-colors" onClick={e => e.stopPropagation()}>
+                  <button 
+                    className="p-2 rounded-lg hover:bg-white/10 transition-colors" 
+                    title="Edit Prompt"
+                    onClick={e => {
+                      e.stopPropagation();
+                      if (onEditPrompt) onEditPrompt(prompt);
+                    }}
+                  >
                     <Edit2 className="w-4 h-4" />
+                  </button>
+                  <button 
+                    className="p-2 rounded-lg hover:bg-red-500/20 text-red-400 transition-colors" 
+                    title="Delete Prompt"
+                    onClick={e => {
+                      e.stopPropagation();
+                      if (onDeletePrompt) onDeletePrompt(prompt.id);
+                    }}
+                  >
+                    <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
               </div>

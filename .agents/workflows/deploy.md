@@ -1,42 +1,100 @@
 ---
-description: 
+description: "Пълен deploy процес за BrainBox монорепото — typecheck, lint, test, graph-check, build."
 ---
 
 # Workflow: Deploy BrainBox
 
 Процес на разгръщане за BrainBox монорепото.
 
+> **Правило:** Никой не merge-ва директно в `main` без PR + минали CI checks.
+
+---
+
 ## Стъпки
 
-1. **Изпълни Typecheck**:
+### 1. Typecheck (0 грешки задължително)
 
-   ```bash
-   pnpm typecheck
-   ```
+```bash
+pnpm typecheck
+```
 
-2. **Изпълни Тестове**:
+Ако има грешки — **СПРИ**. Не продължавай.
 
-   ```bash
-   pnpm test
-   ```
+### 2. Lint
 
-3. **Build**:
+```bash
+pnpm lint
+```
 
-   ```bash
-   pnpm build
-   ```
+### 3. Unit тестове
 
-4. **Провери за линтер грешки**:
+```bash
+pnpm test --run
+```
 
-   ```bash
-   pnpm lint
-   ```
+Очаквано: всички тестове минават, coverage ≥ 85%.
 
-5. **Push към `main` branch**.
-6. **Vercel/GitHub Actions** ще поемат автоматичното разгръщане.
+### 4. Graph check (dependency integrity)
 
-## Критерии
+```bash
+npx tsx scripts/generate-graph.ts --check
+```
 
-- [ ] 0 TypeScript грешки
+Ако има orphan nodes или несъответствия — обнови `docs/GRAPH.json` преди да продължиш.
+
+### 5. Build
+
+```bash
+pnpm build
+```
+
+Web-app: Next.js production build.  
+Extension: `pnpm --filter @brainbox/extension build`
+
+### 6. E2E тестове (преди merge в main)
+
+```bash
+pnpm --filter web-app exec playwright test
+```
+
+### 7. Push към `main` branch
+
+```bash
+git push origin main
+```
+
+**Vercel/GitHub Actions** ще поемат автоматичното разгръщане.
+
+---
+
+## GitHub Actions (автоматично)
+
+| Workflow | Тригер | Jobs |
+|---|---|---|
+| `ci.yml` | push/PR | typecheck → lint → unit tests → graph-check |
+| `e2e.yml` | PR към main | Playwright E2E |
+| `preview.yml` | PR | Vercel preview + PR comment |
+| `deploy.yml` | push main | Vercel production |
+
+---
+
+## Критерии за завършване
+
+- [ ] `pnpm typecheck` → 0 грешки
+- [ ] `pnpm lint` → 0 warnings за production код
 - [ ] Всички unit тестове минават
+- [ ] `graph-check` → OK
 - [ ] Build стъпката е успешна
+- [ ] E2E тестове минават (при merge в main)
+
+---
+
+## Rollback
+
+При проблем в production:
+```bash
+# Върни предишния deployment в Vercel dashboard
+# или revert commit:
+git revert HEAD --no-edit
+git push origin main
+```

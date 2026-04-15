@@ -4,6 +4,7 @@ import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
 import type { Folder, Item } from '@brainbox/types'
 import { STORAGE_KEYS } from '@brainbox/utils'
+import { logger } from '@brainbox/utils'
 import { 
   loadUserData, 
   createFolder as serverCreateFolder, 
@@ -40,36 +41,17 @@ interface LibraryActions {
 
 export type LibraryStore = LibraryState & LibraryActions
 
-const MOCK_LIBRARY_FOLDERS: Folder[] = [
-  { id: 'mock-lf-1', name: 'Q1 Launch', iconIndex: 0, level: 0, type: 'library', parentId: null },
-  { id: 'mock-lf-2', name: 'Research', iconIndex: 12, level: 0, type: 'library', parentId: null },
-  { id: 'mock-lf-3', name: 'Deep Dives', iconIndex: 4, level: 1, type: 'library', parentId: 'mock-lf-2' },
-]
-
-const MOCK_PROMPT_FOLDERS: Folder[] = [
-  { id: 'mock-pf-1', name: 'Coding Agents', iconIndex: 8, level: 0, type: 'prompt', parentId: null },
-  { id: 'mock-pf-2', name: 'Writing Styles', iconIndex: 21, level: 0, type: 'prompt', parentId: null }
-]
-
-const MOCK_ITEMS: Item[] = [
-  { id: 'mock-i-1', title: 'Next.js 16 Migration', description: 'Chat about App Router and React 19', type: 'chat', folderId: 'mock-lf-1', content: '', theme: 'chatgpt' },
-  { id: 'mock-i-2', title: 'Supabase RLS Rules', description: 'Debugging policies', type: 'chat', folderId: 'mock-lf-3', content: '', theme: 'claude' },
-  { id: 'mock-i-3', title: 'Vite vs Farm', description: 'Performance comparison', type: 'chat', folderId: null, content: '', theme: 'gemini' }, // unassigned
-  { id: 'mock-i-4', title: 'Senior Frontend Dev', description: 'System prompt with strict rules', type: 'prompt', folderId: 'mock-pf-1', content: 'You are...', theme: 'deepseek' },
-  { id: 'mock-i-5', title: 'Creative Writer', description: 'Tone and voice guidelines', type: 'prompt', folderId: 'mock-pf-2', content: 'Write with flair...', theme: 'claude' }
-]
-
 export const useLibraryStore = create<LibraryStore>()(
   persist(
     (set, get) => ({
-      // State
-      libraryFolders: MOCK_LIBRARY_FOLDERS,
-      promptFolders: MOCK_PROMPT_FOLDERS,
-      items: MOCK_ITEMS,
+      // State — empty initial state; populated via loadData() after Supabase auth
+      libraryFolders: [],
+      promptFolders: [],
+      items: [],
       isLoading: false,
 
       // Actions
-      loadData: async () => {
+      loadData: async (): Promise<void> => {
         set({ isLoading: true })
         try {
           const data = await loadUserData()
@@ -88,7 +70,7 @@ export const useLibraryStore = create<LibraryStore>()(
             })
           }
         } catch (error) {
-          console.error('Failed to load library data:', error)
+          logger.error('useLibraryStore', 'loadData failed', error)
         } finally {
           set({ isLoading: false })
         }
@@ -98,7 +80,7 @@ export const useLibraryStore = create<LibraryStore>()(
       setPromptFolders: (folders) => set({ promptFolders: folders }),
       setItems: (items) => set({ items: items }),
 
-      createFolder: async (data: Omit<Folder, 'id'>) => {
+      createFolder: async (data: Omit<Folder, 'id'>): Promise<void> => {
         const tempId = crypto.randomUUID()
         const newFolder: Folder = { ...data, id: tempId }
         
@@ -125,7 +107,7 @@ export const useLibraryStore = create<LibraryStore>()(
             })
           }
         } catch (error) {
-          console.error('Failed to create folder:', error)
+          logger.error('useLibraryStore', 'createFolder failed', error)
           // Rollback
           set({
             libraryFolders: previousLibraryFolders,
@@ -134,7 +116,7 @@ export const useLibraryStore = create<LibraryStore>()(
         }
       },
 
-      removeFolder: async (id) => {
+      removeFolder: async (id): Promise<void> => {
         const previousLibraryFolders = get().libraryFolders
         const previousPromptFolders = get().promptFolders
 
@@ -147,7 +129,7 @@ export const useLibraryStore = create<LibraryStore>()(
         try {
           await serverDeleteFolder(id)
         } catch (error) {
-          console.error('Failed to delete folder:', error)
+          logger.error('useLibraryStore', 'removeFolder failed', error)
           // Rollback
           set({
             libraryFolders: previousLibraryFolders,
@@ -156,7 +138,7 @@ export const useLibraryStore = create<LibraryStore>()(
         }
       },
 
-      createItem: async (data: Omit<Item, 'id'>) => {
+      createItem: async (data: Omit<Item, 'id'>): Promise<void> => {
         const tempId = crypto.randomUUID()
         const newItem: Item = { ...data, id: tempId }
         
@@ -169,12 +151,12 @@ export const useLibraryStore = create<LibraryStore>()(
             items: get().items.map((i) => (i.id === tempId ? created : i)),
           })
         } catch (error) {
-          console.error('Failed to create item:', error)
+          logger.error('useLibraryStore', 'createItem failed', error)
           set({ items: previousItems })
         }
       },
 
-      saveItem: async (item) => {
+      saveItem: async (item): Promise<void> => {
         // Optimistic upsert
         const previousItems = get().items
         const exists = previousItems.some((i) => i.id === item.id)
@@ -190,12 +172,12 @@ export const useLibraryStore = create<LibraryStore>()(
         try {
           await serverUpsertItem(item)
         } catch (error) {
-          console.error('Failed to save item:', error)
+          logger.error('useLibraryStore', 'saveItem failed', error)
           // No rollback for upsert as per constraints (dangerous)
         }
       },
 
-      deleteItem: async (id) => {
+      deleteItem: async (id): Promise<void> => {
         const previousItems = get().items
         const deletedAt = new Date().toISOString()
 
@@ -209,13 +191,13 @@ export const useLibraryStore = create<LibraryStore>()(
         try {
           await serverSoftDeleteItem(id)
         } catch (error) {
-          console.error('Failed to delete item:', error)
+          logger.error('useLibraryStore', 'deleteItem failed', error)
           // Rollback for soft delete is safe
           set({ items: previousItems })
         }
       },
 
-      freezeItem: async (id) => {
+      freezeItem: async (id): Promise<void> => {
         const previousItems = get().items
 
         // Optimistic freeze
@@ -228,7 +210,7 @@ export const useLibraryStore = create<LibraryStore>()(
         try {
           await serverFreezeItem(id)
         } catch (error) {
-          console.error('Failed to freeze item:', error)
+          logger.error('useLibraryStore', 'freezeItem failed', error)
           set({ items: previousItems })
         }
       },
@@ -244,9 +226,9 @@ export const useLibraryStore = create<LibraryStore>()(
           promptFolders: state.promptFolders.map((f) => (f.id === id ? { ...f, ...updates } : f)),
         })),
 
-      addItem: async (data) => get().createItem(data),
+      addItem: async (data): Promise<void> => get().createItem(data),
       
-      addCapture: async (data) => {
+      addCapture: async (data): Promise<void> => {
         await get().createItem({ ...data, type: 'capture' })
       },
     }),
@@ -254,6 +236,7 @@ export const useLibraryStore = create<LibraryStore>()(
       name: STORAGE_KEYS.LIBRARY_STORE,
       storage: createJSONStorage(() => localStorage),
       skipHydration: true,
+      partialize: () => ({}), // Don't persist library data
     }
   )
 )

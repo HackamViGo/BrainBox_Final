@@ -1,0 +1,44 @@
+{
+  "manifest_version": 3,
+  "name": "BrainBox",
+  "version": "2.0.0",
+  "description": "Premium AI conversation organizer for Gemini, ChatGPT, and more.",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting",
+    "contextMenus",
+    "webNavigation"
+  ],
+  "host_permissions": [
+    "https://gemini.google.com/*",
+    "https://chatgpt.com/*",
+    "https://claude.ai/*",
+    "https://*.brainbox.ai/*",
+    "http://localhost:3000/*"
+  ],
+  "action": {
+    "default_popup": "index.html"
+  },
+  "background": {
+    "service_worker": "src/background/index.ts",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://gemini.google.com/*",
+        "https://chatgpt.com/*",
+        "https://claude.ai/*"
+      ],
+      "js": ["src/content/index.ts"],
+      "run_at": "document_start"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["src/content/inject-interceptor.js"],
+      "matches": ["https://gemini.google.com/*"]
+    }
+  ]
+}

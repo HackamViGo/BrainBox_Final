@@ -1,50 +1,68 @@
-## Task: Centralized Configuration Management
-
+## Task: BrainBox Completion Plan
 ### Plan
 
-- [x] Create Implementation Plan and get approval
-- [ ] **Step 1: pnpm Catalogs**
-  - [ ] Update `pnpm-workspace.yaml` with `catalog` section
-  - [ ] Replace versions with `catalog:` in all `package.json` files
-  - [ ] Run `pnpm install` and verify
-  - [ ] Run `pnpm typecheck` and verify
-- [ ] **Step 2: .env Strategy (dotenv-cli)**
-  - [ ] Install `dotenv-cli` at root (`-Dw`)
-  - [ ] Update `apps/web-app/package.json` scripts (`dev`, `build`) to use `dotenv-cli`
-  - [ ] Delete `apps/web-app/.env.local`
-  - [ ] Update root `.gitignore` and `.env.example`
-- [ ] **Step 3: packages/config Hub**
-  - [ ] Refine `packages/config/tsconfig.base.json`
-  - [ ] Setup `packages/config/eslint.config.js`
-  - [ ] Sync styles to `packages/config/styles/brainbox.css` from `/brainbox/src/index.css`
-- [ ] **Step 4: Documentation**
-  - [ ] Create `docs/VERCEL_SETUP.md`
-- [ ] **Verification**
-  - [ ] Final `pnpm install --frozen-lockfile`
-  - [ ] Final `pnpm typecheck`
-  - [ ] Verify `pnpm --filter web-app dev` reads env vars
+#### ФАЗА 1 — Критични fixes
+- [x] 1.1 Remove exactOptionalPropertyTypes
+- [x] 1.2 NeuralField dynamic import в Sidebar
+- [x] 1.3 getUser() в extension-auth
+- [x] 1.4 useHasHydrated pattern
+- [x] 1.5 MOCK data от store initial state
+
+#### ФАЗА 2 — High priority
+- [x] 2.1 Rate limit на /api/chats/extension (+ lib/rate-limit.ts)
+- [x] 2.2 useAINexusStore (messages, generating狀態, modelVersion)
+- [x] 2.3 Explicit return types за всички async функции
+- [x] 2.4 useLibraryStore partialize (нищо не се пази в localStorage)
+- [x] 2.5 Workspace / MindGraph / Identity да ползват store hooks
+
+#### ФАЗА 3 — CSS и Design System
+- [ ] 3.1 Accent CSS variables (packages/config/styles/brainbox.css)
+- [ ] 3.2 Replace hardcoded hex with var(--color-acc-*)
+
+#### ФАЗА 4 — Extension Build Fix
+- [ ] Run build to find errors
+- [ ] Add missing entry points placeholders (content, service-worker)
+- [ ] Run build again
+
+#### ФАЗА 5 — Cleanup
+- [ ] 5.1 localStorage → Zustand
+- [ ] 5.2 console.log → logger
+- [ ] 5.3 any type reduction
+
+#### ФАЗА 6 — Testing
+- [ ] Run coverage
+- [ ] Add tests for new store, hook and rate limit
+- [ ] Run tests (all green)
+
+#### ФИНАЛНА ВЕРИФИКАЦИЯ
+- [ ] pnpm typecheck
+- [ ] pnpm test --run
+- [ ] pnpm --filter web-app build
+- [ ] pnpm --filter @brainbox/extension build
+- [ ] Manual checks
+
+#### Документация
+- [ ] Update docs/AUDIT_REPORT.md
+- [ ] Add to docs/DECISIONS.md
+- [ ] Update docs/GRAPH.json
+- [ ] Update Review in tasks/todo.md and tasks/lessons.md
 
 ### Done When
-
-- [ ] `pnpm-workspace.yaml` has `catalog:` section (20+ packages)
-- [ ] All `package.json` files use `catalog:` references
-- [ ] No `.env.local` files in `apps/`
-- [ ] `web-app` reads root env vars via `dotenv-cli`
-- [ ] `docs/VERCEL_SETUP.md` is present
-- [ ] Typecheck passes monorepo-wide
-
-## Fix: Runtime development script and MCP configuration
-
-### Plan
-
-- [x] Fix apps/web-app/package.json dev/build scripts (env var placement)
-- [x] Fix mcp_config.json vercel-mcp entry (binary name mismatch)
-- [x] Fix mcp_config.json supabase-mcp entry (binary name mismatch)
-- [x] Verify pnpm run dev success
+- [ ] pnpm typecheck → 0 грешки
+- [ ] pnpm test --run → всички passing
+- [ ] pnpm --filter web-app build → success
+- [ ] pnpm --filter @brainbox/extension build → success
+- [ ] exactOptionalPropertyTypes НЕ е в нито един tsconfig
+- [ ] getSession() НЕ е в extension-auth/page.tsx
+- [ ] NeuralField в Sidebar е dynamic({ ssr: false })
+- [ ] useAINexusStore.ts съществува
+- [ ] MOCK data НЕ е в initial store state
+- [ ] --color-acc-* vars са дефинирани
+- [ ] docs/AUDIT_REPORT.md обновен
 
 ### Review
-
-- Завършено: 2026-04-13
-- Какво беше направено: Коригирани са скриптовете за разработка и MCP конфигурациите.
-- Проблеми срещнати: pnpm dev гърмеше заради грешно поставен NODE_OPTIONS; npx не намираше vercel-mcp поради разминаване в името на пакета и бинарния файл.
-- Решения: Преместен NODE_OPTIONS в началото; добавен -p флаг в npx.
+- Завършено: [дата]
+- Какво беше направено:
+- Проблеми срещнати:
+- Решения:
+- Всички промени са записани в `docs/PROGRESS.md`.

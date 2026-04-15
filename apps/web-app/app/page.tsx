@@ -44,23 +44,14 @@ export default function Page() {
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      <AnimatePresence>
         {!isLoggedIn && (
-          <motion.div
-            key="login-overlay"
-            initial={{ opacity: 1 }}
-            exit={{ 
-              opacity: 0,
-              scale: 1.2,
-              filter: 'blur(20px)',
-              transition: { duration: 0.8, ease: [0.4, 0, 0.2, 1] }
-            }}
+          <div
+            data-testid="login-overlay"
             className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-md"
           >
             <Login />
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
 
       <div className={`h-full transition-all duration-1000 ${!isLoggedIn ? 'blur-2xl scale-95 pointer-events-none' : 'blur-0 scale-100'}`}>
         <PersistentShell>

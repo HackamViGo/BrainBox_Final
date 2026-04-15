@@ -80,7 +80,8 @@ export function Library() {
   });
 
   const handleAction = async (chat: Item, option: any) => {
-    const apiKey = localStorage.getItem('GEMINI_API_KEY');
+    // API key stored in Zustand store (not raw localStorage)
+    const apiKey = useAppStore.getState().getApiKey('gemini')
     if (!apiKey) {
       setModalOpen('apiKey', true, { id: 'gemini', name: 'Gemini' });
       return;

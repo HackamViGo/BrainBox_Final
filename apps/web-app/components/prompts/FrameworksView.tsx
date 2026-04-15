@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
-  ChevronLeft, X, GitCommit, Trash2
+  ChevronLeft, X, GitCommit, Trash2, Rocket
 } from 'lucide-react';
 import type { ThemeName } from '@brainbox/types';
 import { MATRIX_DATA } from '@/lib/prompts-data';
@@ -11,9 +11,10 @@ import { MATRIX_DATA } from '@/lib/prompts-data';
 interface FrameworksViewProps {
   onBack: () => void;
   setTheme: (theme: ThemeName) => void;
+  onUseTemplate: (text: string) => void;
 }
 
-export function FrameworksView({ onBack, setTheme }: FrameworksViewProps) {
+export function FrameworksView({ onBack, setTheme, onUseTemplate }: FrameworksViewProps) {
   const [selectedCell, setSelectedCell] = useState<any>(null);
 
   return (
@@ -105,10 +106,17 @@ export function FrameworksView({ onBack, setTheme }: FrameworksViewProps) {
                   <div className="w-12 h-12 rounded-full bg-white text-black flex items-center justify-center font-bold text-xl shadow-[0_0_30px_rgba(255,255,255,0.5)] shrink-0">
                     v1.0
                   </div>
-                  <div className="glass-panel-light p-5 rounded-2xl flex-1 border border-white/20">
-                    <h4 className="font-bold text-lg mb-1">Main Trunk</h4>
-                    <p className="text-sm text-white/50">The original, universal prompt.</p>
-                  </div>
+                  <button 
+                    className="glass-panel-light p-5 rounded-2xl flex-1 border border-white/20 group cursor-pointer hover:bg-white/5 transition-colors text-left" 
+                    onClick={() => onUseTemplate(selectedCell.content || '')}
+                    title="Use in Refiner"
+                  >
+                    <div className="flex items-center justify-between mb-1">
+                      <h4 className="font-bold text-lg">Main Trunk</h4>
+                      <Rocket className="w-4 h-4 text-purple-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </div>
+                    <p className="text-sm text-white/50">{selectedCell.content ? 'Click to synchronize with Refiner.' : 'The original, universal prompt.'}</p>
+                  </button>
                 </div>
 
                 {selectedCell.branches.length > 0 ? (

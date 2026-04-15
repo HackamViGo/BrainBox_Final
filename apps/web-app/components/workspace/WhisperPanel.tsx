@@ -3,6 +3,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Mic, MicOff, Save, X, Zap } from 'lucide-react';
+import { useAppStore } from '@/store/useAppStore';
+import { logger } from '@brainbox/utils';
 
 export function WhisperPanel() {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,15 +12,15 @@ export function WhisperPanel() {
   const [isListening, setIsListening] = useState(false);
   const recognitionRef = useRef<any>(null);
 
-  // Load from localStorage
+  // Load from Zustand store (persisted) — NOT raw localStorage
   useEffect(() => {
-    const saved = localStorage.getItem('brainbox_whisper_note');
+    const saved = useAppStore.getState().getApiKey('__whisper_note')
     if (saved) setNote(saved);
   }, []);
 
-  // Save to localStorage
+  // Save to Zustand store
   const saveNote = () => {
-    localStorage.setItem('brainbox_whisper_note', note);
+    useAppStore.getState().setApiKey('__whisper_note', note);
   };
 
   // Auto-save when closing or typing (debounced)
@@ -48,7 +50,7 @@ export function WhisperPanel() {
       };
 
       recognitionRef.current.onerror = (event: any) => {
-        console.error('Speech recognition error', event.error);
+        logger.error('WhisperPanel', 'Speech recognition error', event.error)
         setIsListening(false);
       };
 
@@ -57,7 +59,7 @@ export function WhisperPanel() {
           try {
             recognitionRef.current.start();
           } catch (e) {
-            console.error('Restart failed', e);
+            logger.error('WhisperPanel', 'Speech recognition restart failed', e)
           }
         }
       };

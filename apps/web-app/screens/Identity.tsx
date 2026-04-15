@@ -7,8 +7,8 @@ import { getUser, signOut } from '@/actions/auth';
 import type { User } from '@supabase/supabase-js';
 
 export function Identity() {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { user, setUser } = useAppStore();
+  const [loading, setLoading] = useState(!user);
   
   // AI Fingerprint State (Mock usage percentages for visuals)
   const [modelUsage, setModelUsage] = useState({
@@ -24,15 +24,22 @@ export function Identity() {
 
   useEffect(() => {
     async function loadUser() {
-      const supabaseUser = await getUser();
-      if (supabaseUser) {
-        setUser(supabaseUser);
-        setNameInput(supabaseUser.user_metadata?.full_name || supabaseUser.email?.split('@')[0] || 'Neural Entity');
+      if (!user) {
+        const supabaseUser = await getUser();
+        if (supabaseUser) {
+          setUser(supabaseUser);
+        }
       }
       setLoading(false);
     }
     loadUser();
-  }, []);
+  }, [user, setUser]);
+
+  useEffect(() => {
+    if (user) {
+      setNameInput(user.user_metadata?.full_name || user.email?.split('@')[0] || 'Neural Entity');
+    }
+  }, [user]);
 
   const handleSaveName = () => {
     setIsEditingName(false);

@@ -17,7 +17,8 @@ import {
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { motion, AnimatePresence } from 'motion/react';
-import { StickyNote, MessageSquare, Zap } from 'lucide-react';
+import { StickyNote, MessageSquare, Zap, Plus, X, GripVertical, Save, Trash2, Maximize2, Minimize2, MousePointer2, Hand, ZoomIn, ZoomOut, Brain, Sparkles, Folder } from 'lucide-react';
+import { useLibraryStore } from '@/store/useLibraryStore';
 
 import { GlassNode } from '@/components/workspace/GlassNode';
 import { StickyNode } from '@/components/workspace/StickyNode';
@@ -46,6 +47,19 @@ function WorkspaceCanvas() {
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
 
   const [isWhisperOpen, setIsWhisperOpen] = useState(false);
+  const { items } = useLibraryStore();
+
+  useEffect(() => {
+    if (nodes.length === 0 && items.length > 0) {
+      const newNodes: Node[] = items.slice(0, 3).map((item, idx) => ({
+        id: item.id,
+        type: 'glassNode',
+        position: { x: 100 + (idx * 350), y: 100 + (idx * 50) },
+        data: { title: item.title, description: item.content, type: item.type },
+      }));
+      setNodes(newNodes);
+    }
+  }, [items, nodes.length, setNodes]);
 
   const onConnect = useCallback(
     (params: Connection | Edge) => setEdges((eds) => addEdge({ ...params, type: 'neuralEdge' }, eds)),

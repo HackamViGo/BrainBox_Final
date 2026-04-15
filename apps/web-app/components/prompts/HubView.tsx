@@ -6,9 +6,16 @@ import { Sparkles, Lock, LayoutGrid, GitBranch, Zap, Wand2, Download, ArrowRight
 
 interface HubViewProps {
   onNavigate: (view: 'frameworks' | 'refine' | 'captures' | 'saved-prompts') => void;
+  onUseTemplate: (text: string) => void;
+  stats: {
+    frameworks: number;
+    saved: number;
+    refine: number;
+    captures: number;
+  };
 }
 
-export function HubView({ onNavigate }: HubViewProps) {
+export function HubView({ onNavigate, onUseTemplate, stats }: HubViewProps) {
   const [chestOpen, setChestOpen] = useState(false);
 
   return (
@@ -38,7 +45,13 @@ export function HubView({ onNavigate }: HubViewProps) {
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
               <h3 className="text-2xl sm:text-4xl font-bold mb-3 sm:mb-4 text-yellow-400">"The Socratic Challenger"</h3>
               <p className="text-white/80 text-base sm:text-lg mb-6">Act as a critical thinker and challenge my assumptions on [TOPIC]. Identify logical fallacies, propose counter-arguments, and force me to defend my position with rigorous evidence.</p>
-              <button className="w-full sm:w-auto px-8 py-3 rounded-xl bg-yellow-500 text-black font-bold hover:bg-yellow-400 transition-colors">
+              <button 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onUseTemplate("Act as a critical thinker and challenge my assumptions on [TOPIC]. Identify logical fallacies, propose counter-arguments, and force me to defend my position with rigorous evidence.");
+                }}
+                className="w-full sm:w-auto px-8 py-3 rounded-xl bg-yellow-500 text-black font-bold hover:bg-yellow-400 transition-colors"
+              >
                 Use Template
               </button>
             </motion.div>
@@ -55,16 +68,16 @@ export function HubView({ onNavigate }: HubViewProps) {
           <GatewayCard 
             id="frameworks"
             title="Frameworks" 
-            subtitle="The 7x7 Matrix"
+            subtitle={`${stats.frameworks} Structures`}
             icon={GitBranch} 
             color="from-blue-500 to-cyan-500"
-            desc="Access your 49 professional structures and their model-specific branches." 
+            desc="Access your professional structures and their model-specific branches." 
             onClick={() => onNavigate('frameworks')} 
           />
           <GatewayCard 
             id="saved-prompts"
             title="Saved Prompts" 
-            subtitle="Your Collection"
+            subtitle={`${stats.saved} Items`}
             icon={Zap} 
             color="from-amber-500 to-orange-500"
             desc="Access your saved prompts, organized by folders or in the main feed." 
@@ -73,18 +86,18 @@ export function HubView({ onNavigate }: HubViewProps) {
           <GatewayCard 
             id="refine"
             title="Refine" 
-            subtitle="The 7-Way Optimizer"
+            subtitle={`${stats.refine} Modes`}
             icon={Wand2} 
             color="from-purple-500 to-pink-500"
-            desc="Instantly enhance raw thoughts into professional prompts without diffs." 
+            desc="Instantly enhance raw thoughts into professional prompts using crystals." 
             onClick={() => onNavigate('refine')} 
           />
           <GatewayCard 
             id="captures"
             title="Captures" 
-            subtitle="The Raw Feed"
+            subtitle={`${stats.captures} Unprocessed`}
             icon={Download} 
-            color="from-emerald-500 to-teal-500"
+            color="from-teal-500 to-emerald-500"
             desc="Direct pipeline from the BrainBox Extension. Raw text ready for processing." 
             onClick={() => onNavigate('captures')} 
           />

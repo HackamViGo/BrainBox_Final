@@ -2,28 +2,43 @@
 
 import { create } from 'zustand'
 
+export interface Message {
+  id: string
+  role: 'user' | 'assistant'
+  content: string
+  isCode?: boolean
+}
+
 interface AINexusState {
-  activeModelId: string
-  pendingModelId: string | null
+  messages: Message[]
+  isGenerating: boolean
+  modelVersion: 'basic' | 'latest'
 }
 
 interface AINexusActions {
-  selectModel: (id: string) => void
-  confirmModel: () => void
-  cancelModel: () => void
+  setMessages: (messages: Message[]) => void
+  addMessage: (message: Message) => void
+  setIsGenerating: (isGenerating: boolean) => void
+  setModelVersion: (version: 'basic' | 'latest') => void
+  clearMessages: () => void
 }
 
 export type AINexusStore = AINexusState & AINexusActions
 
-export const useAINexusStore = create<AINexusStore>()((set) => ({
-  activeModelId: 'chatgpt',
-  pendingModelId: null,
+export const useAINexusStore = create<AINexusStore>((set) => ({
+  // State
+  messages: [
+    { id: 'msg-1', role: 'assistant', content: 'Hello. Nexus Core is synchronized. How shall we begin?' }
+  ],
+  isGenerating: false,
+  modelVersion: 'basic',
 
-  selectModel: (id) => set({ pendingModelId: id }),
-  confirmModel: () => 
-    set((state) => ({ 
-      activeModelId: state.pendingModelId || state.activeModelId,
-      pendingModelId: null 
-    })),
-  cancelModel: () => set({ pendingModelId: null }),
+  // Actions
+  setMessages: (messages) => set({ messages }),
+  addMessage: (message) => set((state) => ({ messages: [...state.messages, message] })),
+  setIsGenerating: (isGenerating) => set({ isGenerating }),
+  setModelVersion: (version) => set({ modelVersion: version }),
+  clearMessages: () => set({ 
+    messages: [{ id: 'msg-1', role: 'assistant', content: 'Hello. Nexus Core is synchronized. How shall we begin?' }] 
+  }),
 }))

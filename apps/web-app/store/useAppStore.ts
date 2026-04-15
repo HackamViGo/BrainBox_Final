@@ -4,12 +4,14 @@ import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
 import type { ThemeName, ScreenName } from '@brainbox/types'
 import { STORAGE_KEYS } from '@brainbox/utils'
+import type { User } from '@supabase/supabase-js'
 
 interface AppState {
   activeScreen: ScreenName
   theme: ThemeName
   hoverTheme: ThemeName | null
   isLoggedIn: boolean
+  user: User | null
   isSidebarExpanded: boolean
   isMobileSidebarOpen: boolean
   isPinned: boolean
@@ -30,6 +32,9 @@ interface AppState {
   targetModel: any | null
   apiKeyModelId: string | null
   apiKeyModelName: string | null
+  // API Keys (persisted in localStorage via STORAGE_KEYS, not in Zustand state directly)
+  apiKeys: Record<string, string>
+  _hasHydrated: boolean
 }
 
 interface AppActions {
@@ -37,6 +42,7 @@ interface AppActions {
   setTheme: (theme: ThemeName) => void
   setHoverTheme: (theme: ThemeName | null) => void
   setIsLoggedIn: (v: boolean) => void
+  setUser: (user: User | null) => void
   setPendingModelId: (id: string | null) => void
   setActiveFolder: (id: string | null) => void
   setIsSidebarExpanded: (v: boolean) => void
@@ -51,6 +57,10 @@ interface AppActions {
   setActiveModelId: (id: string) => void
   clearPendingModel: () => void
   setApiKeyModel: (id: string, name: string) => void
+  /** Read an API key for a given model id. Returns null if not set. */
+  getApiKey: (modelId: string) => string | null
+  /** Save an API key for a given model id. */
+  setApiKey: (modelId: string, key: string) => void
 }
 
 export type AppStore = AppState & AppActions
@@ -63,6 +73,7 @@ export const useAppStore = create<AppStore>()(
       theme: 'chatgpt',
       hoverTheme: null,
       isLoggedIn: false,
+      user: null,
       isSidebarExpanded: false,
       isMobileSidebarOpen: false,
       isPinned: false,
@@ -82,12 +93,14 @@ export const useAppStore = create<AppStore>()(
       isSmartSwitchModalOpen: false,
       isApiKeyModalOpen: false,
 
-      targetModel: null,
       apiKeyModelId: null,
       apiKeyModelName: null,
+      targetModel: null,
+      apiKeys: {},
+      _hasHydrated: false,
 
       // Actions
-      setActiveScreen: (screen) => {
+      setActiveScreen: (screen): void => {
         const currentScreen = get().activeScreen;
         const currentMode = get().switchMode;
         
@@ -113,13 +126,15 @@ export const useAppStore = create<AppStore>()(
       setTheme: (theme) => set({ theme }),
       setHoverTheme: (theme) => set({ hoverTheme: theme }),
       setIsLoggedIn: (v) => set({ isLoggedIn: v }),
+      setUser: (user) => set({ user, isLoggedIn: !!user }),
       setPendingModelId: (id) => set({ pendingModelId: id }),
+      setApiKeyModelId: (id: string | null) => set({ apiKeyModelId: id }),
       setActiveFolder: (id) => set({ activeFolder: id }),
       setIsSidebarExpanded: (v) => set({ isSidebarExpanded: v }),
       setIsMobileSidebarOpen: (v) => set({ isMobileSidebarOpen: v }),
       setPinned: (v) => set({ isPinned: v }),
       closeMobileSidebar: () => set({ isMobileSidebarOpen: false }),
-      setSwitchMode: (mode, direction) => {
+      setSwitchMode: (mode, direction): void => {
         const currentMode = get().switchMode;
         if (mode === currentMode) return;
         
@@ -154,6 +169,13 @@ export const useAppStore = create<AppStore>()(
       setActiveModelId: (id) => set({ activeModelId: id, theme: id as ThemeName }),
       clearPendingModel: () => set({ pendingModelId: null }),
       setApiKeyModel: (id, name) => set({ apiKeyModelId: id, apiKeyModelName: name }),
+      getApiKey: (modelId): string | null => {
+        const key = get().apiKeys[modelId]
+        return key ?? null
+      },
+      setApiKey: (modelId, key): void => {
+        set(state => ({ apiKeys: { ...state.apiKeys, [modelId]: key } }))
+      },
     }),
     {
       name: STORAGE_KEYS.APP_STORE,
@@ -166,7 +188,11 @@ export const useAppStore = create<AppStore>()(
         isPinned: state.isPinned,
         isSidebarExpanded: state.isSidebarExpanded,
         expandedFolders: state.expandedFolders,
+        apiKeys: state.apiKeys,  // API keys persisted in Zustand (NOT raw localStorage)
       }),
+      onRehydrateStorage: () => () => {
+        useAppStore.setState({ _hasHydrated: true })
+      },
     }
   )
 )
