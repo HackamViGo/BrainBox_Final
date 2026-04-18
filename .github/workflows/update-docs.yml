@@ -2,7 +2,7 @@ name: 🤖 BrainBox — Auto Update Docs
 
 on:
   push:
-    branches: [main]
+    branches: ['**']
     paths:
       - 'apps/web-app/**'
       - 'packages/**'
