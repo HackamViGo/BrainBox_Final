@@ -7,6 +7,10 @@ import { useShallow } from 'zustand/react/shallow';
 import { useAppStore } from '@/store/useAppStore';
 import { useLibraryStore } from '@/store/useLibraryStore';
 
+/**
+ * Dashboard Screen
+ * The primary entry point for the BrainBox Neural Interface.
+ */
 export function Dashboard() {
   const { setActiveScreen } = useAppStore();
   const { libraryFolders, promptFolders, items } = useLibraryStore(useShallow(s => ({
