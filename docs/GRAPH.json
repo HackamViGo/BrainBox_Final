@@ -1,10 +1,10 @@
 {
   "metadata": {
-    "generated_at": "2026-04-15T10:05:28.086Z",
+    "generated_at": "2026-04-16T19:06:49.294Z",
     "generated_by": "SCRIPT+AGENT",
     "version": "1.0.0",
     "schema_version": "1",
-    "total_nodes": 74,
+    "total_nodes": 78,
     "coverage": {
       "tier1_packages": "4/4",
       "tier2_app_core": "13/12",
@@ -715,6 +715,35 @@
       "status": "active"
     },
     {
+      "id": "apps/web-app/components/ScreenErrorBoundary.tsx",
+      "workspace": "web-app",
+      "type": "component",
+      "responsibility": "Class-based Error Boundary за изолиране на грешки в специфични screens. Предотвратява пълен срив на приложението и позволява рестарт на конкретния екран.",
+      "dependencies": [
+        "apps/web-app/components/ui/button.tsx",
+        "packages/utils/src/index.ts"
+      ],
+      "dependents": ["apps/web-app/screens/Prompts.tsx"],
+      "side_effects": [
+        "ComponentDidCatch — логва грешки в конзолата/мониторинг"
+      ],
+      "public_api": [
+        "ScreenErrorBoundary({ children, screenName }): JSX.Element"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "apps/web-app/app/api/chats/extension/route.ts",
+      "workspace": "web-app",
+      "type": "module",
+      "responsibility": "Защитен API маршрут за получаване на данни от браузър разширението. Верифицира JWT и записва в Supabase.",
+      "dependencies": ["apps/web-app/lib/supabase/server.ts"],
+      "dependents": [],
+      "side_effects": ["Supabase DB write"],
+      "public_api": ["POST(request: Request): Promise<NextResponse>"],
+      "status": "active"
+    },
+    {
       "id": "apps/web-app/components/workspace/NeuralEdge.tsx",
       "workspace": "web-app",
       "type": "component",
@@ -820,6 +849,7 @@
       "type": "screen",
       "responsibility": "Prompt engineering hub с 4 sub-views: Hub (daily prompt + captures), Frameworks (7x7 matrix), Refine (7 Crystals + Gemini), Saved (folder-based list).",
       "dependencies": [
+        "apps/web-app/components/ScreenErrorBoundary.tsx",
         "apps/web-app/components/prompts/CapturesView.tsx",
         "apps/web-app/components/prompts/FrameworksView.tsx",
         "apps/web-app/components/prompts/HubView.tsx",
@@ -981,7 +1011,6 @@
         "apps/web-app/components/ui/button.tsx",
         "apps/web-app/components/ui/dialog.tsx",
         "apps/web-app/components/ui/input.tsx",
-        "apps/web-app/components/ui/scroll-area.tsx",
         "apps/web-app/store/useAppStore.ts",
         "apps/web-app/store/useLibraryStore.ts",
         "packages/utils/src/index.ts"
@@ -1072,7 +1101,6 @@
       "dependencies": ["apps/web-app/lib/utils.ts"],
       "dependents": [
         "apps/web-app/components/ApiKeyModal.tsx",
-        "apps/web-app/components/NewChatModal.tsx",
         "apps/web-app/components/NewFolderModal.tsx"
       ],
       "side_effects": [],

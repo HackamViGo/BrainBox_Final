@@ -1,0 +1,130 @@
+{
+  "metadata": {
+    "version": "2.0.0",
+    "description": "BrainBox knowledge graph за RAG",
+    "extends": "docs/GRAPH.json",
+    "last_updated": "2026-04-16T19:08:28.357Z"
+  },
+  "concepts": [
+    {
+      "id": "concept:neural-field",
+      "type": "concept",
+      "label": "NeuralField Animation",
+      "description": "Високопроизводителна Canvas анимация, която служи за динамичен фон на цялото приложение. Реагира на мишката и се адаптира към активния екран чрез промяна на 'mode'.",
+      "related_code": [
+        "packages/ui/src/NeuralField.tsx",
+        "apps/web-app/app/page.tsx"
+      ],
+      "related_decisions": ["ADR-004"],
+      "keywords": [
+        "canvas",
+        "particles",
+        "animation",
+        "brain",
+        "wander",
+        "persistence"
+      ]
+    },
+    {
+      "id": "concept:knowledge-capture",
+      "type": "concept",
+      "label": "Knowledge Capture System",
+      "description": "Механизъм за извличане на информация от външни AI платформи (ChatGPT, Gemini) чрез браузър разширението и автоматичното ѝ изпращане към BrainBox Library.",
+      "related_code": [
+        "apps/extension/src/content/index.ts",
+        "apps/extension/src/background/index.ts",
+        "apps/web-app/app/api/chats/extension/route.ts"
+      ],
+      "related_decisions": ["ADR-007"],
+      "keywords": ["extension", "capture", "scraping", "sync", "bridge"]
+    },
+    {
+      "id": "concept:optimistic-sync",
+      "type": "concept",
+      "label": "Optimistic Data Synchronization",
+      "description": "Принцип на работа на Store-овете, при който UI се обновява мигновено (optimistic update), а същинският запис в Supabase се извършва асинхронно във фонов режим.",
+      "related_code": [
+        "apps/web-app/store/useLibraryStore.ts",
+        "apps/web-app/actions/library.ts"
+      ],
+      "related_decisions": ["ADR-005"],
+      "keywords": ["zustand", "optimistic", "supabase", "rollback", "sync"]
+    },
+    {
+      "id": "concept:smart-switch",
+      "type": "concept",
+      "label": "SmartSwitch Architecture",
+      "description": "Система за плавен преход между различни AI модели (Gemini, Claude, GPT) в рамките на AINexus, включваща потвърждение и визуална трансформация на интерфейса.",
+      "related_code": [
+        "apps/web-app/screens/AINexus.tsx",
+        "apps/web-app/components/SmartSwitchModal.tsx",
+        "apps/web-app/store/useAppStore.ts"
+      ],
+      "related_decisions": ["ADR-008"],
+      "keywords": ["ai", "nexus", "model", "transition", "proxy"]
+    }
+  ],
+  "relationships": [
+    {
+      "from": "apps/web-app/src/screens/Library.tsx",
+      "to": "apps/web-app/src/store/useLibraryStore.ts",
+      "type": "reads",
+      "description": "Library екрана се абонира за списъка с items и folders и рендерира йерархията."
+    },
+    {
+      "from": "apps/web-app/src/app/page.tsx",
+      "to": "packages/ui/src/NeuralField.tsx",
+      "type": "mounts",
+      "description": "Root страницата монтира NeuralField точно веднъж, гарантирайки че анимацията не прекъсва при навигация."
+    },
+    {
+      "from": "apps/extension/src/background/index.ts",
+      "to": "apps/web-app/app/api/chats/extension/route.ts",
+      "type": "posts_to",
+      "description": "Разширението изпраща уловените данни към защитен API маршрут на уеб приложението."
+    },
+    {
+      "from": "apps/web-app/actions/library.ts",
+      "to": "supabase:tables:items",
+      "type": "writes_to",
+      "description": "Server Action валидира данните и ги записва в PostgreSQL таблицата на Supabase."
+    }
+  ],
+  "user_flows": [
+    {
+      "id": "flow:save-chat-from-extension",
+      "label": "Запис на чат от Extension",
+      "steps": [
+        "Потребителят избира опция в Context Menu на ChatGPT",
+        "Content Script извлича HTML/текст на разговора",
+        "Background Script изпраща POST към BrainBox API",
+        "API маршрутът верифицира JWT токена",
+        "Данните се записват в Supabase",
+        "При следващо отваряне на Library, новият айтем се зарежда автоматично"
+      ]
+    },
+    {
+      "id": "flow:refine-prompt",
+      "label": "Подобряване на промпт (Refine)",
+      "steps": [
+        "Потребителят отваря Prompts screen и избира съществуващ шаблон",
+        "Клика на 'Refine' и избира магически кристал (напр. 'Logic')",
+        "usePromptStore извиква Gemini Server Action",
+        "Gemini API анализира и подобрява текста спрямо избрания кристал",
+        "Потребителят преглежда промяната и потвърждава запис",
+        "useLibraryStore прави upsertItem и обновява базата"
+      ]
+    },
+    {
+      "id": "flow:initial-onboarding",
+      "label": "Първоначално влизане (Auth Sync)",
+      "steps": [
+        "Потребителят влиза през Login screen",
+        "auth.ts Server Action сетва бисквитките за сесия",
+        "useAppStore.setIsLoggedIn(true) тригърва презареждане",
+        "Providers.tsx изпълнява loadData() за изтегляне на папки",
+        "NeuralField преминава в 'brain' mode за Dashboard"
+      ]
+    }
+  ]
+}

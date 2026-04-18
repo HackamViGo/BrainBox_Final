@@ -1,24 +1,29 @@
-## Task: Diagnostics and Repair of Migration to Next.js Monorepo
+# Task: Automation Documentation Update System
 
-### Plan
+## Plan
 
-- [x] Initial Diagnosis (Step 1) ✓
-- [ ] Step 2: Analyze specifically missing parts and config errors
-- [ ] Create `turbo.json` in root
-- [ ] Update root `package.json` with `turbo` scripts and `turbo` devDependency
-- [ ] Verify/Fix package names and exports for existing packages (config, types, ui, utils)
-- [ ] Check `apps/web-app` dependencies and workspace references
-- [ ] Check `apps/extension` dependencies and workspace references
-- [ ] Run `pnpm install`
-- [ ] Run `pnpm turbo type-check` and fix errors
-- [ ] Run `pnpm turbo build` and fix errors
-- [ ] Verify if everything from `brainbox/` (Vite project) is migrated
-- [ ] Remove old Vite files from root (once confirmed)
-- [ ] Document results in `docs/PROGRESS.md`
+- [x] Verify/Create `docs/KNOWLEDGE_GRAPH.json` if it doesn't exist (ensure it has the right structure) ✓
+- [x] Create `.github/workflows/update-docs.yml` ✓
+- [x] Create `scripts/update_docs.py` with the specified logic ✓
+  - [x] Implement `DOC_MAP` with correct paths ✓
+  - [x] Implement `get_diff` ✓
+  - [x] Implement `update_doc` with GitHub Models API ✓
+  - [x] Implement `update_knowledge_graph` ✓
+  - [x] Implement `Main` block ✓
+- [x] Update `.gitignore` to allow `scripts/update_docs.py` ✓
 
-### Done When
+- [ ] Verify everything with a dry run or manual check (if possible)
 
-- [ ] pnpm typecheck → 0 errors
-- [ ] pnpm turbo build → 0 errors
-- [ ] dev server starts successfully
-- [ ] All packages are properly linked via `workspace:*`
+## Done When
+
+- [ ] `.github/workflows/update-docs.yml` exists and has correct triggers/steps
+- [ ] `scripts/update_docs.py` handles all source files correctly
+- [ ] `scripts/` is not ignored by git
+
+## Review
+
+- Завършено: [дата]
+- Какво беше направени: ...
+- Проблеми срещнати: ...
+- Решения: ...
+- Записвай всички промени в `docs/PROGRESS.md`.

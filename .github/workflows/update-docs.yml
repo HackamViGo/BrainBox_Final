@@ -1,0 +1,56 @@
+name: 🤖 BrainBox — Auto Update Docs
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/web-app/**'
+      - 'packages/**'
+      - 'apps/extension/**'
+      - '!docs/**'
+
+jobs:
+  update-docs:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # нужно за auto-commit
+
+    steps:
+      - name: 📥 Checkout (с history за diff)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          token: ${{ secrets.MODELS_PAT }}
+
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 📦 Install dependencies
+        run: pip install openai
+
+      - name: 🔍 Get changed source files
+        id: changed
+        run: |
+          CHANGED=$(git diff --name-only HEAD~1 HEAD \
+            -- 'apps/web-app/' 'packages/' 'apps/extension/' \
+            | tr '\n' '|')
+          echo "files=$CHANGED" >> $GITHUB_OUTPUT
+          echo "🔍 Changed files: $CHANGED"
+
+      - name: 🤖 Update docs via GitHub Models API
+        if: steps.changed.outputs.files != ''
+        env:
+          GITHUB_TOKEN: ${{ secrets.MODELS_PAT }}
+          CHANGED_FILES: ${{ steps.changed.outputs.files }}
+        run: |
+          python scripts/update_docs.py
+
+      - name: 💾 Auto-commit updated docs
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "📝 docs: auto-update [skip ci]"
+          file_pattern: "docs/**/*.md docs/KNOWLEDGE_GRAPH.json"
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "github-actions[bot]@users.noreply.github.com"
