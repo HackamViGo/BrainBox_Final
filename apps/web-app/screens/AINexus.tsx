@@ -1,12 +1,10 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion } from 'motion/react';
 import { 
-  MessageSquare, MoreVertical, Pin, Save, Edit2, Trash2, 
-  Send, Sparkles, Code, Download, Cpu, BrainCircuit, 
-  GitBranch, Plus, X, ArrowRight, Network, Globe,
-  Bot, Eye, Compass, Swords, Telescope, Cloud, Brain,
+  MoreVertical, Save, 
+  Send, Download,
   Zap
 } from 'lucide-react';
 import { generateGeminiResponse, generateBasicResponse } from '@/lib/gemini';
@@ -20,12 +18,6 @@ import { useShallow } from 'zustand/react/shallow';
 import { logger } from '@brainbox/utils';
 import type { User } from '@supabase/supabase-js';
 
-interface Message {
-  id: string;
-  role: 'user' | 'assistant';
-  content: string;
-  isCode?: boolean;
-}
 
 interface BrainBoxModel {
   id: string;
@@ -42,16 +34,10 @@ interface BrainBoxModel {
 export function AINexus() {
   const { 
     activeModelId, 
-    setActiveModelId, 
-    setTheme,
-    pendingModelId, 
-    clearPendingModel 
+    setActiveModelId
   } = useAppStore(useShallow(s => ({
     activeModelId: s.activeModelId,
-    setActiveModelId: s.setActiveModelId,
-    setTheme: s.setTheme,
-    pendingModelId: s.pendingModelId,
-    clearPendingModel: s.clearPendingModel
+    setActiveModelId: s.setActiveModelId
   })));
 
   const {
@@ -72,21 +58,13 @@ export function AINexus() {
     setModelVersion: s.setModelVersion
   })));
 
-  const [user, setUser] = useState<User | null>(null);
+
   const [input, setInput] = useState('');
   
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const activeModel = (MODELS.find(m => m.id === activeModelId) || MODELS[0]) as BrainBoxModel;
-  const pendingModel = (pendingModelId ? MODELS.find(m => m.id === pendingModelId) : null) as BrainBoxModel | null;
 
-  useEffect(() => {
-    async function loadUser() {
-      const supabaseUser = await getUser();
-      setUser(supabaseUser);
-    }
-    loadUser();
-  }, []);
 
   useEffect(() => {
     if (scrollContainerRef.current) {
@@ -101,7 +79,7 @@ export function AINexus() {
     // API key presence is managed by useAppStore — check via store, not localStorage directly
     const key = useAppStore.getState().getApiKey(activeModelId)
     setModelVersion(key ? 'latest' : 'basic')
-  }, [activeModelId])
+  }, [activeModelId, setModelVersion])
 
   const handleVersionSwitch = (version: 'basic' | 'latest') => {
     if (version === 'latest') {
@@ -137,12 +115,8 @@ export function AINexus() {
         }
 
         if (activeModelId === 'gemini') {
-          const result = await generateGeminiResponse(userMsg, apiKey);
-          const isCode = result.includes('```');
-          const { content, error } = { content: result, error: null };
-
-          if (error) throw new Error(error);
-
+          const content = await generateGeminiResponse(userMsg, apiKey);
+          
           addMessage({ id: Date.now().toString(), role: 'assistant', content });
         } else {
           await new Promise(resolve => setTimeout(resolve, 1500));
@@ -161,11 +135,6 @@ export function AINexus() {
     }
   };
 
-  const handleSmartSwitch = (action: 'mind' | 'branch' | 'new', targetModelId: string) => {
-    setActiveModelId(targetModelId);
-    setTheme(targetModelId as any);
-    clearPendingModel();
-  };
 
   return (
     <div className="h-full relative overflow-hidden flex bg-transparent text-white transition-colors duration-1000 no-scrollbar">

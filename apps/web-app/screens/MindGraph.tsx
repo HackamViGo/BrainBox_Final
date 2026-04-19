@@ -3,10 +3,10 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
-  Network, Share2, Brain, Sparkles, Bot, 
-  Zap, Database, Clock, RefreshCw, Layers,
-  ChevronRight, Search, Activity, Workflow,
-  Maximize2, Minimize2, Filter, Info, ShieldAlert
+  Brain, 
+  Zap, Database, Clock,
+  Search, Activity, 
+  Maximize2, Minimize2
 } from 'lucide-react';
 import * as d3 from 'd3';
 import { useLibraryStore } from '@/store/useLibraryStore';
@@ -380,7 +380,7 @@ export function MindGraph() {
               <div className="glass-panel p-6 rounded-3xl border border-white/5 flex-1">
                 <h3 className="text-[10px] font-mono text-white/40 uppercase tracking-[0.2em] mb-6">Topic Heatmap</h3>
                 <div className="flex flex-wrap gap-2">
-                  {TOPICS.map((topic, i) => (
+                  {TOPICS.map((topic) => (
                     <motion.div
                       key={topic.name}
                       whileHover={{ scale: 1.1, backgroundColor: 'rgba(255,255,255,0.1)' }}

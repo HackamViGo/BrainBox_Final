@@ -63,6 +63,27 @@
 - [x] Extension can sync data via REST API with Bearer token ✓
 - [x] All hardcoded colors replaced with `var(--color-*)` ✓
 
+## Phase 2: Code Quality & Linting Cleanup
+
+### Plan
+
+- [x] **Step 1: Screen Cleanup (AINexus, Library, MindGraph, Prompts)**
+  - [x] Remove unused imports and variables in `AINexus.tsx`
+  - [x] Fix `useEffect` dependencies in `AINexus.tsx`
+  - [x] Remove unused imports and variables in `Library.tsx`
+  - [x] Remove unused imports and variables in `MindGraph.tsx`
+  - [x] Remove unused import in `Prompts.tsx`
+- [x] **Step 2: Store & Utility Cleanup**
+  - [x] Remove unused `get` parameter in `usePromptStore.ts`
+  - [x] Consolidate/Audit `@theme` blocks in `globals.css`
+- [ ] **Step 3: Verification**
+  - [ ] Run `pnpm lint` and `pnpm typecheck` to ensure 0 errors/warnings
+
+### Done When
+
+- [ ] All reported IDE warnings in the provided list are resolved
+- [ ] `pnpm typecheck` returns 0 errors
+
 ## Review
 
 - Завършено: 2026-04-19 (Phase 1)

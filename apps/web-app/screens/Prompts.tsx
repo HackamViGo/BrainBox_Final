@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { AnimatePresence } from 'motion/react';
 import { useAppStore } from '@/store/useAppStore';
 import { useLibraryStore } from '@/store/useLibraryStore';

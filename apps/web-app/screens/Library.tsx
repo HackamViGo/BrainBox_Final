@@ -1,19 +1,19 @@
 'use client'
 
-import React, { useState, useRef, useEffect, useCallback, forwardRef } from 'react';
+import React, { useState, useRef, useEffect, forwardRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import type { LucideIcon
 } from 'lucide-react';
 import { 
-  Search, Filter, MessageSquare, MoreVertical, Sparkles, Activity, 
-  ChevronRight, ChevronLeft, Loader2, X, Brain, Zap, FileText, 
+  Search, MessageSquare, MoreVertical, Sparkles, Activity, 
+  ChevronLeft, Loader2, X, Brain, Zap, FileText, 
   List, Target, MessageCircle, BarChart3, ShieldAlert, Eye, 
-  Lightbulb, Scale, CheckCircle2, Folder as FolderIcon, LayoutGrid, 
+  Lightbulb, Scale, CheckCircle2, 
   Plus, BookOpen
 } from 'lucide-react';
 
 import { THEMES, ICON_LIBRARY, SCREEN_LABELS } from '@brainbox/types';
-import type { ThemeName, Folder, Item } from '@brainbox/types';
+import type { ThemeName, Item } from '@brainbox/types';
 import { useLibraryStore } from '@/store/useLibraryStore';
 import { useAppStore } from '@/store/useAppStore';
 import { useShallow } from 'zustand/react/shallow';
@@ -52,19 +52,15 @@ export function Library() {
   })));
   
   const { 
-    setTheme,
     setHoverTheme,
     activeFolder, 
     setActiveFolder,
-    setModalOpen,
-    isApiKeyModalOpen
+    setModalOpen
   } = useAppStore(useShallow(s => ({
-    setTheme: s.setTheme,
     setHoverTheme: s.setHoverTheme,
     activeFolder: s.activeFolder,
     setActiveFolder: s.setActiveFolder,
-    setModalOpen: s.setModalOpen,
-    isApiKeyModalOpen: s.isApiKeyModalOpen
+    setModalOpen: s.setModalOpen
   })));
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -108,7 +104,7 @@ export function Library() {
       const prompt = `${option.prompt}\n\nContent:\n${chat.content || chat.description}`;
       const result = await generateGeminiResponse(prompt, apiKey);
       setAnalysisResult(result);
-    } catch (error) {
+    } catch {
       setAnalysisResult("Error generating analysis. Please check your API key and connection.");
     } finally {
       setIsAnalyzing(false);
@@ -209,7 +205,6 @@ export function Library() {
                 <ChatCard 
                   key={chat.id} 
                   chat={chat} 
-                  setTheme={setHoverTheme}
                   onAction={(option) => handleAction(chat, option)}
                   onDelete={() => deleteItem(chat.id)}
                   onClick={() => {
@@ -333,12 +328,11 @@ export function Library() {
 
 const ChatCard = forwardRef<HTMLDivElement, {
   chat: Item;
-  setTheme: (t: ThemeName) => void;
   onAction: (opt: { id: string, label: string }) => void;
   onClick: () => void;
   onDelete: (id: string) => void;
   onDragStart?: (e: any, type: string, item: Item) => void;
-}>(({ chat, setTheme, onAction, onClick, onDelete, onDragStart }, ref) => {
+}>(({ chat, onAction, onClick, onDelete, onDragStart }, ref) => {
   const { setHoverTheme } = useAppStore();
   const modelId = chat.modelId || 'chatgpt';
   const themeColor = THEMES[modelId as ThemeName]?.color || 'var(--color-foreground)';

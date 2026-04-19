@@ -26,7 +26,7 @@ interface PromptState {
 
 export const usePromptStore = create<PromptState>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       folders: [],
       items: [],
       activeFolder: null,

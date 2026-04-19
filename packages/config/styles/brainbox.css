@@ -1,10 +1,6 @@
 /* BrainBox Global Design System Tokens & Utility Classes */
 
 @theme {
-  /* Base Theme Colors */
-  --color-background: #050505;
-  --color-foreground: #ffffff;
-
   /* BrainBox Platform Accent Colors */
   --color-acc-chatgpt: #10a37f;
   --color-acc-claude: #d97757;
