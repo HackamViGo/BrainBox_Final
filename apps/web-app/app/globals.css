@@ -71,20 +71,7 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 8%);
   --sidebar-ring: oklch(0.5 0 0);
-
-  /* ── BrainBox Platform Accent Colors ── */
-  /* Used as: var(--color-acc-chatgpt), var(--color-acc-claude), etc. */
-  --color-acc-chatgpt: #10a37f; /* OpenAI green */
-  --color-acc-claude: #d97757; /* Anthropic warm orange */
-  --color-acc-gemini: #8ab4f8; /* Google blue */
-  --color-acc-mistral: #7c3aed; /* Mistral violet */
-  --color-acc-grok: #e5e5e5; /* xAI light grey */
-  --color-acc-perplexity: #20b2aa; /* Perplexity teal */
-  --color-acc-deepseek: #3b82f6; /* DeepSeek blue */
-  --color-acc-neutral: #6b7280; /* fallback neutral */
 }
-
-/* ── BrainBox Custom Classes (Inherited from @brainbox/config) ── */
 html,
 body {
   background-color: #000000;

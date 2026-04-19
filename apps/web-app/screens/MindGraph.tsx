@@ -31,7 +31,7 @@ interface Link extends d3.SimulationLinkDatum<Node> {
 // --- Data Transformation ---
 const transformToGraphData = (folders: any[], items: any[]) => {
   const nodes: Node[] = [
-    { id: 'root', name: 'Neural Core', color: '#ffffff', size: 40, type: 'folder', val: 100 },
+    { id: 'root', name: 'Neural Core', color: 'var(--foreground)', size: 40, type: 'folder', val: 100 },
   ];
   const links: Link[] = [];
 
@@ -40,7 +40,7 @@ const transformToGraphData = (folders: any[], items: any[]) => {
     nodes.push({
       id: f.id,
       name: f.name,
-      color: f.type === 'library' ? '#10a37f' : '#d97757',
+      color: f.type === 'library' ? 'var(--color-acc-chatgpt)' : 'var(--color-acc-claude)',
       size: 30,
       type: 'folder',
       val: 80
@@ -53,7 +53,7 @@ const transformToGraphData = (folders: any[], items: any[]) => {
     nodes.push({
       id: i.id,
       name: i.title,
-      color: i.type === 'chat' ? '#8ab4f8' : '#fbbf24',
+      color: i.type === 'chat' ? 'var(--color-acc-gemini)' : 'var(--color-acc-mistral)',
       size: 15,
       type: i.type,
       val: 40
@@ -69,10 +69,10 @@ const transformToGraphData = (folders: any[], items: any[]) => {
 };
 
 const MODELS = [
-  { name: 'GPT-4o', value: 45, color: '#10a37f' },
-  { name: 'Claude 3.5', value: 30, color: '#d97757' },
-  { name: 'Gemini 1.5', value: 15, color: '#8ab4f8' },
-  { name: 'Other', value: 10, color: '#e5e5e5' },
+  { name: 'GPT-4o', value: 45, color: 'var(--color-acc-chatgpt)' },
+  { name: 'Claude 3.5', value: 30, color: 'var(--color-acc-claude)' },
+  { name: 'Gemini 1.5', value: 15, color: 'var(--color-acc-gemini)' },
+  { name: 'Other', value: 10, color: 'var(--color-acc-neutral)' },
 ];
 
 const TOPICS = [
@@ -330,7 +330,7 @@ export function MindGraph() {
                     <circle cx="50%" cy="50%" r="60" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="12" />
                     <circle 
                       cx="50%" cy="50%" r="60" fill="none" 
-                      stroke="#10a37f" strokeWidth="12" 
+                      stroke="var(--color-acc-chatgpt)" strokeWidth="12" 
                       strokeDasharray="377" strokeDashoffset={377 * (1 - 0.45)}
                       strokeLinecap="round"
                       className="transition-all duration-1000"
@@ -356,9 +356,9 @@ export function MindGraph() {
                 <h3 className="text-[10px] font-mono text-white/40 uppercase tracking-[0.2em] mb-6">Efficiency Matrix</h3>
                 <div className="space-y-3">
                   {[
-                    { icon: Database, label: 'Knowledge Growth', val: '+124', unit: 'Artifacts', color: '#10a37f' },
-                    { icon: Clock, label: 'Time Optimized', val: '14.5h', unit: 'Saved', color: '#8ab4f8' },
-                    { icon: Zap, label: 'Neural Sync', val: '94%', unit: 'Accuracy', color: '#a855f7' }
+                    { icon: Database, label: 'Knowledge Growth', val: '+124', unit: 'Artifacts', color: 'var(--color-acc-chatgpt)' },
+                    { icon: Clock, label: 'Time Optimized', val: '14.5h', unit: 'Saved', color: 'var(--color-acc-gemini)' },
+                    { icon: Zap, label: 'Neural Sync', val: '94%', unit: 'Accuracy', color: 'var(--color-acc-mistral)' }
                   ].map((item, i) => (
                     <div key={i} className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-all group cursor-default">
                       <div 

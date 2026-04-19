@@ -1,6 +1,7 @@
 export const STORAGE_KEYS = {
   APP_STORE: 'brainbox-app-store',
   LIBRARY_STORE: 'brainbox-library-store',
+  PROMPT_STORE: 'brainbox-prompt-store',
   IS_LOGGED_IN: 'brainbox_is_logged_in',
   LIBRARY_FOLDERS: 'brainbox-library-folders',
   PROMPT_FOLDERS: 'brainbox-prompt-folders',

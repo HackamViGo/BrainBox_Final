@@ -41,7 +41,7 @@ export default function Page() {
   // 1. HYDRATION BRIDGE: Wait for Zustand persist to load
   if (!_hasHydrated) {
     return (
-      <div className="h-dvh w-full bg-[#050505] flex items-center justify-center relative overflow-hidden">
+      <div className="h-dvh w-full bg-background flex items-center justify-center relative overflow-hidden">
         {/* Placeholder AmbientLight/NeuralField can go here if needed, but PersistentShell handles it too */}
         <div className="text-white/20 animate-pulse font-mono uppercase tracking-[0.3em]">Neural Bridge Initializing...</div>
       </div>
@@ -50,7 +50,7 @@ export default function Page() {
 
   return (
     <div 
-      className="relative h-dvh w-full bg-[#050505] text-white font-sans overflow-hidden"
+      className="relative h-dvh w-full bg-background text-white font-sans overflow-hidden"
       onWheel={handleWheel}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}

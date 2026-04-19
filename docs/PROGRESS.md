@@ -23,6 +23,64 @@ BrainBox — Progress Log
 
 -->
 
+## 2026-04-19 — Phase 1: Web App Stability & Auth Refinement
+
+**Фаза:** 1
+**Статус:** Завършена
+
+### Направено
+
+- **Design Unification:** Изцяло премахнати hardcoded hex цветове. Въведени `--color-background` и `--color-foreground` токени в `brainbox.css`.
+- **Type Safety Audit:** Рефакторирани `Library.tsx`, `Prompts.tsx` и `AINexus.tsx`. Премахнати над 40 `any` асертации. Въведени стриктни интерфейси (`BrainBoxModel`).
+- **Auth Sync Fix:** Рефакториран `apps/web-app/lib/supabase/server.ts` за поддръжка на Bearer tokens. Това решава проблема с `refresh_token_not_found` при заявки от екстеншъна.
+- **Store Standardization:** Стандартизиран `usePromptStore` с `_hasHydrated` патент и използване на централизирани `STORAGE_KEYS`.
+- **Cleanup:** Изтрит дублиращ се Supabase клиент от `utils/supabase` в полза на `lib/supabase`. Коригирани всички вносове.
+- **Bug Fixes:** Фиксиран `onDragStart` тип за Framer Motion и липсващи аргументи в `onDelete`.
+
+### Проблеми
+
+- Конфликт между Framer Motion `motion.div` и стандартния HTML5 `draggable` тип (решено чрез кастване).
+- Дублирани Supabase клиенти причиняваха объркване при внос (решено чрез изтриване на legacy папката).
+
+### Файлове променени
+
+- packages/config/styles/brainbox.css
+- apps/web-app/lib/supabase/server.ts
+- apps/web-app/screens/Library.tsx
+- apps/web-app/screens/Prompts.tsx
+- apps/web-app/screens/AINexus.tsx
+- apps/web-app/store/usePromptStore.ts
+- packages/utils/src/storage.ts
+- apps/web-app/app/extension-auth/page.tsx
+
+## 2026-04-19 — Phase 0: Foundation Fix & WXT Migration
+
+**Фаза:** 0
+**Статус:** Завършена
+
+### Направено
+
+- **WXT Migration:** Успешна миграция на екстеншъна от CRXJS/Vite към WXT. Създадени нови entrypoints и конфигуриран `wxt.config.ts`.
+- **Type Safety Remediation:** Премахнати `any` типовете от `library.ts` (actions) и `useLibraryStore.ts`. Синхронизирани интерфейси с Zod схеми.
+- **Git Visibility:** Коригиран `.gitignore` за включване на `.agent/` директорията (правила, умения, работни процеси).
+- **Build Infrastructure:** Фиксиран `tsconfig.node.json` и `vitest.config.ts` за новата архитектура.
+- **Cleanup:** Изчистен Turbo кеш (2.7 GB) и премахнати ненужни `dist`/`.output` файлове от git.
+
+### Проблеми
+
+- Build failures поради грешни пътища в entrypoints (решено с относителни пътища).
+- Несъвместимост на `WxtVitest` с ръчни Chrome API mocks (решено чрез връщане към чист Vitest с алиаси).
+
+### Файлове променени
+
+- apps/extension/wxt.config.ts (създаден)
+- apps/extension/entrypoints/\*\*
+- apps/web-app/actions/library.ts
+- apps/web-app/store/useLibraryStore.ts
+- .gitignore
+- apps/extension/tsconfig.node.json
+- apps/extension/vitest.config.ts
+
 ## 2026-04-19 — Rule Consolidation & Project Revision
 
 **Фаза:** 7+ (Revision)

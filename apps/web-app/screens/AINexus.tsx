@@ -27,6 +27,18 @@ interface Message {
   isCode?: boolean;
 }
 
+interface BrainBoxModel {
+  id: string;
+  name: string;
+  icon: any;
+  color: string;
+  bg: string;
+  border: string;
+  glow: string;
+  text: string;
+  gradient: string;
+}
+
 export function AINexus() {
   const { 
     activeModelId, 
@@ -65,8 +77,8 @@ export function AINexus() {
   
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  const activeModel = (MODELS.find(m => m.id === activeModelId) || MODELS[0]) as any;
-  const pendingModel = (pendingModelId ? MODELS.find(m => m.id === pendingModelId) : null) as any;
+  const activeModel = (MODELS.find(m => m.id === activeModelId) || MODELS[0]) as BrainBoxModel;
+  const pendingModel = (pendingModelId ? MODELS.find(m => m.id === pendingModelId) : null) as BrainBoxModel | null;
 
   useEffect(() => {
     async function loadUser() {

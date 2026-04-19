@@ -91,7 +91,7 @@ export function Library() {
     return item.folderId === (activeFolder || null);
   });
 
-  const handleAction = async (chat: Item, option: any) => {
+  const handleAction = async (chat: Item, option: { id: string, label: string, prompt?: string }) => {
     // API key stored in Zustand store (not raw localStorage)
     const apiKey = useAppStore.getState().getApiKey('gemini')
     if (!apiKey) {
@@ -210,7 +210,7 @@ export function Library() {
                   key={chat.id} 
                   chat={chat} 
                   setTheme={setHoverTheme}
-                  onAction={(option: any) => handleAction(chat, option)}
+                  onAction={(option) => handleAction(chat, option)}
                   onDelete={() => deleteItem(chat.id)}
                   onClick={() => {
                     setExpandedChatId(chat.id);
@@ -255,7 +255,7 @@ export function Library() {
                     >
                       <MessageSquare className="w-5 h-5" />
                     </div>
-                    <span className="text-[10px] uppercase tracking-widest text-white/40 truncate">{(currentChatForAnalysis as any)?.modelId || 'chatgpt'}</span>
+                    <span className="text-[10px] uppercase tracking-widest text-white/40 truncate">{currentChatForAnalysis?.platform || 'chatgpt'}</span>
                   </div>
                   <h3 className="text-xl sm:text-3xl font-bold line-clamp-2">{currentChatForAnalysis?.title}</h3>
                   <div className="flex flex-wrap gap-2 mt-4">
@@ -331,10 +331,17 @@ export function Library() {
   );
 }
 
-const ChatCard = forwardRef<HTMLDivElement, any>(({ chat, setTheme, onAction, onClick, onDelete, onDragStart }, ref) => {
+const ChatCard = forwardRef<HTMLDivElement, {
+  chat: Item;
+  setTheme: (t: ThemeName) => void;
+  onAction: (opt: { id: string, label: string }) => void;
+  onClick: () => void;
+  onDelete: (id: string) => void;
+  onDragStart?: (e: any, type: string, item: Item) => void;
+}>(({ chat, setTheme, onAction, onClick, onDelete, onDragStart }, ref) => {
   const { setHoverTheme } = useAppStore();
   const modelId = chat.modelId || 'chatgpt';
-  const themeColor = THEMES[modelId as ThemeName]?.color || '#ffffff';
+  const themeColor = THEMES[modelId as ThemeName]?.color || 'var(--color-foreground)';
   const tags = chat.tags || [];
   const date = chat.updatedAt || 'Just now';
   const content = chat.content || chat.description || '';
@@ -457,7 +464,7 @@ const ChatCard = forwardRef<HTMLDivElement, any>(({ chat, setTheme, onAction, on
                   <div className="h-[1px] bg-white/5 my-1" />
                   <button
                     onClick={() => {
-                      onDelete();
+                      onDelete(chat.id);
                       setShowMore(false);
                     }}
                     className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-red-500/10 text-left text-xs text-red-400/70 hover:text-red-400 transition-all group/opt"

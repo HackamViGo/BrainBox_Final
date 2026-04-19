@@ -41,7 +41,7 @@ export function PersistentShell({ children }: { children: React.ReactNode }) {
 
   if (!hasHydrated) {
     return (
-      <div className="h-dvh w-full bg-[#050505] flex items-center justify-center relative overflow-hidden">
+      <div className="h-dvh w-full bg-background flex items-center justify-center relative overflow-hidden">
         <AmbientLight theme="chatgpt" />
         <NeuralField theme="chatgpt" mode="wander" />
         <Loader2 className="w-8 h-8 text-white/20 animate-spin relative z-10" />
@@ -52,7 +52,7 @@ export function PersistentShell({ children }: { children: React.ReactNode }) {
   const effectiveTheme = hoverTheme ?? theme;
 
   return (
-    <div className="relative h-full w-full bg-[#050505] text-white font-sans overflow-hidden flex bg-grain blur-0 scale-100">
+    <div className="relative h-full w-full bg-background text-white font-sans overflow-hidden flex bg-grain blur-0 scale-100">
       <AmbientLight theme={effectiveTheme} monochrome={activeScreen === 'archive'} />
       <NeuralField 
         theme={effectiveTheme} 

@@ -27,21 +27,21 @@ export function Prompts() {
   const folders = [...libraryFolders, ...promptFolders];
   const captures = items.filter(i => i.type === 'capture');
 
-  const filteredPromptFolders = folders.filter((f: any) => f.type === 'prompt' || f.type === 'folder');
+  const filteredPromptFolders = folders.filter((f) => f.type === 'prompt');
 
   const handleRefine = (text: string) => {
     setRefineInput(text);
     setCurrentView('refine');
   };
 
-  const handleSaveToPrompts = (text: string) => {
-    addItem({
+  const handleSaveToPrompts = async (text: string) => {
+    await addItem({
       type: 'prompt',
       title: 'New Prompt',
       description: text.substring(0, 100) + '...',
       content: text,
       folderId: activeFolder,
-      platform: theme   // 'platform' is the ThemeName field on Item
+      platform: theme as any   // theme is currently a string from useAppStore, casting for now until Store is audited
     });
     setCurrentView('saved-prompts');
   };

@@ -3,11 +3,13 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import type { Folder, Item } from '@brainbox/types';
+import { STORAGE_KEYS } from '@brainbox/utils';
 
 interface PromptState {
   folders: Folder[];
   items: Item[];
   activeFolder: string | null;
+  _hasHydrated: boolean;
   
   // Actions
   setFolders: (folders: Folder[]) => void;
@@ -19,14 +21,16 @@ interface PromptState {
   updateItem: (id: string, updates: Partial<Item>) => void;
   deleteFolder: (id: string) => void;
   deleteItem: (id: string) => void;
+  setHasHydrated: (v: boolean) => void;
 }
 
 export const usePromptStore = create<PromptState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       folders: [],
       items: [],
       activeFolder: null,
+      _hasHydrated: false,
 
       setFolders: (folders) => set({ folders }),
       setItems: (items) => set({ items }),
@@ -57,15 +61,20 @@ export const usePromptStore = create<PromptState>()(
         set((state) => ({
           items: state.items.filter((i) => i.id !== id),
         })),
+      
+      setHasHydrated: (v) => set({ _hasHydrated: v }),
     }),
     {
-      name: 'brainbox-prompt-store',
+      name: STORAGE_KEYS.PROMPT_STORE || 'brainbox-prompt-store',
       storage: createJSONStorage(() => localStorage),
       skipHydration: true,
       partialize: (state) => ({
         folders: state.folders,
         items: state.items,
       }),
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true);
+      },
     }
   )
 );

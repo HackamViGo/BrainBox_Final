@@ -47,7 +47,7 @@ export function Login() {
             transition={{ type: 'spring', damping: 12 }}
             className="w-20 h-20 rounded-3xl bg-gradient-to-br from-blue-500 to-purple-600 p-0.5 mx-auto mb-6 shadow-2xl shadow-blue-500/20"
           >
-            <div className="w-full h-full bg-[#050505] rounded-[22px] flex items-center justify-center">
+            <div className="w-full h-full bg-background rounded-[22px] flex items-center justify-center">
               <Brain className="w-10 h-10 text-white" />
             </div>
           </motion.div>
