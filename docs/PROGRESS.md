@@ -23,6 +23,38 @@ BrainBox — Progress Log
 
 -->
 
+## 2026-04-19 — Phase 2: Code Quality & Linting Cleanup
+
+**Фаза:** 2
+**Статус:** Завършена
+
+### Направено
+
+- **Screen Optimization:** Изчистени неизползвани импорти, икони и променливи в основните екрани: `AINexus.tsx`, `Library.tsx`, `MindGraph.tsx` и `Prompts.tsx`.
+- **Bug Fixes (Linting):** Коригирани липсващи зависимости в `useEffect` (AINexus) и синтактични грешки (липсващ `const`) при деструктуриране на store-ове.
+- **Store Cleanup:** Премахнат неизползван `get` параметър в `usePromptStore.ts` и оптимизирано извличане на състояние в екраните за по-добра производителност.
+- **Design System Polish:** Премахнати дублиращи се CSS променливи в `brainbox.css`, които причиняваха теми конфликти с `globals.css` (Tailwind v4).
+- **Store Refinement:** В `Library.tsx` е премахнато излишното подаване на пропсове към `ChatCard`, позволявайки на компонента да черпи състояние директно от Zustand.
+
+### Проблеми
+
+- Прекъснат commit процес поради стриктни `pre-commit` куки (eslint warnings/errors).
+- Синтактична грешка при ръчен рефакторинг на сложни деструктуриращи присвоявания.
+
+### Решения
+
+- Пълен одит на "dead code" и премахване на всички неизползвани `lucide-react` икони.
+- Корекция на деструктурирането на store-овете и добавяне на пропуснати ключови думи (`const`).
+
+### Файлове променени
+
+- apps/web-app/screens/AINexus.tsx
+- apps/web-app/screens/Library.tsx
+- apps/web-app/screens/MindGraph.tsx
+- apps/web-app/screens/Prompts.tsx
+- apps/web-app/store/usePromptStore.ts
+- packages/config/styles/brainbox.css
+
 ## 2026-04-19 — Phase 1: Web App Stability & Auth Refinement
 
 **Фаза:** 1
