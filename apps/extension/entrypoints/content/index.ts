@@ -1,6 +1,6 @@
-import { ChatGPTAdapter } from '@/content/adapters/chatgpt.adapter';
-import { GeminiAdapter } from '@/content/adapters/gemini.adapter';
-import type { BaseAdapter } from '@/content/adapters/base.adapter';
+import { ChatGPTAdapter } from '../../src/content/adapters/chatgpt.adapter';
+import { GeminiAdapter } from '../../src/content/adapters/gemini.adapter';
+import type { BaseAdapter } from '../../src/content/adapters/base.adapter';
 
 /**
  * BrainBox Content Script Entry Point (WXT)

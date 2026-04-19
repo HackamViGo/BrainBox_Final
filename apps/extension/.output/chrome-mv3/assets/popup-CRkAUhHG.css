@@ -1,0 +1,78 @@
+@layer utilities {
+  .glass-panel {
+    -webkit-backdrop-filter: blur(12px);
+    background: #14141466;
+    border: 1px solid #ffffff14;
+    box-shadow: 0 4px 30px #0000001a;
+  }
+  .glass-panel-light {
+    -webkit-backdrop-filter: blur(12px);
+    background: #ffffff08;
+    border: 1px solid #ffffff0d;
+  }
+  .bg-grain {
+    position: relative;
+  }
+  .bg-grain:before {
+    content: "";
+    opacity: 0.03;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    position: absolute;
+    inset: 0;
+  }
+  .neural-edge-path {
+    stroke-dasharray: 5 5;
+    animation: 2s linear infinite dashdraw;
+  }
+  .neural-edge-path-fast {
+    stroke-dasharray: 5 5;
+    animation: 0.5s linear infinite dashdraw;
+  }
+}
+@keyframes dashdraw {
+  0% {
+    stroke-dashoffset: 100px;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+:root {
+  --background: oklch(6% 0 0);
+  --foreground: oklch(98.5% 0 0);
+  --border: oklch(100% 0 0/0.08);
+  --radius: 0.75rem;
+}
+body {
+  background-color: var(--background);
+  width: 380px;
+  min-height: 500px;
+  color: var(--foreground);
+  margin: 0;
+  font-family: Inter, system-ui, sans-serif;
+  overflow-x: hidden;
+}
+.extension-container {
+  flex-direction: column;
+  gap: 1rem;
+  height: 100%;
+  padding: 1rem;
+  display: flex;
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  color: #fff;
+  background: #0a0a0a;
+  width: 380px;
+  min-height: 520px;
+  font-family: -apple-system, BlinkMacSystemFont, Inter, sans-serif;
+}
+#root {
+  width: 100%;
+  height: 100%;
+}

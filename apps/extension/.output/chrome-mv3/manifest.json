@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "BrainBox",
+  "description": "Premium AI conversation organizer.",
+  "version": "2.0.0",
+  "permissions": [
+    "storage",
+    "contextMenus",
+    "tabs",
+    "alarms",
+    "activeTab",
+    "scripting",
+    "webNavigation"
+  ],
+  "host_permissions": [
+    "https://gemini.google.com/*",
+    "https://chatgpt.com/*",
+    "https://claude.ai/*",
+    "https://*.brainbox.ai/*",
+    "http://localhost:3000/*"
+  ],
+  "background": { "service_worker": "background.js" },
+  "action": { "default_title": "BrainBox", "default_popup": "popup.html" },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://localhost:3000/extension-auth",
+        "https://*.brainbox.ai/extension-auth",
+        "https://chatgpt.com/*",
+        "https://gemini.google.com/*"
+      ],
+      "run_at": "document_idle",
+      "js": ["content-scripts/content.js"]
+    }
+  ]
+}
