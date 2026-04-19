@@ -86,8 +86,5 @@ playwright/.cache/
 
 # Local Scratch
 scratch/
-*.txt
 logs/
-.agent/
-brainbox/
 !scripts/update_docs.py
