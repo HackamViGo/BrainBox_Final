@@ -45,10 +45,10 @@ test.describe('Navigation', () => {
     
     // Switch to Library
     await libraryBtn.click();
-    await expect(page.getByText('Main Library').first()).toBeVisible();
+    await expect(page.getByText('Library').first()).toBeVisible();
     
     // Switch to Prompts
     await page.locator('button').filter({ hasText: 'Prompts' }).first().click();
-    await expect(page.getByText('Main Prompts').first()).toBeVisible();
+    await expect(page.getByText('Prompts').first()).toBeVisible();
   });
 });

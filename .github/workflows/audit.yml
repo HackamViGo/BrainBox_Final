@@ -1,0 +1,100 @@
+name: Project Audit
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  audit:
+    name: Critical Rule Audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for 'any' types in source (not type definitions)
+        run: |
+          echo "Checking for 'any' types in source files..."
+          # Exclude: node_modules, .d.ts files, test setup, and type-assertion comments
+          if grep -r --include="*.ts" --include="*.tsx" \
+            --exclude="*.d.ts" \
+            --exclude-dir=node_modules \
+            --exclude-dir=".wxt" \
+            --exclude-dir="dist" \
+            --exclude-dir=".next" \
+            -P ':\s*any\b|<any>|as any\b' \
+            apps/web-app/actions apps/web-app/app packages apps/extension/src apps/extension/entrypoints 2>/dev/null; then
+            echo "❌ Found 'any' types — use 'unknown' + type guard instead."
+            exit 1
+          fi
+          echo "✅ No 'any' types found."
+
+      - name: Check for console.log (not in test files)
+        run: |
+          echo "Checking for console.log..."
+          if grep -r --include="*.ts" --include="*.tsx" \
+            --exclude-dir=node_modules \
+            --exclude-dir=".wxt" \
+            --exclude-dir="dist" \
+            --exclude-dir=".next" \
+            --exclude-dir="__tests__" \
+            'console\.log' \
+            apps packages 2>/dev/null; then
+            echo "❌ Found console.log — use project logger instead."
+            exit 1
+          fi
+          echo "✅ No console.log found."
+
+      - name: Check for getSession (use getUser instead)
+        run: |
+          echo "Checking for getSession..."
+          if grep -r --include="*.ts" --include="*.tsx" \
+            --exclude-dir=node_modules \
+            --exclude-dir=".wxt" \
+            --exclude-dir="dist" \
+            'getSession' \
+            apps packages 2>/dev/null; then
+            echo "❌ Found getSession — use getUser() instead (ADR-014)."
+            exit 1
+          fi
+          echo "✅ No getSession found."
+
+      - name: Check for localStorage in extension
+        run: |
+          echo "Checking for localStorage in extension..."
+          if grep -r --include="*.ts" --include="*.tsx" \
+            --exclude-dir=node_modules \
+            --exclude-dir=".wxt" \
+            'localStorage' \
+            apps/extension/src apps/extension/entrypoints 2>/dev/null; then
+            echo "❌ Found localStorage in extension — use chrome.storage.local only."
+            exit 1
+          fi
+          echo "✅ No localStorage in extension."
+
+      - name: Verify WXT entrypoint structure
+        run: |
+          echo "Verifying WXT entrypoints..."
+          if [ ! -f "apps/extension/entrypoints/background.ts" ]; then
+            echo "❌ Missing entrypoints/background.ts (WXT background entrypoint)"
+            exit 1
+          fi
+          if [ ! -f "apps/extension/wxt.config.ts" ]; then
+            echo "❌ Missing wxt.config.ts"
+            exit 1
+          fi
+          if [ -f "apps/extension/manifest.json" ]; then
+            echo "⚠️  WARNING: manual manifest.json found — WXT generates this automatically."
+            exit 1
+          fi
+          echo "✅ WXT structure valid."
+
+      - name: Check for CRXJS remnants
+        run: |
+          if grep -r "@crxjs/vite-plugin" apps/extension/package.json 2>/dev/null; then
+            echo "❌ @crxjs/vite-plugin still present — migration to WXT incomplete."
+            exit 1
+          fi
+          echo "✅ No CRXJS remnants."
+
+      - name: pnpm Audit (security vulnerabilities)
+        run: pnpm audit --audit-level=high

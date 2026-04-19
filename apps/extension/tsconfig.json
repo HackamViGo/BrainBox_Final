@@ -9,6 +9,6 @@
       "@brainbox/utils": ["../../packages/utils/src/index.ts"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "entrypoints", ".wxt/wxt.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -31,11 +31,13 @@ export function AINexus() {
   const { 
     activeModelId, 
     setActiveModelId, 
+    setTheme,
     pendingModelId, 
     clearPendingModel 
   } = useAppStore(useShallow(s => ({
     activeModelId: s.activeModelId,
     setActiveModelId: s.setActiveModelId,
+    setTheme: s.setTheme,
     pendingModelId: s.pendingModelId,
     clearPendingModel: s.clearPendingModel
   })));
@@ -149,6 +151,7 @@ export function AINexus() {
 
   const handleSmartSwitch = (action: 'mind' | 'branch' | 'new', targetModelId: string) => {
     setActiveModelId(targetModelId);
+    setTheme(targetModelId as any);
     clearPendingModel();
   };
 

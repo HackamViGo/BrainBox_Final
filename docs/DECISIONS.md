@@ -360,6 +360,7 @@ TypeScript, ESLint и CSS токените са разпръснати из пр
 - **Design Integrity**: Промяна на глас-модула в конфига обновява и Workspace, и Library веднага.
 - **Code Standards**: Еднакви строги правила за всички пакети в монорепото.
 - **TS Compatibility**: Решаване на deprecation предупреждения от TS 6.0 на централно ниво.
+
 ---
 
 ## [ADR-012] Extension Architecture and Passive Observer Sync
@@ -375,7 +376,7 @@ TypeScript, ESLint и CSS токените са разпръснати из пр
 
 1. **Vite 8 + CRXJS**: Използване на Vite 8 с Rolldown за бързи билдове и CRXJS за управление на Manifest V3.
 2. **Passive Observer Pattern**: Разширението не комуникира директно със Supabase. Вместо това, то изпраща събраните данни към Dashboard API (`/api/chats/extension`) с Bearer JWT.
-3. **Multi-World Interception**: 
+3. **Multi-World Interception**:
    - **MAIN World**: Инжектиран скрипт за 'batchexecute' прехващане на мрежови заявки.
    - **ISOLATED World**: Контент скрипт за DOM екстракция (fallback) и мост към фоновия скрипт.
 4. **Auth Bridge**: JWT токенът се извлича от Dashboard сесията и се съхранява в `chrome.storage.local`.
@@ -440,3 +441,92 @@ TypeScript, ESLint и CSS токените са разпръснати из пр
 
 - Минимално забавяне в аутентикацията (заради сървърния call), но защитен мост.
 - Вече се излъчват верифицирани данни към `postMessage` слушателите.
+
+---
+
+## [ADR-016] Extension Build System: WXT replaces CRXJS/Vite
+
+**Дата:** 2026-04-19
+**Статус:** Прието — Заменя ADR-012 (Extension Architecture)
+
+### Контекст
+
+Разширението ползваше Vite 8 + `@crxjs/vite-plugin` + ръчно поддържан `manifest.json`. Появиха се три проблема:
+
+1. `@crxjs/vite-plugin` е в бета — `2.0.0-beta.33` — без финален release за Vite 8.
+2. Ръчният `manifest.json` изисква синхронно обновяване при всяка промяна на permissions/entrypoints — бавно и error-prone.
+3. Структурата с `src/background/service-worker.ts`, `src/content/index.ts` и root `index.html` не е file-based — тежка за мащабиране.
+
+### Решение
+
+Миграция към **WXT** (Web Extension Framework) — "Next.js за extensions".
+
+- **`wxt.config.ts`** заменя `vite.config.ts` + `manifest.json`.
+- **`entrypoints/`** директория: file-based entrypoints (background, content, popup).
+- **`@wxt-dev/module-react`** заменя `@vitejs/plugin-react` (babel) — съвместимо с Vite 8 + Oxc.
+- **`wxt prepare`** генерира TypeScript типове (`.wxt/`) — без нужда от `@types/chrome` workarounds.
+- Манифестът се генерира автоматично от WXT при build — никога ръчни редакции.
+
+### Ключови структурни промени
+
+```
+# Стара структура (CRXJS)           # Нова структура (WXT)
+src/background/service-worker.ts  → entrypoints/background.ts
+src/content/index.ts              → entrypoints/content/index.ts
+src/popup/index.tsx               → entrypoints/popup/main.tsx
+manifest.json (ръчен)             → генерира се от wxt.config.ts
+vite.config.ts                    → wxt.config.ts
+```
+
+### Причини
+
+- **Стабилност**: WXT е production-ready (v0.19+). CRXJS beta е незавършена за Vite 8.
+- **Zero-config HMR**: WXT HMR работи за popup и content scripts без ръчна конфигурация.
+- **Type Safety**: `wxt prepare` генерира `browser` типове специфични за проекта.
+- **Cross-browser**: WXT поддържа Firefox/Safari без промяна на кода (бъдеща нужда).
+- **Maintenance**: Манифестът се управлява на едно място — `wxt.config.ts`.
+
+### Алтернативи разгледани
+
+- **Продължаване с CRXJS** — отхвърлено, бета без Vite 8 финална поддръжка.
+- **Чист Vite 8 без CRXJS** — отхвърлено, ръчен manifest overhead.
+- **Plasmo Framework** — отхвърлено, React-only lock-in и тежка абстракция.
+
+### Последици
+
+- `GEMINI.md` Prohibition #2 се обновява: `background.ts` (WXT entrypoint) е новото правило — НЕ `service-worker.ts`.
+- `AGENTS.md` tech stack се обновява: `WXT` вместо `CRXJS`.
+- `extension-build.yml` workflow: `wxt build` вместо `vite build`.
+- `wxt zip` генерира `.zip` за Chrome Web Store директно.
+- Всички agent rules за `service-worker.ts` трябва да четат `background.ts` (WXT компилира го до SW автоматично).
+
+---
+
+## [ADR-015] Multi-Tool Rules Standard (AGENTS.md & GEMINI.md)
+
+**Дата:** 2026-04-19
+**Статус:** Прието (Заменя "Centralized Rule Documentation")
+
+### Контекст
+
+Предишният подход за консолидация в `docs/rules.md` се оказа несъвместим с новите cross-tool стандарти (v1.20.5) и затруднява преноса на правила към други инструменти (Cursor, Claude Code).
+
+### Решение
+
+Преминаване към йерархична структура на правилата:
+
+1. **AGENTS.md (Root):** Споделени стандарти за всички AI инструменти (Tech stack, Core principles, Git).
+2. **GEMINI.md (Root):** Специфични за Antigravity инструкции и "Absolute Prohibitions".
+3. **.agent/rules/ (Folder):** Подробни правила, разделени по категории (Core, BrainBox).
+
+### Причини
+
+- **Interoperability:** `AGENTS.md` е новият индустриален стандарт за споделени правила.
+- **Precedence Control:** Позволява на Antigravity да има специфични хакове (напр. `proxy.ts`) без да обърква други инструменти.
+- **Organization:** Използването на `.agent/` (singular) директория съответства на най-новите гайдлайни от Antigravity Codes.
+
+### Последици
+
+- Изтрит е `docs/rules.md`.
+- Папката `.agent/` е преименувана на `.agent/`.
+- Агентите трябва да четат `AGENTS.md` за общ контекст и `GEMINI.md` за стриктни ограничения.

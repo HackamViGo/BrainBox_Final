@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Menu } from 'lucide-react';
 import { Sidebar } from './Sidebar';
 import { useAppStore } from '../store/useAppStore';
+import { useLibraryStore } from '../store/useLibraryStore';
 import dynamic from 'next/dynamic';
 import { usePathname } from 'next/navigation';
 import { motion } from 'motion/react';
@@ -21,10 +22,19 @@ export function PersistentShell({ children }: { children: React.ReactNode }) {
   const { 
     activeScreen, theme, hoverTheme, setActiveScreen,
     isMobileSidebarOpen, setIsMobileSidebarOpen,
-    isPinned, isSidebarExpanded
+    isPinned, isSidebarExpanded, setModalOpen
   } = useAppStore();
   const pathname = usePathname();
   const hasHydrated = useHasHydrated();
+  const isLoggedIn = useAppStore(s => s.isLoggedIn);
+  const loadData = useLibraryStore(s => s.loadData);
+
+  // Load library data on mount/login
+  React.useEffect(() => {
+    if (hasHydrated && isLoggedIn) {
+      loadData();
+    }
+  }, [hasHydrated, isLoggedIn, loadData]);
 
   // Removed URL sync to enable pure state-based navigation in SPA mode
 
@@ -63,7 +73,7 @@ export function PersistentShell({ children }: { children: React.ReactNode }) {
         </div>
       </header>
       
-      <Sidebar />
+      <Sidebar onModelSelect={(id, name) => setModalOpen('smartSwitch', true, { id, name })} />
       
       <motion.main 
         initial={false}

@@ -25,6 +25,19 @@ export const ICON_LIBRARY = [
   Network, Cpu, History, Search, Pin, Home
 ];
 
+export const SCREEN_LABELS = {
+  dashboard: 'Dashboard',
+  library: 'Library',
+  prompts: 'Prompts',
+  studio: 'AI Nexus',
+  workspace: 'Workspace',
+  analytics: 'Mind Graph',
+  archive: 'Archive',
+  settings: 'Settings',
+  profile: 'Identity',
+  extension: 'Extension',
+} as const;
+
 export const MODELS = [
   { id: 'chatgpt', name: 'ChatGPT', icon: Brain, color: 'emerald', bg: 'bg-[var(--color-acc-chatgpt)]/10', border: 'border-[var(--color-acc-chatgpt)]/30', glow: 'shadow-[0_0_20px_var(--color-acc-chatgpt)]/50', text: 'text-[var(--color-acc-chatgpt)]', gradient: 'from-[var(--color-acc-chatgpt)]/40 via-[var(--color-acc-chatgpt)]/10 to-transparent' },
   { id: 'gemini', name: 'Gemini', icon: Sparkles, color: 'blue', bg: 'bg-[var(--color-acc-gemini)]/10', border: 'border-[var(--color-acc-gemini)]/30', glow: 'shadow-[0_0_20px_var(--color-acc-gemini)]/50', text: 'text-[var(--color-acc-gemini)]', gradient: 'from-[var(--color-acc-gemini)]/40 via-[var(--color-acc-gemini)]/10 to-transparent' },

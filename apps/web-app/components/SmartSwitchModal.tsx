@@ -15,7 +15,9 @@ export function SmartSwitchModal() {
   const handleSelect = (type: 'mind' | 'branch' | 'new') => {
     // Logic for model switching would go here
     // For now, we just switch the active model and close the modal
+    const { setTheme } = useAppStore.getState()
     setActiveModelId(targetModel.id)
+    setTheme(targetModel.id as any)
     setActiveScreen('studio')
     setModalOpen('smartSwitch', false)
   }

@@ -23,12 +23,12 @@ export const ItemSchema = z.object({
   url: z.string().optional(),
   source: z.string().optional(),
   sourceId: z.string().optional(),
-  platform: ThemeNameSchema.optional(),
+  platform: ThemeNameSchema.nullable().optional(),
   messages: z.array(z.unknown()).optional(),
   tags: z.array(z.string()).optional(),
-  theme: ThemeNameSchema.optional(),
+  theme: ThemeNameSchema.nullable().optional(),
   isFrozen: z.boolean().optional(),
-  deletedAt: z.string().optional(),
+  deletedAt: z.string().nullable().optional(),
 });
 
 export const ScreenNameSchema = z.enum([

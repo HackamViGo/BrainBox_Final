@@ -112,7 +112,7 @@ export function FrameworksView({ onBack, setTheme, onUseTemplate }: FrameworksVi
                     title="Use in Refiner"
                   >
                     <div className="flex items-center justify-between mb-1">
-                      <h4 className="font-bold text-lg">Main Trunk</h4>
+                      <h4 className="font-bold text-lg">Trunk</h4>
                       <Rocket className="w-4 h-4 text-purple-400 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
                     <p className="text-sm text-white/50">{selectedCell.content ? 'Click to synchronize with Refiner.' : 'The original, universal prompt.'}</p>

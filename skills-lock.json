@@ -5,84 +5,84 @@
     "ai-pipeline": {
       "id": "ai-pipeline",
       "version": "1.0.0",
-      "path": ".agents/skills/ai-pipeline",
+      "path": ".agent/skills/ai-pipeline",
       "description": "Управление на Gemini SDK, стандарти за Prompt Engineering и AI филтри.",
       "whenToUse": "При работа по AI интеграции, промяна на системни промпти или логика на Gemini."
     },
     "brainbox-extension": {
       "id": "brainbox-extension",
       "version": "1.0.0",
-      "path": ".agents/skills/brainbox-extension",
+      "path": ".agent/skills/brainbox-extension",
       "description": "Vite 8, CRXJS, MV3 Service Worker и комуникация между разширението и Dashboard.",
       "whenToUse": "При разработка на Chrome Extension, лонг-поулинг, контекстни менюта или Content Scripts."
     },
     "brainbox-web": {
       "id": "brainbox-web",
       "version": "1.0.0",
-      "path": ".agents/skills/brainbox-web",
+      "path": ".agent/skills/brainbox-web",
       "description": "Next.js 16.2 monorepo архитектура, NeuralField canvas и Zustand state управление.",
       "whenToUse": "При работа по уеб приложението (Dashboard, Library, Prompts) и UI компоненти."
     },
     "brainbox-supabase": {
       "id": "brainbox-supabase",
       "version": "1.0.0",
-      "path": ".agents/skills/brainbox-supabase",
+      "path": ".agent/skills/brainbox-supabase",
       "description": "Postgres schema, RLS политики, Auth setup и Server Actions.",
       "whenToUse": "При промени по базата данни, създаване на нови Server Actions или проблеми с оторизацията."
     },
     "core-standards": {
       "id": "core-standards",
       "version": "1.0.0",
-      "path": ".agents/skills/core-standards",
+      "path": ".agent/skills/core-standards",
       "description": "Глобални стандарти за TypeScript, Logging, Error Handling и Monorepo граници.",
       "whenToUse": "Задължителен за всяка задача за проверка на съответствие с архитектурните правила."
     },
     "error-handling": {
       "id": "error-handling",
       "version": "1.0.0",
-      "path": ".agents/skills/error-handling",
+      "path": ".agent/skills/error-handling",
       "description": "Стандарти за хвърляне и улавяне на грешки, Error Boundaries и AppError клас.",
       "whenToUse": "При писане на нова логика, API маршрути или UI компоненти с обработка на грешки."
     },
     "logging": {
       "id": "logging",
       "version": "1.0.0",
-      "path": ".agents/skills/logging",
+      "path": ".agent/skills/logging",
       "description": "Директиви за ползване на @brainbox/utils логъра вместо console.log.",
       "whenToUse": "При добавяне на телеметрия или дебъгване на код."
     },
     "nextjs-api": {
       "id": "nextjs-api",
       "version": "1.0.0",
-      "path": ".agents/skills/nextjs-api",
+      "path": ".agent/skills/nextjs-api",
       "description": "Специфични правила за Next.js 16.2 API routes, middleware и Server Components.",
       "whenToUse": "При работа по бекенд частта на web-app."
     },
     "security": {
       "id": "security",
       "version": "1.0.0",
-      "path": ".agents/skills/security",
+      "path": ".agent/skills/security",
       "description": "Сигурност на API-то, rate limiting, token storage и XSS защита.",
       "whenToUse": "При работа с чувствителни данни или публични ендпойнти."
     },
     "supabase-rls": {
       "id": "supabase-rls",
       "version": "1.0.0",
-      "path": ".agents/skills/supabase-rls",
+      "path": ".agent/skills/supabase-rls",
       "description": "Детайлни правила за писане на RLS политики и миграции.",
       "whenToUse": "При промени по DB схемата."
     },
     "testing": {
       "id": "testing",
       "version": "1.0.0",
-      "path": ".agents/skills/testing",
+      "path": ".agent/skills/testing",
       "description": "Конфигурация за Vitest и Playwright, mock patterns и coverage изисквания.",
       "whenToUse": "При писане на нови тестове."
     },
     "zustand": {
       "id": "zustand",
       "version": "1.0.0",
-      "path": ".agents/skills/zustand",
+      "path": ".agent/skills/zustand",
       "description": "Управление на Zustand stores, useShallow, partialize и hydration.",
       "whenToUse": "При промени по стейта на приложението."
     }

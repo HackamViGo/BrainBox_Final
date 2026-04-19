@@ -36,7 +36,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="bg" className={inter.variable} suppressHydrationWarning>
-      <body className="antialiased font-sans">
+      <body className="antialiased font-sans" suppressHydrationWarning>
         <Providers>
           <TooltipProvider>
             {children}

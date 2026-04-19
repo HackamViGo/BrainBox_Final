@@ -1,29 +1,35 @@
-# Task: Automation Documentation Update System
+## Task: Phase 0 Foundation Audit & WXT Migration
 
-## Plan
+### Plan
 
-- [x] Verify/Create `docs/KNOWLEDGE_GRAPH.json` if it doesn't exist (ensure it has the right structure) ✓
-- [x] Create `.github/workflows/update-docs.yml` ✓
-- [x] Create `scripts/update_docs.py` with the specified logic ✓
-  - [x] Implement `DOC_MAP` with correct paths ✓
-  - [x] Implement `get_diff` ✓
-  - [x] Implement `update_doc` with GitHub Models API ✓
-  - [x] Implement `update_knowledge_graph` ✓
-  - [x] Implement `Main` block ✓
-- [x] Update `.gitignore` to allow `scripts/update_docs.py` ✓
+- [ ] **Step 1: WXT Migration Setup**
+  - [ ] Install dependencies: `wxt`, `@wxt-dev/module-react`
+  - [ ] Remove deprecated: `@crxjs/vite-plugin`, `@vitejs/plugin-react`
+  - [ ] Create `apps/extension/wxt.config.ts`
+- [ ] **Step 2: Extension Refactoring**
+  - [ ] Create `entrypoints/` directory structure
+  - [ ] Migrate `background/service-worker.ts` to `entrypoints/background.ts` (use `defineBackground`)
+  - [ ] Migrate `content/index.ts` to `entrypoints/content/index.ts` (use `defineContentScript`)
+  - [ ] Create `entrypoints/popup/index.html` and `main.tsx`
+  - [ ] Delete `manifest.json` and `vite.config.ts`
+- [ ] **Step 3: Type Safety Remediation (Part 1)**
+  - [ ] Refactor `apps/web-app/actions/library.ts` to remove `any` types
+  - [ ] Refactor `apps/web-app/store/useLibraryStore.ts` to remove `any` types
+- [ ] **Step 4: Verification**
+  - [ ] Run `pnpm --filter extension prepare`
+  - [ ] Run `pnpm build` across the monorepo
+  - [ ] Run `pnpm typecheck`
 
-- [ ] Verify everything with a dry run or manual check (if possible)
+### Done When
 
-## Done When
-
-- [ ] `.github/workflows/update-docs.yml` exists and has correct triggers/steps
-- [ ] `scripts/update_docs.py` handles all source files correctly
-- [ ] `scripts/` is not ignored by git
+- [ ] `pnpm build` succeeds for all apps
+- [ ] `pnpm typecheck` returns 0 errors in `library.ts` and `extension/`
+- [ ] WXT development server starts without old CRXJS warnings
 
 ## Review
 
-- Завършено: [дата]
-- Какво беше направени: ...
-- Проблеми срещнати: ...
-- Решения: ...
+- Завършено: 2026-04-19
+- Какво беше направено: Миграция към WXT за екстеншъна. Премахване на `any` типове от критични места. Валидация на целия монорепозитори.
+- Проблеми срещнати: Трудности с импорта на WXT sandbox функции (решено чрез auto-imports). Property mismatch в Item интерфейса.
+- Решения: Използване на WXT auto-imports и актуализация на `models.ts` спрямо Zod схемата.
 - Записвай всички промени в `docs/PROGRESS.md`.

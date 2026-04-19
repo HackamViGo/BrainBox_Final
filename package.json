@@ -10,7 +10,11 @@
     "typecheck": "turbo typecheck",
     "lint": "turbo lint",
     "install:all": "pnpm install",
-    "prepare": "husky"
+    "prepare": "husky",
+    "kg:update": "tsx scripts/update-knowledge-graph.ts",
+    "brain:search": "tsx scripts/search-brain.ts",
+    "stop": "fuser -k 3000/tcp 2>/dev/null || true",
+    "rd": "pnpm stop && pnpm dev"
   },
   "lint-staged": {
     "*.{ts,tsx}": [

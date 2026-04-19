@@ -12,7 +12,7 @@ import {
   Plus, BookOpen
 } from 'lucide-react';
 
-import { THEMES, ICON_LIBRARY } from '@brainbox/types';
+import { THEMES, ICON_LIBRARY, SCREEN_LABELS } from '@brainbox/types';
 import type { ThemeName, Folder, Item } from '@brainbox/types';
 import { useLibraryStore } from '@/store/useLibraryStore';
 import { useAppStore } from '@/store/useAppStore';
@@ -139,7 +139,7 @@ export function Library() {
             <div>
               <h2 className="text-3xl font-bold flex items-center gap-4">
                 <ActiveIcon className="w-8 h-8 text-white/20" />
-                {activeFolderData ? activeFolderData.name : 'Library'}
+                {activeFolderData ? activeFolderData.name : SCREEN_LABELS.library}
               </h2>
               <p className="text-white/40">{activeFolder ? 'Browsing organized intelligence' : 'Access your collective intelligence'}</p>
             </div>
@@ -163,7 +163,10 @@ export function Library() {
               className="w-full h-12 pl-12 pr-4 bg-white/5 border border-white/10 rounded-2xl text-sm focus:outline-none focus:border-blue-500/50 focus:bg-white/10 transition-all placeholder:text-white/20"
             />
           </div>
-          <button className="h-12 px-6 bg-blue-500 hover:bg-blue-400 text-white rounded-2xl font-bold text-sm transition-all flex items-center gap-2 shadow-lg shadow-blue-500/20 active:scale-95">
+          <button 
+            onClick={() => setModalOpen('newChat', true)}
+            className="h-12 px-6 bg-blue-500 hover:bg-blue-400 text-white rounded-2xl font-bold text-sm transition-all flex items-center gap-2 shadow-lg shadow-blue-500/20 active:scale-95"
+          >
             <Plus className="w-4 h-4" />
             New Fragment
           </button>
@@ -329,6 +332,7 @@ export function Library() {
 }
 
 const ChatCard = forwardRef<HTMLDivElement, any>(({ chat, setTheme, onAction, onClick, onDelete, onDragStart }, ref) => {
+  const { setHoverTheme } = useAppStore();
   const modelId = chat.modelId || 'chatgpt';
   const themeColor = THEMES[modelId as ThemeName]?.color || '#ffffff';
   const tags = chat.tags || [];
@@ -360,8 +364,8 @@ const ChatCard = forwardRef<HTMLDivElement, any>(({ chat, setTheme, onAction, on
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
-      onMouseEnter={() => setTheme(modelId as ThemeName)}
-      onMouseLeave={() => setTheme(null as any)}
+      onMouseEnter={() => setHoverTheme(modelId as ThemeName)}
+      onMouseLeave={() => setHoverTheme(null)}
       onClick={onClick}
       draggable
       onDragStart={(e: any) => {

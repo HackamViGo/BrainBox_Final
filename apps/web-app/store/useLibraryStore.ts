@@ -3,6 +3,7 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
 import type { Folder, Item } from '@brainbox/types'
+import { ItemSchema } from '@brainbox/types'
 import { STORAGE_KEYS } from '@brainbox/utils'
 import { logger } from '@brainbox/utils'
 import { 
@@ -63,10 +64,24 @@ export const useLibraryStore = create<LibraryStore>()(
               return Array.from(map.values())
             }
 
+            const validItems = (data.items || []).filter((item) => {
+              try {
+                ItemSchema.parse(item)
+                return true
+              } catch (err) {
+                const message = err instanceof Error ? err.message : String(err)
+                logger.warn('useLibraryStore', 'Corrupt item filtered out', { 
+                  itemId: item.id, 
+                  error: message
+                })
+                return false
+              }
+            })
+
             set({
               libraryFolders: mergeById<Folder>(data.libraryFolders),
               promptFolders: mergeById<Folder>(data.promptFolders),
-              items: mergeById<Item>(data.items),
+              items: mergeById<Item>(validItems),
             })
           }
         } catch (error) {
@@ -146,13 +161,22 @@ export const useLibraryStore = create<LibraryStore>()(
         set({ items: [...previousItems, newItem] })
 
         try {
-          const created = await serverUpsertItem(data)
+          const created = await serverUpsertItem(newItem)
           set({
             items: get().items.map((i) => (i.id === tempId ? created : i)),
           })
         } catch (error) {
-          logger.error('useLibraryStore', 'createItem failed', error)
+          logger.error('useLibraryStore', 'createItem failed', {
+            error,
+            payload: {
+              title: data.title,
+              url: data.url,
+              platform: data.platform,
+              contentLength: data.content?.length || 0,
+            }
+          })
           set({ items: previousItems })
+          throw error
         }
       },
 

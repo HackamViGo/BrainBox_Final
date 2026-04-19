@@ -4,19 +4,14 @@ import React, { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import { motion, AnimatePresence } from 'motion/react'
 import { 
-  Home, BookOpen, Zap, BarChart2, Users, Settings, Fingerprint, Puzzle, Archive, Network,
-  MessageSquare, Cpu, Sparkles, Brain, History, Folder, ChevronRight, ChevronLeft, Hash, Layers,
-  Bot, Eye, Compass, Swords, Telescope, Cloud, Workflow, Activity, Search, Pin, Plus,
-  FileText, Image, Music, Video, Globe, Terminal, Database, Shield, Lock, Unlock,
-  Bell, Mail, Phone, Camera, Map, Calendar, Clock, Star, Heart, Share2,
-  Download, Upload, Trash2, Edit3, Check, X, Filter, List, Grid, Maximize2,
-  Minimize2, ExternalLink, Link2, Paperclip, Scissors, Copy, Clipboard, Save,
-  HardDrive, Monitor, Smartphone, Tablet, Watch, Headphones, Speaker, Mic,
-  Volume2, Sun, Moon, Wind, Droplets, Flame, ZapOff, Anchor, Target, Flag,
-  MoreVertical, Key
+  Home, BookOpen, Zap, Settings, Fingerprint, Puzzle,
+  MessageSquare, Sparkles, Brain, History, Folder, ChevronRight, ChevronLeft,
+  Bot, Eye, Compass, Swords, Telescope, Cloud, Workflow, Search, Pin, Plus,
+  X, ExternalLink, Key
 } from 'lucide-react'
 
 import { ICON_LIBRARY } from '@brainbox/ui'
+import { SCREEN_LABELS } from '@brainbox/types'
 
 const NeuralField = dynamic(
   () => import('@brainbox/ui').then(m => ({ default: m.NeuralField })),
@@ -27,34 +22,11 @@ import { useLibraryStore } from '@/store/useLibraryStore'
 import type { ScreenName, Folder as FolderData, Item } from '@brainbox/types'
 import { cn } from '@brainbox/utils'
 
-const ICON_CATEGORIES = [
-  {
-    name: 'Essentials',
-    icons: [76, 74, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 43, 75]
-  },
-  {
-    name: 'AI & Tech',
-    icons: [5, 7, 6, 4, 72, 71, 20, 21, 12, 13, 14, 73, 2, 1]
-  },
-  {
-    name: 'Media & Sound',
-    icons: [16, 17, 18, 58, 59, 60, 61]
-  },
-  {
-    name: 'Devices',
-    icons: [54, 55, 56, 57, 53]
-  },
-  {
-    name: 'Actions & Tools',
-    icons: [35, 36, 44, 45, 46, 47, 48, 49, 50, 51, 52]
-  },
-  {
-    name: 'Nature & Symbols',
-    icons: [62, 63, 64, 65, 66, 67, 68, 69, 70, 9, 10, 11, 19]
-  }
-];
+interface SidebarProps {
+  onModelSelect?: (id: string, name: string) => void
+}
 
-export function Sidebar() {
+export function Sidebar({ onModelSelect }: SidebarProps) {
   const { 
     activeScreen, setActiveScreen, 
     theme, 
@@ -65,7 +37,7 @@ export function Sidebar() {
     slideDirection,
     searchQuery, setSearchQuery,
     activeFolder, setActiveFolder,
-    activeModelId, setActiveModelId,
+    activeModelId,
     expandedFolders, toggleFolder,
     setModalOpen
   } = useAppStore()
@@ -141,19 +113,19 @@ export function Sidebar() {
   };
   
   const globalItems = [
-    { id: 'dashboard' as ScreenName, icon: Home, label: 'Dashboard' },
-    { id: 'library' as ScreenName, icon: BookOpen, label: 'Library' },
-    { id: 'prompts' as ScreenName, icon: Zap, label: 'Prompts' },
-    { id: 'studio' as ScreenName, icon: MessageSquare, label: 'AI Nexus' },
-    { id: 'workspace' as ScreenName, icon: Workflow, label: 'Workspace' },
-    { id: 'analytics' as ScreenName, icon: Brain, label: 'Mind Graph' },
-    { id: 'archive' as ScreenName, icon: History, label: 'Archive' },
+    { id: 'dashboard' as ScreenName, icon: Home, label: SCREEN_LABELS.dashboard },
+    { id: 'library' as ScreenName, icon: BookOpen, label: SCREEN_LABELS.library },
+    { id: 'prompts' as ScreenName, icon: Zap, label: SCREEN_LABELS.prompts },
+    { id: 'studio' as ScreenName, icon: MessageSquare, label: SCREEN_LABELS.studio },
+    { id: 'workspace' as ScreenName, icon: Workflow, label: SCREEN_LABELS.workspace },
+    { id: 'analytics' as ScreenName, icon: Brain, label: SCREEN_LABELS.analytics },
+    { id: 'archive' as ScreenName, icon: History, label: SCREEN_LABELS.archive },
   ];
 
   const bottomItems = [
-    { id: 'settings' as ScreenName, icon: Settings, label: 'Settings' },
-    { id: 'profile' as ScreenName, icon: Fingerprint, label: 'Identity' },
-    { id: 'extension' as ScreenName, icon: Puzzle, label: 'Extension' },
+    { id: 'settings' as ScreenName, icon: Settings, label: SCREEN_LABELS.settings },
+    { id: 'profile' as ScreenName, icon: Fingerprint, label: SCREEN_LABELS.profile },
+    { id: 'extension' as ScreenName, icon: Puzzle, label: SCREEN_LABELS.extension },
   ];
 
   const feathers = [
@@ -336,7 +308,7 @@ export function Sidebar() {
                 )}>
                   <div className="flex items-center gap-2">
                     {activeScreen === 'library' ? <BookOpen className="w-3 h-3" /> : <Zap className="w-3 h-3" />}
-                    {activeScreen === 'library' ? 'Library' : 'Prompts'}
+                    {activeScreen === 'library' ? SCREEN_LABELS.library : SCREEN_LABELS.prompts}
                   </div>
                   <div className="flex items-center gap-1">
                     <button 
@@ -388,7 +360,7 @@ export function Sidebar() {
                         "text-sm font-medium transition-all duration-300 whitespace-nowrap overflow-hidden font-display",
                         (isExpanded || isPinned || isMobileOpen) ? 'opacity-100 max-w-[200px]' : 'opacity-0 max-w-0'
                       )}>
-                        Main {activeScreen === 'library' ? 'Library' : 'Prompts'}
+                        {activeScreen === 'library' ? SCREEN_LABELS.library : SCREEN_LABELS.prompts}
                       </span>
                     </button>
                     
@@ -468,7 +440,12 @@ export function Sidebar() {
                         onClick={() => {
                           if (activeScreen !== 'studio') setActiveScreen('studio');
                           if (activeModelId === feather.id) return;
-                          setModalOpen('smartSwitch', true, feather);
+                          
+                          if (onModelSelect) {
+                            onModelSelect(feather.id, feather.label);
+                          } else {
+                            setModalOpen('smartSwitch', true, feather);
+                          }
                         }}
                         onMouseEnter={() => useAppStore.getState().setHoverTheme(feather.id as any)}
                         onMouseLeave={() => useAppStore.getState().setHoverTheme(null)}
@@ -610,7 +587,7 @@ export function Sidebar() {
                   )}>
                     <div className="flex items-center gap-2">
                       <BookOpen className="w-3 h-3" />
-                      Library
+                      {SCREEN_LABELS.library}
                     </div>
                   </div>
                   <div className="flex-1 overflow-y-auto space-y-1 scrollbar-hide pr-1">
@@ -627,7 +604,7 @@ export function Sidebar() {
                   )}>
                     <div className="flex items-center gap-2">
                       <Zap className="w-3 h-3" />
-                      Prompts
+                      {SCREEN_LABELS.prompts}
                     </div>
                   </div>
                   <div className="flex-1 overflow-y-auto space-y-1 scrollbar-hide pr-1">
