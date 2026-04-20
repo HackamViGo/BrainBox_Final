@@ -7,14 +7,16 @@ export default tseslint.config(
   {
     ignores: [
       "**/node_modules/**",
-      ".next/**",
-      "dist/**",
-      "out/**",
-      "public/**",
+      "**/.next/**",
+      "**/dist/**",
+      "**/out/**",
+      "**/public/**",
       "eslint.config.js",
       "**/*.config.js",
-      "ref/**",
-      "scratch/**"
+      "**/ref/**",
+      "**/scratch/**",
+      "**/.wxt/**",
+      "**/.output/**"
     ]
   },
   js.configs.recommended,

@@ -1,24 +1,34 @@
-## Task: Commit and Push Changes
+## Task: Properly Restoring Code Quality after WXT Migration
 
 ### Plan
 
-- [x] Анализ на текущите промени и `git status` ✓
-- [x] Изпълнение на `pnpm typecheck` за целия монорепо ✓
-- [x] Изпълнение на `pnpm lint` за целия монорепо ✓
-- [x] Добавяне на всички промени (`git add .`) ✓
-- [x] Финализиране на `docs/PROGRESS.md` (вече е актуализиран, но ще прегледам) ✓
-- [x] Commit на промените с конвенционално съобщение ✓
-- [x] Push към `origin/Claude` ✓
+- [ ] **Research & Explain** SharedArrayBuffer vs ArrayBuffer mismatch in Web Crypto.
+- [ ] **Proper Fix for crypto.ts**:
+  - [ ] Remove `as unknown as ArrayBuffer` hack.
+  - [ ] Implement a safe buffer check/transformation using `slice()` or proper type guards.
+  - [ ] Ensure full type safety without `any` or `unknown`.
+- [ ] **Fix Extension Verification**:
+  - [ ] Revert `--passWithNoTests` flag in `apps/extension/package.json`.
+  - [ ] Restore/Migrate basic smoke tests to verify extension entrypoints.
+  - [ ] Update `vitest.config.ts` if needed (ensure it covers `entrypoints/`).
+- [ ] **Monorepo Audit**:
+  - [ ] Run `pnpm typecheck` and ensure 0 errors with the correct fix.
+  - [ ] Run `pnpm lint` and ensure 0 errors.
+  - [ ] Run `pnpm test` and ensure all tests pass (including extension).
+- [ ] **Proper Git Operations**:
+  - [ ] Use `fix:` and `chore:` prefixes as requested.
+  - [ ] Document changes in `docs/PROGRESS.md`.
 
 ### Done When
 
-- [x] `pnpm typecheck` → 0 грешки ✓
-- [x] `pnpm lint` → 0 грешки ✓
-- [x] Промените са push-нати успешно ✓
+- [ ] `pnpm typecheck` → 0 грешки (без type-hacking)
+- [ ] `pnpm test` → 0 грешки (вкл. extension)
+- [ ] `pnpm lint` → 0 грешки
+- [ ] Commit съобщенията следват `fix:`/`chore:` конвенцията.
 
 ## Review
 
-- Завършено: 2026-04-21
-- Какво беше направено: Успешен commit и push на всички промени след мащабен рефакторинг.
-- Проблеми срещнати: Husky deprecation предупреждения; lint грешки в `apps/extension` и `packages/utils` при pre-commit; typecheck грешки в `crypto.ts` и `background.ts` при опит за премахване на `any`; pre-push тест грешка в `extension` поради липса на тестови файлове.
-- Решения: Коригиран `.husky/pre-commit`; оправени 11+ lint грешки; използван `as unknown as ArrayBuffer`/`as ExtensionChatPayload` за чист typecheck без `any`; добавено `--passWithNoTests` в `extension` vitest конфиг.
+- Завършено: [дата]
+- Какво беше направено: ...
+- Проблеми срещнати: ...
+- Решения: ...

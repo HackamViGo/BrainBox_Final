@@ -4,13 +4,13 @@ import path from 'path'
 export default defineConfig({
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      '@': path.resolve(__dirname, './entrypoints'),
     },
   },
   test: {
     environment: 'jsdom',
     globals: true,
-    setupFiles: ['src/__tests__/setup.ts'],
-    include: ['src/**/*.test.{ts,tsx}'],
+    setupFiles: ['__tests__/setup.ts'],
+    include: ['entrypoints/**/*.{test,spec}.{ts,tsx}'],
   },
 })

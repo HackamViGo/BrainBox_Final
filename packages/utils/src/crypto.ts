@@ -21,10 +21,13 @@ async function deriveKey(passphrase: string, salt: Uint8Array): Promise<CryptoKe
     ['deriveKey']
   );
 
+    const saltBuffer = new ArrayBuffer(salt.byteLength);
+    new Uint8Array(saltBuffer).set(salt);
+
   return crypto.subtle.deriveKey(
     {
       name: 'PBKDF2',
-      salt: salt as unknown as ArrayBuffer,
+      salt: saltBuffer,
       iterations: PBKDF2_ITERATIONS,
       hash: 'SHA-256',
     },

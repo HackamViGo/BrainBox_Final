@@ -2,6 +2,9 @@ import rootConfig from '../../eslint.config.js';
 import globals from "globals";
 
 export default [
+  {
+    ignores: [".wxt/**", ".output/**", "dist/**"]
+  },
   ...rootConfig,
   {
     languageOptions: {
