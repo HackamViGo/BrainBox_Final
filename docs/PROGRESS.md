@@ -23,6 +23,150 @@ BrainBox — Progress Log
 
 -->
 
+## 2026-04-20 — Codebase Problems & Optimization Fixes
+
+**Фаза:** Code Quality
+**Статус:** Завършена
+
+### Направено
+
+- **WXT Configuration Fix:** Поправени два проблема в `wxt.config.ts`: премахнато е несъществуващото свойство `extensionApi` и е коригиран `minify` параметърът (JS -> `'oxc'`, CSS -> `'lightningcss'`).
+- **Cleanup of Unused Constants:** Премахнати редица неизползвани икони от `lucide-react` в `packages/types/src/constants.ts` за изчистване на lint грешки.
+- **Project Logger Integration:** Рефакториран е скриптът `scripts/search-brain.ts` за използване на системния `logger` вместо директни `console.log` извиквания, съгласно глобалните правила.
+- **Tailwind CSS v4 Migration:** Извършен пакетен фикс на синтактични промени в Tailwind v4 в множество компоненти:
+  - Обновяване на `bg-gradient-*` към `bg-linear-*`.
+  - Оптимизиране на произволни `z-index` стойности (напр. `z-[100]` -> `z-100`).
+  - Оптимизиране на `rounded-[2rem]` -> `rounded-4xl` и `border-[1px]` -> `border`.
+- **Serialization Warning Resolution:** Ракториран `AssetLibrary.tsx` за избягване на Next.js serialization предупреждение чрез преименуване на `onDragStart` проп към `onDragStartAction`.
+
+### Проблеми
+
+- Стриктният линтинг на скриптове изискваше импорт на логъра в среда, която обикновено се доверява на `console`.
+
+### Файлове променени
+
+- apps/extension/wxt.config.ts
+- packages/types/src/constants.ts
+- scripts/search-brain.ts
+- apps/web-app/app/page.tsx
+- apps/web-app/components/PersistentShell.tsx
+- apps/web-app/components/prompts/FrameworksView.tsx
+- apps/web-app/components/prompts/HubView.tsx
+- apps/web-app/components/workspace/AssetLibrary.tsx
+- apps/web-app/screens/Extension.tsx
+- apps/web-app/screens/Login.tsx
+- apps/web-app/screens/MindGraph.tsx
+- apps/web-app/screens/Settings.tsx
+
+## 2026-04-20 — Linting & Type Safety Standardization
+
+**Фаза:** Code Quality
+**Статус:** Завършена
+
+### Направено
+
+- Изцяло решени всички останали `no-explicit-any` ESLint грешки в `apps/web-app`.
+- Използвани `unknown` и стриктни interface дефиниции (`ModalTargetModel`, `React.DragEvent` cast) вместо `any`.
+- Разрешени проблеми с typecheck: липсващи `ThemeName` импорти, неправилно типизиране на `DragEvent` при framer-motion компоненти и неверни type casts в `MindGraph.tsx`.
+- Премахнати редица unused imports и unused variables.
+- Успешно завършени: `pnpm run lint`, `pnpm run typecheck`, и `pnpm run build` за `web-app` (всички с exit code 0).
+
+### Проблеми
+
+- Фреймуърците като `motion/react` подменят нативния `React.DragEvent`, което изисква междинни кастове (`e as unknown as React.DragEvent`).
+- Открит и решен синтактичен проблем с липсваща затваряща скоба в `useAppStore.ts` при рефакториране.
+
+### Файлове променени
+
+- apps/web-app/actions/library.ts
+- apps/web-app/store/useAppStore.ts
+- apps/web-app/screens/AINexus.tsx
+- apps/web-app/screens/Library.tsx
+- apps/web-app/screens/MindGraph.tsx
+- apps/web-app/components/Sidebar.tsx
+- apps/web-app/components/SmartSwitchModal.tsx
+- apps/web-app/components/prompts/CapturesView.tsx
+- apps/web-app/components/prompts/SavedPromptsView.tsx
+
+## 2026-04-20 — Tooling & Hooks Audit
+
+**Фаза:** Audit
+**Статус:** Завършена
+
+### Направено
+
+- Извършен е детайлен одит на код инфраструктурата (ESLint 9, Prettier, Husky, lint-staged).
+- Решени са конфликти между `packages/config/eslint.config.js` и кореновия `eslint.config.js`.
+- Инсталирсни ключови пакети: `eslint-config-prettier`, `prettier-plugin-tailwindcss`, `eslint-plugin-react-hooks`.
+- Конфигурирани файлове: `.prettierrc`, `.prettierignore`, `lint-staged.config.js`, `commitlint.config.js`, `.editorconfig` и настройки за VSCode.
+- Създаден окончателен `TOOLING_AUDIT.md` с одитни резултати.
+
+### Проблеми
+
+- Премахнат `lint-staged` обект от `package.json`, който предизвикваше дубликация.
+- TypeScript lint намери около ~300 `no-explicit-any` и неизползвани променливи из целия код.
+
+### Файлове променени
+
+- .prettierrc
+- .prettierignore
+- lint-staged.config.js
+- commitlint.config.js
+- .husky/pre-commit
+- package.json
+- eslint.config.js (и релевантните в apps/)
+- .editorconfig
+- .vscode/\*
+- TOOLING_AUDIT.md (създаден)
+
+## 2026-04-20 — Typecheck Diagnostics & Verification
+
+**Фаза:** Diagnostics
+**Статус:** Завършена
+
+### Направено
+
+- Извършена проверка по стари логове (`typecheck_output.txt`, `web_app_run.log`), които индикираха липсващи импорти и TypeScript грешки в `Prompts.tsx`, `RefineView.tsx`, `CapturesView.tsx` и `NeuralEdge.tsx`.
+- Потвърдено на живо (с `pnpm -r typecheck`), че всички тези проблеми вече са фиксирани в предишни итерации (`exactOptionalPropertyTypes` е конфигуриран правилно, `lucide-react` компонентите са импортирани, и липсващите props са премахнати).
+- Типовата проверка премина на 100% (0 грешки). Задачата е отбелязана като успешна.
+
+### Проблеми
+
+- Предоставеният от системата контекст (log файловете) беше остарял и сочи към вече решени грешки.
+
+### Файлове променени
+
+- tasks/todo.md
+
+## 2026-04-19 — Flash Action Plan: Post-Audit Extension & Security Refactoring
+
+**Фаза:** Post-Audit
+**Статус:** Завършена
+
+### Направено
+
+- **Secure Storage (AES-GCM):** Изцяло премахнато съхранението на plain-text токени. Въведено AES-GCM криптиране чрез Web Crypto API (`packages/utils/src/crypto.ts`).
+- **Strict Type Safety:** Премахнати над 20 `any` асертации. Дефинирана Zod схема `ExtensionChatPayloadSchema` за гарантиране на интегритета на данните между разширението и Dashboard API.
+- **SyncManager Architecture:** Добавен `SyncManager` в разширението с поддржа на офлайн опашка (storage-based) и автоматично синхронизиране в бекграунд.
+- **Architecture Refactoring:** Специализирани контент скрипти за ChatGPT, Gemini и Claude. Логиката за екстракция е изнесена в споделени `BaseAdapter` класове.
+- **Zustand UI Integration:** Създаден `useExtensionStore` в уеб приложението. Свързан с `CapturesView.tsx` за визуализация на "Raw Feed" captures без нужда от директна Supabase връзка от разширението.
+- **UI Polish:** Премиум ъпгрейд на Popup дизайна (WXT) и изчистване на hardcoded hex цветове в `CapturesView.tsx`.
+
+### Проблеми
+
+- Типов конфликт в `crypto.ts` между `ArrayBuffer` и `SharedArrayBuffer` в монорепо средата (решено чрез експлицитен каст).
+- Неточности при автоматизиран рефакторинг на `CapturesView.tsx` (коригирани ръчно).
+
+### Файлове променени
+
+- apps/extension/entrypoints/background.ts
+- apps/extension/entrypoints/background/syncManager.ts
+- apps/extension/entrypoints/content/chatgpt.content.ts
+- apps/web-app/store/useExtensionStore.ts
+- apps/web-app/app/api/chats/extension/route.ts
+- packages/utils/src/crypto.ts
+- docs/DECISIONS.md (ADR-017)
+
 ## 2026-04-19 — Phase 2: Code Quality & Linting Cleanup
 
 **Фаза:** 2

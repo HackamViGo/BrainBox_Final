@@ -1,10 +1,17 @@
+import { ExtensionChatPayload } from '@brainbox/types';
+import { encryptData } from '@brainbox/utils';
+import { SyncManager } from './background/syncManager';
 
 /**
  * BrainBox Service Worker (WXT / Manifest V3)
  * WXT automatically registers this as the service worker.
  */
 export default defineBackground(() => {
-  const DASHBOARD_URL = 'http://localhost:3000';
+  // Secret for local encryption - in production this should be more dynamic
+  const INTERNAL_SECRET = 'brainbox-secure-bridge-2026';
+  
+  // Initialize Managers
+  const syncManager = new SyncManager();
 
   chrome.runtime.onInstalled.addListener(() => {
     // Set up context menu for capturing text selections
@@ -18,7 +25,7 @@ export default defineBackground(() => {
   // Handle context menu clicks — relay to sync engine
   chrome.contextMenus.onClicked.addListener(async (info, tab) => {
     if (info.menuItemId === 'brainbox-capture' && info.selectionText) {
-      const captureData = {
+      const captureData: ExtensionChatPayload = {
         id: `capture-${Date.now()}`,
         title: 'Captured Snippet',
         description: `From: ${tab?.title || 'Unknown Page'}`,
@@ -29,58 +36,42 @@ export default defineBackground(() => {
         messages: [{ role: 'user', content: info.selectionText }]
       };
 
-      await syncToDashboard(captureData);
+      await syncManager.addToQueue(captureData);
     }
   });
 
   // Handle messages from content scripts and popup
-  chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
-    if (message.type === 'PING') {
+  chrome.runtime.onMessage.addListener((message: unknown, _sender, sendResponse) => {
+    const msg = message as { type: string; payload?: unknown };
+    
+    if (msg.type === 'PING') {
       sendResponse({ status: 'alive' });
+      return true;
     }
 
-    if (message.type === 'SET_AUTH') {
-      chrome.storage.local.set({ auth: message.payload });
-      // use logger instead of console.log eventually
-      sendResponse({ success: true });
-    }
-
-    if (message.type === 'SYNC_CHAT') {
-      syncToDashboard(message.payload)
-        .then(res => sendResponse(res))
-        .catch(err => sendResponse({ success: false, error: err.message }));
+    if (msg.type === 'SET_AUTH') {
+      // Encrypt sensitive auth data before saving to storage
+      encryptData(JSON.stringify(msg.payload), INTERNAL_SECRET)
+        .then(encrypted => {
+          chrome.storage.local.set({ auth_secure: encrypted });
+          sendResponse({ success: true });
+        })
+        .catch(err => {
+          sendResponse({ success: false, error: err.message });
+        });
       return true; // Keep channel open
     }
 
-    // Return true to keep the channel open for async responses
+    if (msg.type === 'SYNC_CHAT') {
+      syncManager.addToQueue(msg.payload as ExtensionChatPayload)
+        .then(res => sendResponse(res))
+        .catch((err: unknown) => {
+          const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+          sendResponse({ success: false, error: errorMessage });
+        });
+      return true; // Keep channel open
+    }
+
     return true;
   });
-
-  async function syncToDashboard(data: any) {
-    const { auth } = await chrome.storage.local.get('auth');
-    
-    if (!auth?.token) {
-      return { success: false, error: 'Unauthorized' };
-    }
-
-    try {
-      const response = await fetch(`${DASHBOARD_URL}/api/chats/extension`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${auth.token}`
-        },
-        body: JSON.stringify(data)
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
-      }
-
-      const result = await response.json();
-      return { success: true, data: result };
-    } catch (error: any) {
-      return { success: false, error: error.message };
-    }
-  }
 });

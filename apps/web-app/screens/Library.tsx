@@ -205,12 +205,27 @@ export function Library() {
                 <ChatCard 
                   key={chat.id} 
                   chat={chat} 
+                  anyExpanded={!!expandedChatId}
                   onAction={(option) => handleAction(chat, option)}
                   onDelete={() => deleteItem(chat.id)}
                   onClick={() => {
                     setExpandedChatId(chat.id);
                     setAnalysisResult(null);
                     setCurrentChatForAnalysis(chat);
+                    const themeId = chat.platform || chat.modelId || 'chatgpt';
+                    let resolvedTheme = themeId as ThemeName;
+                    if (!THEMES[resolvedTheme]) {
+                      const lower = themeId.toLowerCase();
+                      if (lower.includes('gpt') || lower.includes('openai')) resolvedTheme = 'chatgpt';
+                      else if (lower.includes('claude') || lower.includes('anthropic')) resolvedTheme = 'claude';
+                      else if (lower.includes('gemini') || lower.includes('google')) resolvedTheme = 'gemini';
+                      else if (lower.includes('grok') || lower.includes('xai')) resolvedTheme = 'grok';
+                      else if (lower.includes('qwen')) resolvedTheme = 'qwen';
+                      else if (lower.includes('deepseek')) resolvedTheme = 'deepseek';
+                      else if (lower.includes('perplexity')) resolvedTheme = 'perplexity';
+                      else resolvedTheme = 'chatgpt';
+                    }
+                    setHoverTheme(resolvedTheme);
                   }}
                 />
               ))}
@@ -230,10 +245,11 @@ export function Library() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[60] flex items-center justify-center p-0 sm:p-4 md:p-8 bg-black/80 backdrop-blur-xl"
+            className="fixed inset-0 z-60 flex items-center justify-center p-0 sm:p-4 md:p-8 bg-black/80 backdrop-blur-xl"
             onClick={() => {
               setExpandedChatId(null);
               setAnalysisResult(null);
+              setHoverTheme(null);
             }}
           >
             <motion.div
@@ -246,7 +262,7 @@ export function Library() {
                   <div className="flex items-center gap-3 mb-2">
                     <div 
                       className="w-10 h-10 rounded-xl flex items-center justify-center bg-white/5 border border-white/10 shrink-0"
-                      style={{ color: THEMES[(currentChatForAnalysis?.modelId as ThemeName) || 'chatgpt']?.color }}
+                      style={{ color: THEMES[(currentChatForAnalysis?.platform || currentChatForAnalysis?.modelId as ThemeName) || 'chatgpt']?.color || THEMES['chatgpt'].color }}
                     >
                       <MessageSquare className="w-5 h-5" />
                     </div>
@@ -265,6 +281,7 @@ export function Library() {
                   onClick={() => {
                     setExpandedChatId(null);
                     setAnalysisResult(null);
+                    setHoverTheme(null);
                   }} 
                   className="p-3 glass-panel-light rounded-full hover:bg-white/10 transition-colors ml-4 shrink-0"
                 >
@@ -311,7 +328,7 @@ export function Library() {
 
               <div className="p-6 bg-white/5 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-white/30 text-xs">
                 <div className="flex gap-6">
-                  <span>Created: {(currentChatForAnalysis as any)?.updatedAt || 'Just now'}</span>
+                  <span>Created: {currentChatForAnalysis?.updatedAt || 'Just now'}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <ShieldAlert className="w-3 h-3 shrink-0" />
@@ -328,14 +345,29 @@ export function Library() {
 
 const ChatCard = forwardRef<HTMLDivElement, {
   chat: Item;
+  anyExpanded?: boolean;
   onAction: (opt: { id: string, label: string }) => void;
   onClick: () => void;
   onDelete: (id: string) => void;
-  onDragStart?: (e: any, type: string, item: Item) => void;
-}>(({ chat, onAction, onClick, onDelete, onDragStart }, ref) => {
+  onDragStart?: (e: React.DragEvent, type: string, item: Item) => void;
+}>(({ chat, anyExpanded, onAction, onClick, onDelete, onDragStart }, ref) => {
   const { setHoverTheme } = useAppStore();
-  const modelId = chat.modelId || 'chatgpt';
-  const themeColor = THEMES[modelId as ThemeName]?.color || 'var(--color-foreground)';
+  const rawModelId = chat.platform || chat.modelId || 'chatgpt';
+  
+  let modelId = rawModelId as ThemeName;
+  if (!THEMES[modelId]) {
+    const lower = rawModelId.toLowerCase();
+    if (lower.includes('gpt') || lower.includes('openai')) modelId = 'chatgpt';
+    else if (lower.includes('claude') || lower.includes('anthropic')) modelId = 'claude';
+    else if (lower.includes('gemini') || lower.includes('google')) modelId = 'gemini';
+    else if (lower.includes('grok') || lower.includes('xai')) modelId = 'grok';
+    else if (lower.includes('qwen')) modelId = 'qwen';
+    else if (lower.includes('deepseek')) modelId = 'deepseek';
+    else if (lower.includes('perplexity')) modelId = 'perplexity';
+    else modelId = 'chatgpt';
+  }
+
+  const themeColor = THEMES[modelId]?.color || 'var(--color-acc-chatgpt)';
   const tags = chat.tags || [];
   const date = chat.updatedAt || 'Just now';
   const content = chat.content || chat.description || '';
@@ -365,17 +397,22 @@ const ChatCard = forwardRef<HTMLDivElement, {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
-      onMouseEnter={() => setHoverTheme(modelId as ThemeName)}
-      onMouseLeave={() => setHoverTheme(null)}
+      onMouseEnter={() => {
+        if (!anyExpanded) setHoverTheme(modelId);
+      }}
+      onMouseLeave={() => {
+        if (!anyExpanded) setHoverTheme(null);
+      }}
       onClick={onClick}
       draggable
-      onDragStart={(e: any) => {
+      onDragStart={(e: unknown) => {
+        const dragEvent = e as unknown as React.DragEvent;
         if (onDragStart) {
-          onDragStart(e, 'glassNode', chat);
+          onDragStart(dragEvent, 'glassNode', chat);
         } else {
-          if (e.dataTransfer) {
-            e.dataTransfer.setData('application/json', JSON.stringify(chat));
-            e.dataTransfer.effectAllowed = 'move';
+          if (dragEvent.dataTransfer) {
+            dragEvent.dataTransfer.setData('application/json', JSON.stringify(chat));
+            dragEvent.dataTransfer.effectAllowed = 'move';
           }
         }
       }}
@@ -455,7 +492,7 @@ const ChatCard = forwardRef<HTMLDivElement, {
                     <Eye className="w-4 h-4 text-white/30 group-hover/opt:text-blue-400 transition-colors" />
                     Open Fragment
                   </button>
-                  <div className="h-[1px] bg-white/5 my-1" />
+                  <div className="h-px bg-white/5 my-1" />
                   <button
                     onClick={() => {
                       onDelete(chat.id);

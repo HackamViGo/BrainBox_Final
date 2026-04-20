@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   ChevronLeft, X, GitCommit, Trash2, Rocket
@@ -14,8 +14,10 @@ interface FrameworksViewProps {
   onUseTemplate: (text: string) => void;
 }
 
-export function FrameworksView({ onBack, setTheme, onUseTemplate }: FrameworksViewProps) {
-  const [selectedCell, setSelectedCell] = useState<any>(null);
+export function FrameworksView({ onBack, onUseTemplate }: FrameworksViewProps) {
+  const [selectedCell, setSelectedCell] = useState<{
+    id: string; title: string; content?: string; branches: { id: string; name: string }[]; category: { label: string; color: string; icon: React.ElementType }
+  } | null>(null);
 
   return (
     <div className="max-w-[1400px] mx-auto w-full h-full flex flex-col">
@@ -34,7 +36,7 @@ export function FrameworksView({ onBack, setTheme, onUseTemplate }: FrameworksVi
           {MATRIX_DATA.map((col) => (
             <div key={col.id} className="flex flex-col gap-4">
               <div className="flex flex-col items-center justify-center p-4 glass-panel-light rounded-2xl mb-2">
-                <col.icon className={`w-6 h-6 mb-2 bg-gradient-to-br ${col.color} bg-clip-text text-transparent`} style={{ color: 'inherit' }} />
+                <col.icon className={`w-6 h-6 mb-2 bg-linear-to-br ${col.color} bg-clip-text text-transparent`} style={{ color: 'inherit' }} />
                 <span className="text-sm font-bold uppercase tracking-wider text-white/70">{col.label}</span>
               </div>
               
@@ -51,7 +53,7 @@ export function FrameworksView({ onBack, setTheme, onUseTemplate }: FrameworksVi
                     }`}
                   >
                     {hasBranches && (
-                      <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${col.color} opacity-10 pointer-events-none`} />
+                      <div className={`absolute inset-0 rounded-2xl bg-linear-to-br ${col.color} opacity-10 pointer-events-none`} />
                     )}
                     <col.icon className={`w-8 h-8 mb-3 ${hasBranches ? 'text-white' : 'text-white/40'}`} />
                     <span className={`text-xs font-medium ${hasBranches ? 'text-white' : 'text-white/60'}`}>{cell.title}</span>
@@ -79,7 +81,7 @@ export function FrameworksView({ onBack, setTheme, onUseTemplate }: FrameworksVi
               initial={{ scale: 0.9, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
-              className="glass-panel w-full max-w-2xl rounded-[2rem] p-8 relative overflow-hidden"
+              className="glass-panel w-full max-w-2xl rounded-4xl p-8 relative overflow-hidden"
               onClick={e => e.stopPropagation()}
             >
               <button 
@@ -90,7 +92,7 @@ export function FrameworksView({ onBack, setTheme, onUseTemplate }: FrameworksVi
               </button>
 
               <div className="flex items-center gap-4 mb-10">
-                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${selectedCell.category.color} flex items-center justify-center shadow-lg`}>
+                <div className={`w-16 h-16 rounded-2xl bg-linear-to-br ${selectedCell.category.color} flex items-center justify-center shadow-lg`}>
                   <selectedCell.category.icon className="w-8 h-8 text-white" />
                 </div>
                 <div>
@@ -100,7 +102,7 @@ export function FrameworksView({ onBack, setTheme, onUseTemplate }: FrameworksVi
               </div>
 
               <div className="relative pl-8 space-y-8">
-                <div className="absolute left-[2.4rem] top-10 bottom-10 w-0.5 bg-gradient-to-b from-white/40 to-white/5" />
+                <div className="absolute left-[2.4rem] top-10 bottom-10 w-0.5 bg-linear-to-b from-white/40 to-white/5" />
 
                 <div className="relative z-10 flex items-center gap-6">
                   <div className="w-12 h-12 rounded-full bg-white text-black flex items-center justify-center font-bold text-xl shadow-[0_0_30px_rgba(255,255,255,0.5)] shrink-0">
@@ -120,7 +122,7 @@ export function FrameworksView({ onBack, setTheme, onUseTemplate }: FrameworksVi
                 </div>
 
                 {selectedCell.branches.length > 0 ? (
-                  selectedCell.branches.map((branch: any, i: number) => (
+                  selectedCell.branches.map((branch: { id: string; name: string }, i: number) => (
                     <motion.div 
                       key={branch.id}
                       initial={{ opacity: 0, x: -20 }}
@@ -128,7 +130,7 @@ export function FrameworksView({ onBack, setTheme, onUseTemplate }: FrameworksVi
                       transition={{ delay: 0.1 * (i + 1) }}
                       className="relative z-10 flex items-center gap-6 group"
                     >
-                      <div className="absolute left-[-1.5rem] top-1/2 w-6 h-0.5 bg-white/20" />
+                      <div className="absolute -left-6 top-1/2 w-6 h-0.5 bg-white/20" />
                       
                       <div className="w-12 h-12 rounded-full glass-panel-light flex items-center justify-center font-mono text-sm shrink-0 border border-white/10 group-hover:border-white/40 transition-colors">
                         v1.{i+1}

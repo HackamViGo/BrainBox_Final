@@ -1,0 +1,72 @@
+
+> brainbox-monorepo@ typecheck /home/hackamvigo/Projects/BrainBox_
+> turbo typecheck "--filter" "web-app"
+
+
+   • Packages in scope: web-app
+   • Running typecheck in 1 packages
+   • Remote caching disabled
+
+@brainbox/types:typecheck: cache hit, replaying logs 3f42d6860a2d7b50
+@brainbox/types:typecheck: 
+@brainbox/types:typecheck: 
+@brainbox/types:typecheck: > @brainbox/types@0.0.1 typecheck /home/hackamvigo/Projects/BrainBox_/packages/types
+@brainbox/types:typecheck: > tsc --noEmit
+@brainbox/types:typecheck: 
+@brainbox/utils:typecheck: cache hit, replaying logs 962910ab074915d7
+@brainbox/utils:typecheck: 
+@brainbox/utils:typecheck: 
+@brainbox/utils:typecheck: > @brainbox/utils@0.0.1 typecheck /home/hackamvigo/Projects/BrainBox_/packages/utils
+@brainbox/utils:typecheck: > tsc --noEmit
+@brainbox/utils:typecheck: 
+@brainbox/ui:typecheck: cache hit, replaying logs b2619889fe971144
+@brainbox/ui:typecheck: 
+@brainbox/ui:typecheck: 
+@brainbox/ui:typecheck: > @brainbox/ui@0.0.1 typecheck /home/hackamvigo/Projects/BrainBox_/packages/ui
+@brainbox/ui:typecheck: > tsc --noEmit
+@brainbox/ui:typecheck: 
+web-app:typecheck: cache miss, executing bea5a2ff81f7d188
+web-app:typecheck: 
+web-app:typecheck: > web-app@0.1.0 typecheck /home/hackamvigo/Projects/BrainBox_/apps/web-app
+web-app:typecheck: > tsc --noEmit
+web-app:typecheck: 
+web-app:typecheck: actions/library.ts(160,5): error TS2322: Type 'string | null' is not assignable to type 'string'.
+web-app:typecheck:   Type 'null' is not assignable to type 'string'.
+web-app:typecheck: actions/library.ts(164,5): error TS2322: Type 'string' is not assignable to type 'ThemeName | null | undefined'.
+web-app:typecheck: components/Sidebar.tsx(452,96): error TS2304: Cannot find name 'ThemeName'.
+web-app:typecheck: components/SmartSwitchModal.tsx(35,17): error TS2322: Type 'unknown' is not assignable to type 'ReactNode'.
+web-app:typecheck: components/SmartSwitchModal.tsx(35,39): error TS2604: JSX element type 'targetModel.icon' does not have any construct or call signatures.
+web-app:typecheck: components/SmartSwitchModal.tsx(35,39): error TS2786: 'targetModel.icon' cannot be used as a JSX component.
+web-app:typecheck:   Its type '{}' is not a valid JSX element type.
+web-app:typecheck: components/SmartSwitchModal.tsx(39,72): error TS2322: Type 'unknown' is not assignable to type 'ReactNode'.
+web-app:typecheck: components/prompts/SavedPromptsView.tsx(162,31): error TS2345: Argument of type 'MouseEvent | TouchEvent | PointerEvent' is not assignable to parameter of type 'DragEvent<Element>'.
+web-app:typecheck:   Type 'MouseEvent' is missing the following properties from type 'DragEvent<Element>': dataTransfer, nativeEvent, isDefaultPrevented, isPropagationStopped, persist
+web-app:typecheck: components/prompts/SavedPromptsView.tsx(164,21): error TS2339: Property 'dataTransfer' does not exist on type 'MouseEvent | TouchEvent | PointerEvent'.
+web-app:typecheck:   Property 'dataTransfer' does not exist on type 'MouseEvent'.
+web-app:typecheck: components/prompts/SavedPromptsView.tsx(165,21): error TS2339: Property 'dataTransfer' does not exist on type 'MouseEvent | TouchEvent | PointerEvent'.
+web-app:typecheck:   Property 'dataTransfer' does not exist on type 'MouseEvent'.
+web-app:typecheck: screens/AINexus.tsx(36,22): error TS2339: Property 'activeModelId' does not exist on type 'AINexusState & AINexusActions'.
+web-app:typecheck: screens/Library.tsx(408,7): error TS2322: Type '(e: React.DragEvent) => void' is not assignable to type '(event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => void'.
+web-app:typecheck:   Types of parameters 'e' and 'event' are incompatible.
+web-app:typecheck:     Type 'MouseEvent | TouchEvent | PointerEvent' is not assignable to type 'DragEvent<Element>'.
+web-app:typecheck:       Type 'MouseEvent' is missing the following properties from type 'DragEvent<Element>': dataTransfer, nativeEvent, isDefaultPrevented, isPropagationStopped, persist
+web-app:typecheck: screens/MindGraph.tsx(103,65): error TS2345: Argument of type 'Item[]' is not assignable to parameter of type '{ id: string; title: string; type: "prompt" | "chat"; folderId?: string | null | undefined; }[]'.
+web-app:typecheck:   Type 'Item' is not assignable to type '{ id: string; title: string; type: "prompt" | "chat"; folderId?: string | null | undefined; }'.
+web-app:typecheck:     Types of property 'type' are incompatible.
+web-app:typecheck:       Type '"prompt" | "chat" | "capture"' is not assignable to type '"prompt" | "chat"'.
+web-app:typecheck:         Type '"capture"' is not assignable to type '"prompt" | "chat"'.
+web-app:typecheck: screens/MindGraph.tsx(148,11): error TS2345: Argument of type '(selection: Selection<SVGSVGElement, unknown, null, undefined>, transform: ZoomTransform) => void' is not assignable to parameter of type '(transition: Transition<SVGSVGElement, unknown, null, undefined>, ...args: any[]) => any'.
+web-app:typecheck:   Types of parameters 'selection' and 'transition' are incompatible.
+web-app:typecheck:     Type 'Transition<SVGSVGElement, unknown, null, undefined>' is missing the following properties from type 'Selection<SVGSVGElement, unknown, null, undefined>': classed, property, html, append, and 14 more.
+web-app:typecheck: screens/Prompts.tsx(109,17): error TS2322: Type '{ onBack: () => void; onRefine: (text: string) => void; onSaveToPrompts: (text: string) => Promise<void>; captures: Item[]; onDrop: (e: DragEvent<Element>) => void; }' is not assignable to type 'IntrinsicAttributes & CapturesViewProps'.
+web-app:typecheck:   Property 'captures' does not exist on type 'IntrinsicAttributes & CapturesViewProps'.
+web-app:typecheck: store/useAppStore.ts(181,44): error TS2322: Type 'unknown' is not assignable to type 'string | null | undefined'.
+web-app:typecheck: store/useAppStore.ts(181,69): error TS2322: Type 'unknown' is not assignable to type 'string | null | undefined'.
+web-app:typecheck:  ELIFECYCLE  Command failed with exit code 2.
+
+ Tasks:    3 successful, 4 total
+Cached:    3 cached, 4 total
+  Time:    3.503s 
+Failed:    web-app#typecheck
+
+ ELIFECYCLE  Command failed with exit code 2.

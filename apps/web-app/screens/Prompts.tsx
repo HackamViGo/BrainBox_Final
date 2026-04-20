@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { AnimatePresence } from 'motion/react';
 import { useAppStore } from '@/store/useAppStore';
 import { useLibraryStore } from '@/store/useLibraryStore';
-import { SCREEN_LABELS } from '@brainbox/types';
+import { SCREEN_LABELS, type ThemeName } from '@brainbox/types';
 
 // View Components
 import { HubView } from '@/components/prompts/HubView';
@@ -41,7 +41,7 @@ export function Prompts() {
       description: text.substring(0, 100) + '...',
       content: text,
       folderId: activeFolder,
-      platform: theme as any   // theme is currently a string from useAppStore, casting for now until Store is audited
+      platform: theme as ThemeName
     });
     setCurrentView('saved-prompts');
   };
@@ -64,7 +64,7 @@ export function Prompts() {
   return (
     <ScreenErrorBoundary screenName={SCREEN_LABELS.prompts}>
       <div className="relative w-full h-full overflow-hidden bg-transparent pt-20">
-        <AnimatePresence mode="wait">
+        <AnimatePresence>
           {currentView === 'hub' && (
             <ViewWrapper key={currentView} id="hub">
               <HubView 

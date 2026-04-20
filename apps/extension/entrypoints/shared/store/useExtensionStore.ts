@@ -12,7 +12,7 @@ interface ExtensionState {
  */
 export const useExtensionStore = create<ExtensionState>()(
   persist(
-    (set: any): ExtensionState => ({
+    (set): ExtensionState => ({
       isActive: true,
       toggleActive: () => set((state: ExtensionState) => ({ isActive: !state.isActive })),
     }),

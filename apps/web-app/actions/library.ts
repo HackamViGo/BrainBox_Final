@@ -1,7 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { FolderSchema, ItemSchema, type Folder, type Item } from '@brainbox/types'
+import { FolderSchema, ItemSchema, type Folder, type Item, type ThemeName } from '@brainbox/types'
 import { revalidatePath } from 'next/cache'
 
 /**
@@ -145,7 +145,7 @@ export async function loadUserData(): Promise<{ libraryFolders: Folder[], prompt
   ])
 
   // Transform snake_case back to camelCase for the frontend
-  const transformFolder = (f: any): Folder => ({
+  const transformFolder = (f: { id: string; name: string; icon_index: number; parent_id: string | null; type: 'library' | 'prompt'; level: number }): Folder => ({
     id: f.id,
     name: f.name,
     iconIndex: f.icon_index,
@@ -154,14 +154,14 @@ export async function loadUserData(): Promise<{ libraryFolders: Folder[], prompt
     level: f.level,
   })
 
-  const transformItem = (i: any): Item => ({
+  const transformItem = (i: { id: string; title: string; description: string | null; type: 'chat' | 'prompt'; folder_id: string | null; content: string; theme: string; tags: string[]; is_frozen: boolean; deleted_at: string | null }): Item => ({
     id: i.id,
     title: i.title,
-    description: i.description,
-    type: i.type,
+    description: i.description ?? '',
+    type: i.type as 'chat' | 'prompt',
     folderId: i.folder_id,
     content: i.content,
-    theme: i.theme,
+    theme: i.theme as ThemeName,
     tags: i.tags,
     isFrozen: i.is_frozen,
     deletedAt: i.deleted_at,

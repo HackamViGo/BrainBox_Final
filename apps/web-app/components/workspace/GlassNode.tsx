@@ -1,7 +1,7 @@
 import { Handle, Position, useReactFlow } from '@xyflow/react';
 import { MessageSquare, Zap, X } from 'lucide-react';
 
-export function GlassNode({ id, data }: any) {
+export function GlassNode({ id, data }: { id: string; data: { type?: string; title?: string; description?: string } }) {
   const isPrompt = data.type === 'prompt';
   const Icon = isPrompt ? Zap : MessageSquare;
   const { setNodes } = useReactFlow();

@@ -3,6 +3,8 @@ import { join, relative } from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
+import { logger } from '../packages/utils/src/logger';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const ROOT = join(__dirname, '..');
@@ -11,11 +13,11 @@ const DOCS_DIR = join(ROOT, 'docs');
 const query = process.argv.slice(2).join(' ');
 
 if (!query) {
-    console.log('Usage: npx tsx scripts/search-brain.ts <query>');
+    logger.error('SEARCH_BRAIN', 'Usage: npx tsx scripts/search-brain.ts <query>');
     process.exit(1);
 }
 
-console.log(`🔍 Searching BrainBox Knowledge for: "${query}"...\n`);
+logger.info('SEARCH_BRAIN', `🔍 Searching BrainBox Knowledge for: "${query}"...\n`);
 
 interface SearchResult {
     file: string;
@@ -50,7 +52,7 @@ function searchDir(dir: string) {
 searchDir(DOCS_DIR);
 
 if (results.length === 0) {
-    console.log('❌ No matches found.');
+    logger.info('SEARCH_BRAIN', '❌ No matches found.');
 } else {
     // Group by file
     const grouped = results.reduce((acc, curr) => {
@@ -60,13 +62,13 @@ if (results.length === 0) {
     }, {} as Record<string, SearchResult[]>);
 
     Object.entries(grouped).forEach(([file, matches]) => {
-        console.log(`\x1b[1m\x1b[36m${file}\x1b[0m (${matches.length} matches)`);
+        logger.info('SEARCH_BRAIN', `\x1b[1m\x1b[36m${file}\x1b[0m (${matches.length} matches)`);
         matches.slice(0, 5).forEach(m => {
-            console.log(`  \x1b[90mL${m.line}:\x1b[0m ${m.content.slice(0, 120)}${m.content.length > 120 ? '...' : ''}`);
+            logger.info('SEARCH_BRAIN', `  \x1b[90mL${m.line}:\x1b[0m ${m.content.slice(0, 120)}${m.content.length > 120 ? '...' : ''}`);
         });
         if (matches.length > 5) {
-            console.log(`  \x1b[90m... and ${matches.length - 5} more\x1b[0m`);
+            logger.info('SEARCH_BRAIN', `  \x1b[90m... and ${matches.length - 5} more\x1b[0m`);
         }
-        console.log('');
+        logger.info('SEARCH_BRAIN', '');
     });
 }

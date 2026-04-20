@@ -11,7 +11,7 @@ export function AmbientLight({
   theme: ThemeName;
   monochrome?: boolean;
 }) {
-  const currentTheme = THEMES[theme];
+  const currentTheme = (theme && THEMES[theme]) ? THEMES[theme] : THEMES.chatgpt;
   const color = monochrome ? '#111111' : currentTheme.color;
 
   const getPosition = (pos: string): Record<string, string> => {
@@ -34,7 +34,7 @@ export function AmbientLight({
         className="absolute rounded-full"
         style={{ width: '140vw', height: '140vw', mixBlendMode: 'screen' }}
         animate={{
-          background: `radial-gradient(circle at center, ${color}38 0%, ${color}12 40%, transparent 70%)`,
+          background: `radial-gradient(circle at center, color-mix(in srgb, ${color} 22%, transparent) 0%, color-mix(in srgb, ${color} 7%, transparent) 40%, transparent 70%)`,
           filter: 'blur(72px)',
           opacity: 1,
           ...getPosition(currentTheme.lightPosition),
@@ -45,7 +45,7 @@ export function AmbientLight({
         className="absolute rounded-full"
         style={{ width: '90vw', height: '90vw', mixBlendMode: 'screen' }}
         animate={{
-          background: `radial-gradient(circle at center, ${color}18 0%, transparent 65%)`,
+          background: `radial-gradient(circle at center, color-mix(in srgb, ${color} 9%, transparent) 0%, transparent 65%)`,
           filter: 'blur(100px)',
           opacity: monochrome ? 0 : 1,
           top: ['25%', '45%', '25%'],

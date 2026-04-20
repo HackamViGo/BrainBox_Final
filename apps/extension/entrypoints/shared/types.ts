@@ -1,4 +1,4 @@
-import { Item, ThemeName } from '@brainbox/types';
+import { ThemeName } from '@brainbox/types';
 
 export interface ChatMessage {
   role: 'user' | 'assistant';
@@ -12,7 +12,7 @@ export interface CapturedChat {
   messages: ChatMessage[];
   platform: ThemeName;
   url: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface ExtensionState {

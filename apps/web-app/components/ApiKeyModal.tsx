@@ -2,13 +2,13 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
-import { X, Key, ExternalLink, Info, CheckCircle2 } from 'lucide-react'
+import { Key, ExternalLink, Info, CheckCircle2 } from 'lucide-react'
 import { useAppStore } from '@/store/useAppStore'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { cn } from '@brainbox/utils'
+
 
 const API_LINKS: Record<string, { url: string; name: string }> = {
   chatgpt: { url: 'https://platform.openai.com/api-keys', name: 'OpenAI Platform' },
@@ -54,7 +54,7 @@ export function ApiKeyModal() {
 
   return (
     <Dialog open={isApiKeyModalOpen} onOpenChange={(open) => setModalOpen('apiKey', open)}>
-      <DialogContent aria-describedby={undefined} className="max-w-xl p-0 overflow-hidden bg-[#0a0a0a] border-white/10 rounded-3xl">
+      <DialogContent aria-describedby={undefined} className="max-w-xl p-0 overflow-hidden bg-background border-white/10 rounded-3xl">
         <div className="p-6 border-b border-white/10 flex justify-between items-center bg-white/5">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400">
@@ -83,7 +83,7 @@ export function ApiKeyModal() {
                     </h4>
                     <ol className="space-y-4 text-sm text-white/70">
                       <li className="flex gap-3">
-                        <span className="flex-shrink-0 w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold font-mono">1</span>
+                        <span className="shrink-0 w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold font-mono">1</span>
                         <p>
                           Go to the{' '}
                           <a
@@ -97,18 +97,18 @@ export function ApiKeyModal() {
                         </p>
                       </li>
                       <li className="flex gap-3">
-                        <span className="flex-shrink-0 w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold font-mono">2</span>
+                        <span className="shrink-0 w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold font-mono">2</span>
                         <p>Generate a new API key from your dashboard settings.</p>
                       </li>
                       <li className="flex gap-3">
-                        <span className="flex-shrink-0 w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold font-mono">3</span>
+                        <span className="shrink-0 w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold font-mono">3</span>
                         <p>Copy the generated key and paste it below.</p>
                       </li>
                     </ol>
                   </div>
 
                   <div className="flex gap-4 p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 text-[11px] text-amber-200/70">
-                    <Info className="w-5 h-5 flex-shrink-0 text-amber-400" />
+                    <Info className="w-5 h-5 shrink-0 text-amber-400" />
                     <p>
                       <strong>Important:</strong> By using the {apiKeyModelName} API, your data may be used by the provider to improve their models. Please review their terms.
                     </p>
@@ -151,7 +151,7 @@ export function ApiKeyModal() {
           <Button
             onClick={handleSave}
             disabled={!apiKey.trim()}
-            className="flex-[2] py-6 rounded-2xl bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm font-bold shadow-lg shadow-blue-600/20 text-white border-none"
+            className="flex-2 py-6 rounded-2xl bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm font-bold shadow-lg shadow-blue-600/20 text-white border-none"
           >
             Save Configuration
           </Button>

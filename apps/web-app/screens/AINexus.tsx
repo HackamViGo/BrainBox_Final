@@ -2,27 +2,25 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
-import { 
-  MoreVertical, Save, 
+import { MoreVertical, Save, 
   Send, Download,
-  Zap
+  Zap,
+  type LucideIcon
 } from 'lucide-react';
 import { generateGeminiResponse, generateBasicResponse } from '@/lib/gemini';
 import { ApiKeyModal } from '../components/ApiKeyModal';
 import { SmartSwitchModal } from '../components/SmartSwitchModal';
 import { MODELS } from '@brainbox/types';
-import { getUser } from '@/actions/auth';
 import { useAppStore } from '@/store/useAppStore';
 import { useAINexusStore } from '@/store/useAINexusStore';
 import { useShallow } from 'zustand/react/shallow';
 import { logger } from '@brainbox/utils';
-import type { User } from '@supabase/supabase-js';
 
 
 interface BrainBoxModel {
   id: string;
   name: string;
-  icon: any;
+  icon: LucideIcon;
   color: string;
   bg: string;
   border: string;
@@ -33,11 +31,9 @@ interface BrainBoxModel {
 
 export function AINexus() {
   const { 
-    activeModelId, 
-    setActiveModelId
+    activeModelId
   } = useAppStore(useShallow(s => ({
-    activeModelId: s.activeModelId,
-    setActiveModelId: s.setActiveModelId
+    activeModelId: s.activeModelId
   })));
 
   const {
@@ -127,7 +123,7 @@ export function AINexus() {
         const response = await generateBasicResponse(userMsg, activeModel.name);
         addMessage({ id: Date.now().toString(), role: 'assistant', content: response });
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       logger.error('AINexus', 'Generation failed', err);
       addMessage({ id: Date.now().toString(), role: 'assistant', content: 'Error: Connection lost. Re-synchronizing...' });
     } finally {
@@ -139,7 +135,7 @@ export function AINexus() {
   return (
     <div className="h-full relative overflow-hidden flex bg-transparent text-white transition-colors duration-1000 no-scrollbar">
       {/* Dynamic Background */}
-      <div className={`absolute inset-0 bg-gradient-to-br ${activeModel?.gradient || ''} opacity-10 transition-all duration-1000 pointer-events-none`} />
+      <div className={`absolute inset-0 bg-linear-to-br ${activeModel?.gradient || ''} opacity-10 transition-all duration-1000 pointer-events-none`} />
 
       {/* Center Panel */}
       <div className="flex-1 flex flex-col relative z-10 min-w-0 min-h-0">
@@ -147,7 +143,7 @@ export function AINexus() {
         {/* Header */}
         <div className="h-20 flex items-center justify-between px-8 bg-transparent shrink-0 z-20 border-b border-white/5">
           <div className="flex items-center gap-4 group cursor-pointer overflow-hidden">
-            <div className={`w-10 h-10 rounded-2xl bg-gradient-to-br ${activeModel?.gradient || ''} flex items-center justify-center shadow-lg transition-all duration-300 group-hover:scale-110 shrink-0`}>
+            <div className={`w-10 h-10 rounded-2xl bg-linear-to-br ${activeModel?.gradient || ''} flex items-center justify-center shadow-lg transition-all duration-300 group-hover:scale-110 shrink-0`}>
               {activeModel && React.createElement(activeModel.icon, { className: "w-5 h-5 text-white" })}
             </div>
             <div className="transition-transform duration-300 group-hover:translate-x-1 min-w-0">
@@ -239,7 +235,7 @@ export function AINexus() {
         {/* Input Area */}
         <div className="relative shrink-0 p-8 pt-4">
           <div className="max-w-4xl mx-auto relative group">
-            <div className={`absolute inset-0 rounded-3xl bg-gradient-to-r ${activeModel?.gradient || ''} opacity-10 blur-3xl pointer-events-none group-focus-within:opacity-20 transition-opacity`} />
+            <div className={`absolute inset-0 rounded-3xl bg-linear-to-r ${activeModel?.gradient || ''} opacity-10 blur-3xl pointer-events-none group-focus-within:opacity-20 transition-opacity`} />
             <div className={`relative rounded-3xl p-3 border transition-all duration-500 overflow-hidden flex items-end gap-3 bg-black/60 backdrop-blur-3xl ${activeModel?.border || ''}`}>
               <textarea
                 value={input}

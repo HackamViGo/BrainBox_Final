@@ -61,7 +61,7 @@ export function NewChatModal() {
     setModalOpen('newChat', false)
   }
 
-  const PLATFORM_CONFIG: Record<ThemeName, { color: string, icon: any, label: string }> = {
+  const PLATFORM_CONFIG: Record<ThemeName, { color: string, icon: React.ElementType, label: string }> = {
     chatgpt: { color: 'text-emerald-500', icon: Brain, label: 'ChatGPT' },
     gemini: { color: 'text-blue-400', icon: Sparkles, label: 'Gemini' },
     claude: { color: 'text-orange-400', icon: Bot, label: 'Claude' },
@@ -77,7 +77,7 @@ export function NewChatModal() {
 
   return (
     <Dialog open={isNewChatModalOpen} onOpenChange={(open) => setModalOpen('newChat', open)}>
-      <DialogContent aria-describedby={undefined} className="max-w-md p-0 overflow-hidden bg-[#0a0a0a] border-white/10 rounded-3xl shadow-2xl">
+      <DialogContent aria-describedby={undefined} className="max-w-md p-0 overflow-hidden bg-background border-white/10 rounded-3xl shadow-2xl">
         <div className="p-6 border-b border-white/10 flex justify-between items-center bg-white/5">
           <DialogTitle className="text-lg font-semibold text-white">Save New Fragment</DialogTitle>
         </div>
@@ -109,7 +109,7 @@ export function NewChatModal() {
               <select 
                 value={formData.platform}
                 onChange={(e) => setFormData({...formData, platform: e.target.value as ThemeName})}
-                className="w-full bg-[#1a1a1a] border border-white/10 rounded-xl py-3.5 pl-12 pr-4 text-white hover:bg-white/5 transition-all appearance-none cursor-pointer outline-none focus:border-blue-500/50"
+                className="w-full bg-background border border-white/10 rounded-xl py-3.5 pl-12 pr-4 text-white hover:bg-white/5 transition-all appearance-none cursor-pointer outline-none focus:border-blue-500/50"
               >
                 {Object.entries(PLATFORM_CONFIG).map(([id, info]) => (
                   <option key={id} value={id}>{info.label}</option>

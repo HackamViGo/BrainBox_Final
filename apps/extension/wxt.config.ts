@@ -2,7 +2,6 @@ import { defineConfig } from 'wxt';
 
 // See https://wxt.dev/api/config.html
 export default defineConfig({
-  extensionApi: 'chrome',
   modules: ['@wxt-dev/module-react'],
   manifest: {
     name: 'BrainBox',
@@ -19,8 +18,12 @@ export default defineConfig({
   },
   vite: () => ({
     build: {
-      minify: 'lightningcss',
+      minify: 'oxc',
+      cssMinify: 'lightningcss',
       target: 'chrome120',
+    },
+    server: {
+      port: 3001,
     },
   }),
 });

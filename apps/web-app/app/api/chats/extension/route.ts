@@ -1,12 +1,11 @@
 import { createClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
-import { ItemSchema } from '@brainbox/types';
+import { ExtensionChatPayloadSchema } from '@brainbox/types';
 import { logger } from '@brainbox/utils';
 
 import { isRateLimited } from '@/lib/rate-limit';
 
-const RATE_LIMIT = 30;
-const RATE_WINDOW_MS = 60 * 1000;
+
 
 /**
  * Extension Sync API (ADR-012)
@@ -29,11 +28,8 @@ export async function POST(request: Request) {
 
     const body = await request.json();
     
-    // Validate incoming data (Chat objects from extension)
-    const result = ItemSchema.safeParse({
-      ...body,
-      type: 'chat',
-    });
+    // Validate incoming data using the specialized extension payload schema
+    const result = ExtensionChatPayloadSchema.safeParse(body);
 
     if (!result.success) {
       logger.warn('API:extension:sync', 'Validation failed', result.error.flatten());
@@ -49,14 +45,9 @@ export async function POST(request: Request) {
         id: validatedData.id,
         user_id: user.id,
         title: validatedData.title,
-        description: validatedData.description,
+        description: validatedData.description || '',
         type: validatedData.type,
-        folder_id: validatedData.folderId,
         content: validatedData.content,
-        theme: validatedData.theme || validatedData.platform, // Fallback to platform if theme missing
-        tags: validatedData.tags,
-        is_frozen: validatedData.isFrozen,
-        deleted_at: validatedData.deletedAt,
         // Extension Specific Fields
         source_id: validatedData.sourceId,
         platform: validatedData.platform,
@@ -75,11 +66,11 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true, item: data });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('API:extension:sync', 'Sync failed', error);
     return NextResponse.json(
-      { error: error.message || 'Internal Server Error' }, 
-      { status: error.status || 500 }
+      { error: error instanceof Error ? error.message : 'Internal Server Error' }, 
+      { status: 500 }
     );
   }
 }

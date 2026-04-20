@@ -6,7 +6,6 @@ import {
   Snowflake, 
   Diamond, 
   Trash2, 
-  Clock, 
   Database, 
   Wind,
   CheckCircle2,

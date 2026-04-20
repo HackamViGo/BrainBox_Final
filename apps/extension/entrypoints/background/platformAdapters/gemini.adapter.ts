@@ -1,5 +1,5 @@
-import type { CapturedChat } from './base.adapter';
-import { BaseAdapter } from './base.adapter';
+import type { CapturedChat } from './base';
+import { BaseAdapter } from './base';
 
 export class GeminiAdapter extends BaseAdapter {
   platformId = 'gemini';

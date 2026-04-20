@@ -2,7 +2,6 @@
 
 import { useRef, useCallback } from 'react'
 import { useAppStore } from '@/store/useAppStore'
-import type { ScreenName } from '@brainbox/types'
 
 export function useScrollTransition() {
   const { activeScreen, setActiveScreen } = useAppStore()

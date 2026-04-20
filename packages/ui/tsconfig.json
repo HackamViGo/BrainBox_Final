@@ -6,5 +6,5 @@
       "@brainbox/utils": ["../utils/src/index.ts"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "__tests__"]
 }

@@ -11,7 +11,8 @@ import {
 } from 'lucide-react'
 
 import { ICON_LIBRARY } from '@brainbox/ui'
-import { SCREEN_LABELS } from '@brainbox/types'
+import type { ThemeName, ScreenName, Folder as FolderData, Item } from '@brainbox/types';
+import { SCREEN_LABELS } from '@brainbox/types';
 
 const NeuralField = dynamic(
   () => import('@brainbox/ui').then(m => ({ default: m.NeuralField })),
@@ -19,7 +20,7 @@ const NeuralField = dynamic(
 )
 import { useAppStore } from '@/store/useAppStore'
 import { useLibraryStore } from '@/store/useLibraryStore'
-import type { ScreenName, Folder as FolderData, Item } from '@brainbox/types'
+
 import { cn } from '@brainbox/utils'
 
 interface SidebarProps {
@@ -45,13 +46,15 @@ export function Sidebar({ onModelSelect }: SidebarProps) {
   const { libraryFolders, promptFolders, items, updateItem, updateFolder } = useLibraryStore()
 
   useEffect(() => {
-    const handleMoveItem = (e: any) => {
-      const { itemId, folderId } = e.detail;
+    const handleMoveItem = (e: Event) => {
+      const customEvent = e as CustomEvent<{ itemId: string; folderId: string | null }>;
+      const { itemId, folderId } = customEvent.detail;
       updateItem(itemId, { folderId });
     };
 
-    const handleMoveFolder = (e: any) => {
-      const { folderId, parentId } = e.detail;
+    const handleMoveFolder = (e: Event) => {
+      const customEvent = e as CustomEvent<{ folderId: string; parentId: string | null }>;
+      const { folderId, parentId } = customEvent.detail;
       updateFolder(folderId, { parentId });
     };
 
@@ -163,9 +166,9 @@ export function Sidebar({ onModelSelect }: SidebarProps) {
         onMouseEnter={() => !isPinned && !isMobileOpen && setIsExpanded(true)}
         onMouseLeave={() => !isPinned && !isMobileOpen && setIsExpanded(false)}
         className={cn(
-          "absolute inset-y-0 left-0 z-[100] lg:z-50 flex flex-col transition-all duration-300 overflow-hidden",
+          "absolute inset-y-0 left-0 z-100 lg:z-50 flex flex-col transition-all duration-300 overflow-hidden",
           isMobileOpen ? 'translate-x-0 w-64 glass-panel bg-black/80' : '-translate-x-full lg:translate-x-0',
-          isExpanded || isPinned || isMobileOpen ? 'lg:w-64 shadow-2xl shadow-black/80 glass-panel bg-[#080808]/95' : 'lg:w-20 shadow-none glass-panel'
+          isExpanded || isPinned || isMobileOpen ? 'lg:w-64 shadow-2xl shadow-black/80 glass-panel bg-background/95' : 'lg:w-20 shadow-none glass-panel'
         )}
         initial={false}
       >
@@ -179,7 +182,7 @@ export function Sidebar({ onModelSelect }: SidebarProps) {
           />
         </div>
 
-        <div className="lg:hidden absolute top-4 right-4 z-[110]">
+        <div className="lg:hidden absolute top-4 right-4 z-110">
           <button 
             onClick={onCloseMobile}
             className="p-2 bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 transition-colors"
@@ -203,7 +206,7 @@ export function Sidebar({ onModelSelect }: SidebarProps) {
                 "w-10 h-10 rounded-xl border flex items-center justify-center shrink-0 cursor-pointer transition-all",
                 isPinned 
                   ? 'bg-white/20 border-white/30 shadow-[0_0_15px_rgba(255,255,255,0.1)]' 
-                  : 'bg-gradient-to-br from-blue-500/20 to-purple-600/20 border-white/10 hover:bg-white/10'
+                  : 'bg-linear-to-br from-blue-500/20 to-purple-600/20 border-white/10 hover:bg-white/10'
               )}
             >
               <Brain className={cn("w-6 h-6 text-white transition-transform", isPinned ? 'scale-110' : 'scale-100')} />
@@ -343,8 +346,8 @@ export function Sidebar({ onModelSelect }: SidebarProps) {
                         isExpanded || isPinned || isMobileOpen ? 'mr-3' : 'mr-0',
                         !activeFolder 
                           ? (activeScreen === 'library' 
-                              ? 'bg-gradient-to-br from-blue-400 via-blue-500 to-indigo-600 shadow-[0_0_20px_rgba(59,130,246,0.5)] text-white' 
-                              : 'bg-gradient-to-br from-yellow-300 via-amber-500 to-orange-600 shadow-[0_0_20px_rgba(251,191,36,0.5)] text-white') 
+                              ? 'bg-linear-to-br from-blue-400 via-blue-500 to-indigo-600 shadow-[0_0_20px_rgba(59,130,246,0.5)] text-white' 
+                              : 'bg-linear-to-br from-yellow-300 via-amber-500 to-orange-600 shadow-[0_0_20px_rgba(251,191,36,0.5)] text-white') 
                           : 'bg-white/5 text-white/20 group-hover:bg-white/10 group-hover:text-white/40'
                       )}>
                         {!activeFolder && (
@@ -447,7 +450,7 @@ export function Sidebar({ onModelSelect }: SidebarProps) {
                             setModalOpen('smartSwitch', true, feather);
                           }
                         }}
-                        onMouseEnter={() => useAppStore.getState().setHoverTheme(feather.id as any)}
+                        onMouseEnter={() => useAppStore.getState().setHoverTheme(feather.id as ThemeName)}
                         onMouseLeave={() => useAppStore.getState().setHoverTheme(null)}
                         className={cn(
                           "flex items-center border transition-all relative group rounded-xl",
@@ -638,7 +641,7 @@ export function Sidebar({ onModelSelect }: SidebarProps) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onCloseMobile}
-            className="lg:hidden absolute inset-0 bg-black/60 backdrop-blur-sm z-[90]"
+            className="lg:hidden absolute inset-0 bg-black/60 backdrop-blur-sm z-90"
           />
         )}
       </AnimatePresence>
@@ -670,7 +673,7 @@ function FolderItem({
   const Icon = ICON_LIBRARY[folder.iconIndex] || Folder;
   const [isHovered, setIsHovered] = useState(false);
 
-  const SOURCE_THEMES: Record<string, { color: string, icon: any }> = {
+  const SOURCE_THEMES: Record<string, { color: string, icon: React.ElementType }> = {
     chatgpt: { color: 'text-emerald-500', icon: Brain },
     claude: { color: 'text-orange-400', icon: Bot },
     gemini: { color: 'text-blue-400', icon: Sparkles },
@@ -728,7 +731,7 @@ function FolderItem({
 
       {isExpandedInRail && (isExpanded || isPinned || isMobileOpen) && items.length > 0 && (
         <div className="ml-8 mt-1 space-y-1">
-          {items.map((item: any) => {
+          {items.map((item) => {
             const theme = item.source ? SOURCE_THEMES[item.source] || SOURCE_THEMES.other : null;
             const ItemIcon = theme ? theme.icon : (item.type === 'chat' ? MessageSquare : Zap);
             
@@ -751,7 +754,14 @@ function FolderItem({
   );
 }
 
-function NavItem({ item, isActive, onClick, isExpanded, isPinned, isMobileOpen }: any) {
+function NavItem({ item, isActive, onClick, isExpanded, isPinned, isMobileOpen }: {
+  item: { icon: React.ElementType, label: string },
+  isActive: boolean,
+  onClick: () => void,
+  isExpanded: boolean,
+  isPinned: boolean,
+  isMobileOpen: boolean
+}) {
   const Icon = item.icon;
   return (
     <button

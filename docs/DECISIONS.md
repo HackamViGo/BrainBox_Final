@@ -502,31 +502,36 @@ vite.config.ts                    → wxt.config.ts
 
 ---
 
-## [ADR-015] Multi-Tool Rules Standard (AGENTS.md & GEMINI.md)
+## [ADR-017] Post-Audit Secure Extension Integration
 
 **Дата:** 2026-04-19
-**Статус:** Прието (Заменя "Centralized Rule Documentation")
+**Статус:** Прието
 
 ### Контекст
 
-Предишният подход за консолидация в `docs/rules.md` се оказа несъвместим с новите cross-tool стандарти (v1.20.5) и затруднява преноса на правила към други инструменти (Cursor, Claude Code).
+Одитът на BrainBox установи няколко критични архитектурни дефекта в разширението:
+
+1. Несигурно съхранение на аутентикационни токени в `chrome.storage.local`.
+2. Използване на `any` типове в критични точки (Background SW, API Routes).
+3. Дублиране на логика за екстракция между контент скриптове.
+4. Липса на механизъм за офлайн синхронизация.
 
 ### Решение
 
-Преминаване към йерархична структура на правилата:
-
-1. **AGENTS.md (Root):** Споделени стандарти за всички AI инструменти (Tech stack, Core principles, Git).
-2. **GEMINI.md (Root):** Специфични за Antigravity инструкции и "Absolute Prohibitions".
-3. **.agent/rules/ (Folder):** Подробни правила, разделени по категории (Core, BrainBox).
+1. **Secure Storage (AES-GCM)**: Всички токени се криптират с `AES-GCM` чрез Web Crypto API преди запис в браузърното хранилище. Използва се споделена утилита `@brainbox/utils/crypto`.
+2. **Strict Type Safety**: Въвеждане на `ExtensionChatPayloadSchema` в `@brainbox/types` за валидация на обмена между разширението и Dashboard API. Премахнати са всички `any` типове.
+3. **Zustand Extension Store**: Създаден е `useExtensionStore` в уеб приложението за менажиране на "Raw Feed" от captures, отделно от `libraryStore`.
+4. **Platform Adapters Pattern**: Логиката за екстракция е изнесена в `BaseAdapter` специализирани класове, споделени между бекграунд и контент скриптове.
+5. **SyncManager**: Фонова услуга, която управлява опашка от несинхронизирани captures и автоматично се опитва да ги изпрати при наличие на връзка и сесия.
 
 ### Причини
 
-- **Interoperability:** `AGENTS.md` е новият индустриален стандарт за споделени правила.
-- **Precedence Control:** Позволява на Antigravity да има специфични хакове (напр. `proxy.ts`) без да обърква други инструменти.
-- **Organization:** Използването на `.agent/` (singular) директория съответства на най-новите гайдлайни от Antigravity Codes.
+- **Compliance**: Индустриални стандарти за съхранение на секрети в браузъра.
+- **Maintainability**: Лесно добавяне на нови платформи (Claude, Perplexity) чрез наследяване на `BaseAdapter`.
+- **UX**: Позволява на потребителите да "ловят" чатове дори когато са офлайн или Dashboard-ът е затворен.
 
 ### Последици
 
-- Изтрит е `docs/rules.md`.
-- Папката `.agent/` е преименувана на `.agent/`.
-- Агентите трябва да четат `AGENTS.md` за общ контекст и `GEMINI.md` за стриктни ограничения.
+- Нужда от `INTERNAL_SECRET` за локално криптиране (трябва да се ротира/динамизира в бъдеще).
+- Уеб приложението трябва да поддържа рехидратация на `extensionStore`.
+- API рутовете изискват стриктна Zod валидация на новия payload формат.

@@ -31,6 +31,24 @@ export const ItemSchema = z.object({
   deletedAt: z.string().nullable().optional(),
 });
 
+export const ExtensionChatPayloadSchema = z.object({
+  id: z.string(),
+  title: z.string().min(1),
+  description: z.string().optional(),
+  content: z.string().optional(),
+  url: z.string().optional(),
+  platform: ThemeNameSchema,
+  type: z.literal('chat'),
+  messages: z.array(z.object({
+    role: z.enum(['user', 'assistant']),
+    content: z.string(),
+    timestamp: z.number().optional(),
+  })),
+  sourceId: z.string().optional(),
+});
+
+export type ExtensionChatPayload = z.infer<typeof ExtensionChatPayloadSchema>;
+
 export const ScreenNameSchema = z.enum([
   'dashboard', 'login', 'settings', 'identity', 'profile', 'archive', 
   'library', 'prompts', 'ainexus', 'studio', 'extension', 

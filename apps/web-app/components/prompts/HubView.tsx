@@ -22,15 +22,15 @@ export function HubView({ onNavigate, onUseTemplate, stats }: HubViewProps) {
     <div className="max-w-6xl mx-auto w-full space-y-12 py-8">
       {/* Daily Prompt */}
       <motion.div 
-        className="glass-panel rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-12 flex flex-col md:flex-row items-center gap-6 sm:gap-8 relative overflow-hidden group cursor-pointer"
+        className="glass-panel rounded-4xl sm:rounded-5xl p-6 sm:p-12 flex flex-col md:flex-row items-center gap-6 sm:gap-8 relative overflow-hidden group cursor-pointer"
         onClick={() => setChestOpen(true)}
         whileHover={{ scale: 1.01 }}
         whileTap={{ scale: 0.99 }}
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/10 via-amber-600/5 to-transparent opacity-50 group-hover:opacity-100 transition-opacity" />
+        <div className="absolute inset-0 bg-linear-to-r from-yellow-500/10 via-amber-600/5 to-transparent opacity-50 group-hover:opacity-100 transition-opacity" />
         <div className="absolute top-0 right-0 w-96 h-96 bg-yellow-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
         
-        <div className="w-20 h-20 sm:w-32 sm:h-32 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-yellow-400 to-amber-600 flex items-center justify-center shadow-[0_0_50px_rgba(251,191,36,0.3)] shrink-0 z-10">
+        <div className="w-20 h-20 sm:w-32 sm:h-32 rounded-2xl sm:rounded-3xl bg-linear-to-br from-yellow-400 to-amber-600 flex items-center justify-center shadow-[0_0_50px_rgba(251,191,36,0.3)] shrink-0 z-10">
           {chestOpen ? <Sparkles className="w-10 h-10 sm:w-12 sm:h-12 text-black" /> : <Lock className="w-10 h-10 sm:w-12 sm:h-12 text-black" />}
         </div>
         
@@ -107,7 +107,17 @@ export function HubView({ onNavigate, onUseTemplate, stats }: HubViewProps) {
   );
 }
 
-function GatewayCard({ id, title, subtitle, icon: Icon, color, desc, onClick }: any) {
+interface GatewayCardProps {
+  id: string;
+  title: string;
+  subtitle: string;
+  icon: React.ElementType;
+  color: string;
+  desc: string;
+  onClick: () => void;
+}
+
+function GatewayCard({ id, title, subtitle, icon: Icon, color, desc, onClick }: GatewayCardProps) {
   return (
     <motion.div
       onClick={onClick}
@@ -121,7 +131,7 @@ function GatewayCard({ id, title, subtitle, icon: Icon, color, desc, onClick }: 
         style={{ borderRadius: 24 }}
         transition={{ type: "spring", bounce: 0.15, duration: 0.8 }}
       >
-        <div className={`absolute inset-0 bg-gradient-to-br ${color} opacity-0 group-hover:opacity-20 transition-opacity duration-500`} />
+        <div className={`absolute inset-0 bg-linear-to-br ${color} opacity-0 group-hover:opacity-20 transition-opacity duration-500`} />
       </motion.div>
       
       <div className="relative z-10 p-6 sm:p-8 flex flex-col h-full">

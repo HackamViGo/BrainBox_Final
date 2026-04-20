@@ -2,7 +2,7 @@
 
 import React from 'react';
 import dynamic from 'next/dynamic';
-import { motion, AnimatePresence } from 'motion/react';
+
 
 // Store
 import { useAppStore } from '@/store/useAppStore';
@@ -58,7 +58,7 @@ export default function Page() {
         {!isLoggedIn && (
           <div
             data-testid="login-overlay"
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-md"
+            className="fixed inset-0 z-100 flex items-center justify-center bg-black/40 backdrop-blur-md"
           >
             <Login />
           </div>

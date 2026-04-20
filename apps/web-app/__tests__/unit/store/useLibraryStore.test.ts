@@ -32,7 +32,7 @@ describe('useLibraryStore', () => {
       parentId: null,
       level: 0
     }
-    vi.mocked(actions.createFolder).mockResolvedValue(mockCreatedFolder as any)
+    vi.mocked(actions.createFolder).mockResolvedValue(mockCreatedFolder as unknown as import('@brainbox/types').Folder)
 
     const promise = useLibraryStore.getState().createFolder({ 
       name: 'New Folder', 
@@ -63,7 +63,7 @@ describe('useLibraryStore', () => {
         parentId: null, 
         level: 0 
       })
-    } catch (e) {
+    } catch {
       // expected
     }
 
@@ -79,7 +79,7 @@ describe('useLibraryStore', () => {
       folderId: null, 
       content: '' 
     }
-    useLibraryStore.setState({ items: [originalItem as any] })
+    useLibraryStore.setState({ items: [originalItem as unknown as import('@brainbox/types').Item] })
 
     const promise = useLibraryStore.getState().deleteItem(originalItem.id)
     
@@ -127,7 +127,7 @@ describe('useLibraryStore', () => {
         }
       ]
     }
-    vi.mocked(actions.loadUserData).mockResolvedValue(mockData as any)
+    vi.mocked(actions.loadUserData).mockResolvedValue(mockData as unknown as { libraryFolders: import('@brainbox/types').Folder[], promptFolders: import('@brainbox/types').Folder[], items: import('@brainbox/types').Item[] })
 
     await useLibraryStore.getState().loadData()
 
@@ -145,9 +145,9 @@ describe('useLibraryStore', () => {
       type: 'chat' as const, 
       folderId: null 
     }
-    vi.mocked(actions.upsertItem).mockImplementation(async (item) => item as any)
+    vi.mocked(actions.upsertItem).mockImplementation(async (item) => item as unknown as import('@brainbox/types').Item)
 
-    const promise = useLibraryStore.getState().createItem(mockItem as any)
+    const promise = useLibraryStore.getState().createItem(mockItem as unknown as Parameters<ReturnType<typeof useLibraryStore.getState>['createItem']>[0])
     
     // Check optimistic state
     const items = useLibraryStore.getState().items
@@ -173,7 +173,7 @@ describe('useLibraryStore', () => {
       description: 'Desc',
       type: 'chat', 
       folderId: null 
-    } as any)).rejects.toThrow('Server error')
+    } as unknown as Parameters<ReturnType<typeof useLibraryStore.getState>['createItem']>[0])).rejects.toThrow('Server error')
 
     expect(useLibraryStore.getState().items).toHaveLength(0)
   })

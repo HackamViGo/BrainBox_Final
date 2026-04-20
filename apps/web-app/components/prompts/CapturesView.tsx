@@ -3,18 +3,21 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { 
-  ChevronLeft, Rocket, Star, Plus, Download
+  ChevronLeft, Rocket, Star, Plus, Download, Trash2
 } from 'lucide-react';
+import { useExtensionCaptures, useExtensionStoreActions } from '@/store/useExtensionStore';
 
 interface CapturesViewProps {
   onBack: () => void;
   onRefine: (text: string) => void;
   onSaveToPrompts: (text: string) => void;
-  captures: any[];
   onDrop: (e: React.DragEvent) => void;
+  captures?: import('@brainbox/types').Item[];
 }
 
-export function CapturesView({ onBack, onRefine, onSaveToPrompts, captures, onDrop }: CapturesViewProps) {
+export function CapturesView({ onBack, onRefine, onSaveToPrompts, onDrop }: CapturesViewProps) {
+  const captures = useExtensionCaptures();
+  const { removeCapture } = useExtensionStoreActions();
   const [isDraggingOver, setIsDraggingOver] = useState(false);
 
   return (
@@ -28,7 +31,7 @@ export function CapturesView({ onBack, onRefine, onSaveToPrompts, captures, onDr
         setIsDraggingOver(false);
         onDrop(e);
       }}
-      className={`max-w-4xl mx-auto w-full space-y-8 min-h-[500px] transition-all duration-300 rounded-[2rem] p-4 ${
+      className={`max-w-4xl mx-auto w-full space-y-8 min-h-[500px] transition-all duration-300 rounded-4xl p-4 ${
         isDraggingOver ? 'bg-white/5 ring-2 ring-amber-500/50 scale-[0.99]' : ''
       }`}
     >
@@ -56,7 +59,7 @@ export function CapturesView({ onBack, onRefine, onSaveToPrompts, captures, onDr
       </div>
 
       <div className="relative pl-8 sm:pl-12 pb-20">
-        <div className="absolute left-[15px] sm:left-[23px] top-4 bottom-0 w-0.5 bg-gradient-to-b from-white/20 to-transparent" />
+        <div className="absolute left-[15px] sm:left-[23px] top-4 bottom-0 w-0.5 bg-linear-to-b from-white/20 to-transparent" />
 
         <div className="space-y-12">
           {captures.map((capture, i) => (
@@ -67,14 +70,15 @@ export function CapturesView({ onBack, onRefine, onSaveToPrompts, captures, onDr
               transition={{ delay: i * 0.1 }}
               className="relative group"
             >
-              <div className="absolute -left-8 sm:-left-12 top-6 w-4 h-4 rounded-full bg-white/20 border-2 border-[#0a0a0a] ring-2 ring-white/10 group-hover:bg-white transition-colors z-10" />
+              <div className="absolute -left-8 sm:-left-12 top-6 w-4 h-4 rounded-full bg-white/20 border-2 border-background ring-2 ring-white/10 group-hover:bg-white transition-colors z-10" />
 
               <div className="glass-panel rounded-2xl overflow-hidden border border-white/5 group-hover:border-white/20 transition-colors">
                 <div className="bg-white/5 px-6 py-3 flex items-center justify-between border-b border-white/5">
                   <div className="flex items-center gap-3 min-w-0">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img 
-                      src={`https://www.google.com/s2/favicons?domain=${capture.domain}&sz=32`} 
-                      alt={capture.domain} 
+                      src={`https://www.google.com/s2/favicons?domain=${new URL(capture.url || 'http://localhost').hostname}&sz=32`} 
+                      alt={capture.url} 
                       className="w-5 h-5 rounded-sm opacity-80"
                     />
                     <span className="text-sm font-medium text-white/70 truncate max-w-[200px] sm:max-w-sm">{capture.url}</span>
@@ -83,19 +87,29 @@ export function CapturesView({ onBack, onRefine, onSaveToPrompts, captures, onDr
                   <div className="flex items-center gap-4">
                     <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                       <button 
-                        onClick={() => onRefine(capture.content || capture.description)}
+                        onClick={() => onRefine(capture.content || capture.description || '')}
                         className="px-3 py-1.5 rounded-lg bg-purple-500/20 text-purple-300 hover:bg-purple-500/40 hover:text-white transition-colors flex items-center gap-2 text-[10px] font-bold shadow-lg backdrop-blur-md border border-purple-500/30"
                       >
                         <Rocket className="w-3 h-3" /> Refine
                       </button>
                       <button 
-                        onClick={() => onSaveToPrompts(capture.content || capture.description)}
+                        onClick={() => onSaveToPrompts(capture.content || capture.description || '')}
                         className="px-3 py-1.5 rounded-lg bg-amber-500/20 text-amber-300 hover:bg-amber-500/40 hover:text-white transition-colors flex items-center gap-2 text-[10px] font-bold shadow-lg backdrop-blur-md border border-amber-500/30"
                       >
                         <Star className="w-3 h-3" /> Save
                       </button>
+                      <button 
+                        onClick={() => removeCapture(capture.id)}
+                        className="px-3 py-1.5 rounded-lg bg-red-500/20 text-red-300 hover:bg-red-500/40 hover:text-white transition-colors flex items-center gap-2 text-[10px] font-bold shadow-lg backdrop-blur-md border border-red-500/30"
+                      >
+                        <Trash2 className="w-3 h-3" /> Delete
+                      </button>
                     </div>
-                    <span className="text-xs font-mono text-white/40 shrink-0">{capture.date}</span>
+                    <span className="text-xs font-mono text-white/40 shrink-0">
+                      {capture.id.startsWith('capture-') 
+                        ? new Date(parseInt(capture.id.split('-')[1] || '0')).toLocaleDateString()
+                        : 'Recent'}
+                    </span>
                   </div>
                 </div>
                 

@@ -1,10 +1,7 @@
-'use client'
+'use client';
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import type {
-  Connection,
-  Edge,
-  Node} from '@xyflow/react';
+import type { Connection, Edge, Node } from '@xyflow/react';
 import {
   ReactFlow,
   ReactFlowProvider,
@@ -17,7 +14,7 @@ import {
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { motion, AnimatePresence } from 'motion/react';
-import { StickyNote, MessageSquare, Zap, Plus, X, GripVertical, Save, Trash2, Maximize2, Minimize2, MousePointer2, Hand, ZoomIn, ZoomOut, Brain, Sparkles, Folder } from 'lucide-react';
+import { StickyNote, MessageSquare, Zap } from 'lucide-react';
 import { useLibraryStore } from '@/store/useLibraryStore';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -25,7 +22,6 @@ import { GlassNode } from '@/components/workspace/GlassNode';
 import { StickyNode } from '@/components/workspace/StickyNode';
 import { NeuralEdge } from '@/components/workspace/NeuralEdge';
 import { WhisperPanel } from '@/components/workspace/WhisperPanel';
-import { AssetLibrary } from '@/components/workspace/AssetLibrary';
 
 const nodeTypes = {
   glassNode: GlassNode,
@@ -43,19 +39,22 @@ function WorkspaceCanvas() {
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
-  const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
-  const [menu, setMenu] = useState<{ x: number; y: number; flowPosition: { x: number; y: number } } | null>(null);
+  const [reactFlowInstance, setReactFlowInstance] = useState<{ screenToFlowPosition: (pos: {x: number, y: number}) => {x: number, y: number} } | null>(null);
+  const [menu, setMenu] = useState<{
+    x: number;
+    y: number;
+    flowPosition: { x: number; y: number };
+  } | null>(null);
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
 
-  const [isWhisperOpen, setIsWhisperOpen] = useState(false);
-  const { items } = useLibraryStore(useShallow(s => ({ items: s.items })));
+  const { items } = useLibraryStore(useShallow((s) => ({ items: s.items })));
 
   useEffect(() => {
     if (nodes.length === 0 && items.length > 0) {
       const newNodes: Node[] = items.slice(0, 3).map((item, idx) => ({
         id: item.id,
         type: 'glassNode',
-        position: { x: 100 + (idx * 350), y: 100 + (idx * 50) },
+        position: { x: 100 + idx * 350, y: 100 + idx * 50 },
         data: { title: item.title, description: item.content, type: item.type },
       }));
       setNodes(newNodes);
@@ -63,8 +62,9 @@ function WorkspaceCanvas() {
   }, [items, nodes.length, setNodes]);
 
   const onConnect = useCallback(
-    (params: Connection | Edge) => setEdges((eds) => addEdge({ ...params, type: 'neuralEdge' }, eds)),
-    [setEdges],
+    (params: Connection | Edge) =>
+      setEdges((eds) => addEdge({ ...params, type: 'neuralEdge' }, eds)),
+    [setEdges]
   );
 
   const onDragOver = useCallback((event: React.DragEvent) => {
@@ -83,13 +83,14 @@ function WorkspaceCanvas() {
 
       if (!type) return;
 
-      const bounds = reactFlowWrapper.current?.getBoundingClientRect();
       const position = reactFlowInstance.screenToFlowPosition({
         x: event.clientX,
         y: event.clientY,
       });
 
-      const data = dataStr ? JSON.parse(dataStr) : { title: `${type} node`, description: 'Dropped from library' };
+      const data = dataStr
+        ? JSON.parse(dataStr)
+        : { title: `${type} node`, description: 'Dropped from library' };
 
       const newNode: Node = {
         id: getId(),
@@ -100,7 +101,7 @@ function WorkspaceCanvas() {
 
       setNodes((nds) => nds.concat(newNode));
     },
-    [reactFlowInstance, setNodes],
+    [reactFlowInstance, setNodes]
   );
 
   const onContextMenu = useCallback(
@@ -119,14 +120,14 @@ function WorkspaceCanvas() {
         flowPosition: position,
       });
     },
-    [reactFlowInstance],
+    [reactFlowInstance]
   );
 
   const onPaneClick = useCallback(() => {
     setMenu(null);
   }, []);
 
-  const addNodeFromMenu = (type: string, data: any) => {
+  const addNodeFromMenu = (type: string, data: Record<string, unknown>) => {
     if (!menu) return;
 
     const newNode: Node = {
@@ -140,11 +141,7 @@ function WorkspaceCanvas() {
     setMenu(null);
   };
 
-  const onDragStart = (event: React.DragEvent, nodeType: string, data: any) => {
-    event.dataTransfer.setData('application/reactflow', nodeType);
-    event.dataTransfer.setData('application/json', JSON.stringify(data));
-    event.dataTransfer.effectAllowed = 'move';
-  };
+
 
   const onNodeMouseEnter = useCallback((_: React.MouseEvent, node: Node) => {
     setHoveredNodeId(node.id);
@@ -155,7 +152,10 @@ function WorkspaceCanvas() {
   }, []);
 
   const edgesWithHoverState: Edge[] = edges.map((edge) => {
-    const isHovered = !!(hoveredNodeId && (edge.source === hoveredNodeId || edge.target === hoveredNodeId));
+    const isHovered = !!(
+      hoveredNodeId &&
+      (edge.source === hoveredNodeId || edge.target === hoveredNodeId)
+    );
     return {
       ...edge,
       data: { ...edge.data, isHovered },
@@ -171,10 +171,10 @@ function WorkspaceCanvas() {
   });
 
   return (
-    <div className="h-full flex w-full overflow-hidden relative flex-col lg:flex-row">
+    <div className="relative flex h-full w-full flex-col overflow-hidden lg:flex-row">
       {/* AssetLibrary removed as per user request */}
-      
-      <div className="flex-1 h-full relative" ref={reactFlowWrapper} onContextMenu={onContextMenu}>
+
+      <div className="relative h-full flex-1" ref={reactFlowWrapper} onContextMenu={onContextMenu}>
         <ReactFlow
           nodes={nodes}
           edges={edgesWithHoverState}
@@ -195,16 +195,20 @@ function WorkspaceCanvas() {
           panOnScroll={true}
           selectionOnDrag={true}
         >
-          <Background 
-            variant={BackgroundVariant.Dots} 
-            gap={24} 
-            size={2} 
-            color="rgba(255,255,255,0.05)" 
+          <Background
+            variant={BackgroundVariant.Dots}
+            gap={24}
+            size={2}
+            color="rgba(255,255,255,0.05)"
           />
-          <Controls showInteractive={false} position="bottom-left" className="glass-panel border-white/10" />
+          <Controls
+            showInteractive={false}
+            position="bottom-left"
+            className="glass-panel border-white/10"
+          />
         </ReactFlow>
 
-        <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/20 via-transparent to-transparent z-10" />
+        <div className="pointer-events-none absolute inset-0 z-10 bg-linear-to-t from-black/20 via-transparent to-transparent" />
 
         <AnimatePresence>
           {menu && (
@@ -213,29 +217,41 @@ function WorkspaceCanvas() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.1 }}
-              className="fixed z-50 glass-panel border border-white/10 rounded-xl shadow-2xl overflow-hidden flex flex-col min-w-[180px] py-1"
+              className="glass-panel fixed z-50 flex min-w-[180px] flex-col overflow-hidden rounded-xl border border-white/10 py-1 shadow-2xl"
               style={{ top: menu.y, left: menu.x }}
             >
-              <div className="px-3 py-2 text-[10px] uppercase tracking-wider text-white/40 font-bold border-b border-white/5 mb-1">
+              <div className="mb-1 border-b border-white/5 px-3 py-2 text-[10px] font-bold tracking-wider text-white/40 uppercase">
                 Add to Canvas
               </div>
               <button
-                className="px-4 py-2 text-sm text-left hover:bg-white/10 transition-colors flex items-center gap-3 text-white/90"
+                className="flex items-center gap-3 px-4 py-2 text-left text-sm text-white/90 transition-colors hover:bg-white/10"
                 onClick={() => addNodeFromMenu('stickyNode', { text: '' })}
               >
-                <StickyNote className="w-4 h-4 text-emerald-400" /> Sticky Note
+                <StickyNote className="h-4 w-4 text-emerald-400" /> Sticky Note
               </button>
               <button
-                className="px-4 py-2 text-sm text-left hover:bg-white/10 transition-colors flex items-center gap-3 text-white/90"
-                onClick={() => addNodeFromMenu('glassNode', { type: 'chat', title: 'New Chat', description: 'Empty chat session' })}
+                className="flex items-center gap-3 px-4 py-2 text-left text-sm text-white/90 transition-colors hover:bg-white/10"
+                onClick={() =>
+                  addNodeFromMenu('glassNode', {
+                    type: 'chat',
+                    title: 'New Chat',
+                    description: 'Empty chat session',
+                  })
+                }
               >
-                <MessageSquare className="w-4 h-4 text-blue-400" /> Chat Node
+                <MessageSquare className="h-4 w-4 text-blue-400" /> Chat Node
               </button>
               <button
-                className="px-4 py-2 text-sm text-left hover:bg-white/10 transition-colors flex items-center gap-3 text-white/90"
-                onClick={() => addNodeFromMenu('glassNode', { type: 'prompt', title: 'New Prompt', description: 'Empty prompt template' })}
+                className="flex items-center gap-3 px-4 py-2 text-left text-sm text-white/90 transition-colors hover:bg-white/10"
+                onClick={() =>
+                  addNodeFromMenu('glassNode', {
+                    type: 'prompt',
+                    title: 'New Prompt',
+                    description: 'Empty prompt template',
+                  })
+                }
               >
-                <Zap className="w-4 h-4 text-amber-400" /> Prompt Node
+                <Zap className="h-4 w-4 text-amber-400" /> Prompt Node
               </button>
             </motion.div>
           )}

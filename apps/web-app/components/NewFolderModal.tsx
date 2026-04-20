@@ -1,11 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'motion/react'
-import { X, Folder } from 'lucide-react'
+
+import { Folder } from 'lucide-react'
 import { useAppStore } from '@/store/useAppStore'
 import { useLibraryStore } from '@/store/useLibraryStore'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -66,7 +66,7 @@ export function NewFolderModal() {
 
   return (
     <Dialog open={isNewFolderModalOpen} onOpenChange={(open) => setModalOpen('newFolder', open)}>
-      <DialogContent aria-describedby={undefined} className="max-w-2xl p-0 overflow-hidden bg-[#0a0a0a] border-white/10 rounded-3xl shadow-2xl flex flex-col max-h-[90vh]">
+      <DialogContent aria-describedby={undefined} className="max-w-2xl p-0 overflow-hidden bg-background border-white/10 rounded-3xl shadow-2xl flex flex-col max-h-[90vh]">
         <div className="p-6 border-b border-white/10 flex justify-between items-center bg-white/5 shrink-0">
           <DialogTitle className="text-lg font-semibold text-white">Create New Folder</DialogTitle>
         </div>

@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion } from 'motion/react';
 import { 
   ChevronLeft, Plus, Search, BookOpen, Zap, Copy, Edit2, Trash2
 } from 'lucide-react';
@@ -14,10 +14,10 @@ interface SavedPromptsViewProps {
   activeFolder?: string | null;
   setActiveFolder: (id: string | null) => void;
   onNewPrompt: () => void;
-  onSelectTheme: (theme: ThemeName) => void;
+  onSelectTheme: (theme: ThemeName | null) => void;
   promptFolders: Folder[];
   items: Item[];
-  onDragStart?: (event: React.DragEvent, nodeType: string, data: any) => void;
+  onDragStart?: (event: React.DragEvent, nodeType: string, data: Item) => void;
   onDeletePrompt?: (id: string) => void;
   onEditPrompt?: (item: Item) => void;
 }
@@ -49,6 +49,28 @@ export function SavedPromptsView({
 
   const activeFolderData = activeFolder ? promptFolders.find(f => f.id === activeFolder) : null;
   const ActiveIcon = activeFolderData ? (ICON_LIBRARY[(activeFolderData.iconIndex || 0) % ICON_LIBRARY.length] as LucideIcon) : Zap;
+
+  const getThemeId = (rawModelId: string | null | undefined): ThemeName => {
+    if (!rawModelId) return 'chatgpt';
+    let modelId = rawModelId as ThemeName;
+    if (!THEMES[modelId]) {
+      const lower = rawModelId.toLowerCase();
+      if (lower.includes('gpt') || lower.includes('openai')) modelId = 'chatgpt';
+      else if (lower.includes('claude') || lower.includes('anthropic')) modelId = 'claude';
+      else if (lower.includes('gemini') || lower.includes('google')) modelId = 'gemini';
+      else if (lower.includes('grok') || lower.includes('xai')) modelId = 'grok';
+      else if (lower.includes('qwen')) modelId = 'qwen';
+      else if (lower.includes('deepseek')) modelId = 'deepseek';
+      else if (lower.includes('perplexity')) modelId = 'perplexity';
+      else modelId = 'chatgpt';
+    }
+    return modelId;
+  };
+
+  const getPromptTheme = (prompt: Item): ThemeName => {
+    const p = prompt as Item & { platform?: string; modelId?: string };
+    return getThemeId(p.platform || p.modelId);
+  };
 
   return (
     <div className="max-w-5xl mx-auto w-full h-full flex flex-col">
@@ -132,14 +154,14 @@ export function SavedPromptsView({
               key={prompt.id}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              onMouseEnter={() => onSelectTheme(((prompt as any).modelId as ThemeName) || 'chatgpt')}
-              onMouseLeave={() => onSelectTheme(null as any)}
+              onMouseEnter={() => onSelectTheme(getPromptTheme(prompt))}
+              onMouseLeave={() => onSelectTheme(null)}
               draggable
-              onDragStart={(e) => {
+              onDragStart={(e: unknown) => {
+                const dragEvent = e as unknown as React.DragEvent;
                 if (onDragStart) {
-                  onDragStart(e as any, 'glassNode', prompt);
+                  onDragStart(dragEvent, 'glassNode', prompt);
                 } else {
-                  const dragEvent = e as unknown as React.DragEvent;
                   dragEvent.dataTransfer.setData('application/json', JSON.stringify(prompt));
                   dragEvent.dataTransfer.effectAllowed = 'move';
                 }
@@ -148,14 +170,14 @@ export function SavedPromptsView({
             >
               <div 
                 className="absolute top-0 left-0 w-1 h-full opacity-50 group-hover:opacity-100 transition-opacity"
-                style={{ backgroundColor: THEMES[((prompt as any).modelId as ThemeName) || 'chatgpt']?.color || '#ffffff' }}
+                style={{ backgroundColor: THEMES[getPromptTheme(prompt)]?.color || 'var(--color-acc-chatgpt)' }}
               />
               
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-start gap-4">
                   <div 
                     className="w-10 h-10 rounded-xl flex items-center justify-center bg-white/5 border border-white/10 group-hover:bg-white/10 transition-all duration-500 group-hover:scale-110 shadow-xl"
-                    style={{ color: THEMES[((prompt as any).modelId as ThemeName) || 'chatgpt']?.color || '#ffffff' }}
+                    style={{ color: THEMES[getPromptTheme(prompt)]?.color || 'var(--color-acc-chatgpt)' }}
                   >
                     <Zap className="w-5 h-5" />
                   </div>
@@ -164,7 +186,7 @@ export function SavedPromptsView({
                       {prompt.title}
                       <div 
                         className="w-2 h-2 rounded-full" 
-                        style={{ backgroundColor: THEMES[((prompt as any).modelId as ThemeName) || 'chatgpt']?.color || '#ffffff', boxShadow: `0 0 10px ${THEMES[((prompt as any).modelId as ThemeName) || 'chatgpt']?.color || '#ffffff'}` }} 
+                        style={{ backgroundColor: THEMES[getPromptTheme(prompt)]?.color || 'var(--color-acc-chatgpt)', boxShadow: `0 0 10px ${THEMES[getPromptTheme(prompt)]?.color || 'var(--color-acc-chatgpt)'}` }} 
                       />
                     </h3>
                     <p className="text-white/50 text-sm">{prompt.description}</p>

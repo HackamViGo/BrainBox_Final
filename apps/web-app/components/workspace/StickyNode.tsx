@@ -2,7 +2,7 @@ import { Handle, Position, useReactFlow } from '@xyflow/react';
 import { useState } from 'react';
 import { ChevronDown, ChevronUp, X } from 'lucide-react';
 
-export function StickyNode({ id, data }: any) {
+export function StickyNode({ id, data }: { id: string; data: { text?: string } }) {
   const [text, setText] = useState(data.text || '');
   const [isCollapsed, setIsCollapsed] = useState(false);
   const { setNodes } = useReactFlow();

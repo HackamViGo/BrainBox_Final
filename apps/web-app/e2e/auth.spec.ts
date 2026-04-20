@@ -7,9 +7,8 @@ test.describe('Authentication Flow', () => {
     // Check for login overlay via the Login component content
     const loginHeading = page.getByText('BrainBox').first();
     await expect(loginHeading).toBeVisible();
-    
     // Check if the main app content is blurred
-    const shell = page.locator('.blur-2xl');
+    await expect(page.locator('.blur-2xl')).toBeVisible();
   });
 });
 

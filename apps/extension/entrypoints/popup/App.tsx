@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+
 import { 
   ShieldCheck, 
   ExternalLink, 
@@ -54,46 +54,53 @@ export default function App() {
       </div>
 
       {/* Connection Status Panel */}
-      <div className="glass-panel p-4 flex flex-col gap-4">
-        <div className="flex items-start justify-between">
+      <div className="glass-panel p-5 flex flex-col gap-5 relative overflow-hidden group">
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-50 pointer-events-none" />
+        
+        <div className="flex items-start justify-between relative z-10">
           <div>
-            <h2 className="text-sm font-medium text-white/90 mb-1">
-              {token ? 'Свързан с облака' : 'Нужна е аутентикация'}
+            <h2 className="text-sm font-semibold text-white/90 mb-1 flex items-center gap-2">
+              {token ? 'Secure Cloud Active' : 'Authentication Required'}
+              {token && <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />}
             </h2>
-            <p className="text-xs text-white/40 leading-relaxed">
+            <p className="text-[11px] text-white/40 leading-relaxed font-medium">
               {token 
-                ? 'Автоматичното синхронизиране на чатове е активно.' 
-                : 'Моля, влезте в профила си, за да активирате BrainBox.'}
+                ? 'Your neural bridge is active and syncing captures in real-time.' 
+                : 'Connect your BrainBox account to enable automatic chat synchronization.'}
             </p>
           </div>
           {token ? (
-            <ShieldCheck size={20} className="text-emerald-400/80" />
+            <div className="p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+              <ShieldCheck size={18} className="text-emerald-400" />
+            </div>
           ) : (
-            <AlertCircle size={20} className="text-amber-400/80" />
+            <div className="p-2 rounded-xl bg-amber-500/10 border border-amber-500/20">
+              <AlertCircle size={18} className="text-amber-400" />
+            </div>
           )}
         </div>
 
         {!token ? (
           <button 
             onClick={handleOpenDashboard}
-            className="w-full py-2.5 px-4 bg-white text-black text-xs font-semibold rounded-xl hover:bg-white/90 transition-all flex items-center justify-center gap-2"
+            className="w-full py-3 px-4 bg-white text-black text-xs font-bold rounded-xl hover:bg-white/90 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
           >
-            Влез в BrainBox
+            Connect BrainBox
             <ExternalLink size={14} />
           </button>
         ) : (
-          <div className="flex gap-2">
+          <div className="flex gap-2 relative z-10">
             <button 
               onClick={handleManualSync}
               disabled={syncStatus === 'syncing'}
-              className="flex-1 py-2 px-3 glass-panel border border-white/5 hover:border-white/10 text-[11px] font-medium text-white/70 transition-all flex items-center justify-center gap-2"
+              className="flex-1 py-2.5 px-3 glass-panel-light border border-white/5 hover:border-white/10 hover:bg-white/5 text-[11px] font-bold text-white/80 transition-all flex items-center justify-center gap-2"
             >
               <RefreshCw size={14} className={syncStatus === 'syncing' ? 'animate-spin' : ''} />
-              {syncStatus === 'syncing' ? 'Синхронизиране...' : 'Синхронизирай'}
+              {syncStatus === 'syncing' ? 'Syncing...' : 'Force Sync'}
             </button>
             <button 
               onClick={handleOpenDashboard}
-              className="px-3 glass-panel border border-white/5 hover:border-white/10 text-white/70"
+              className="px-4 glass-panel-light border border-white/5 hover:border-white/10 hover:bg-white/5 text-white/70 transition-all"
             >
               <ExternalLink size={14} />
             </button>
@@ -102,17 +109,19 @@ export default function App() {
       </div>
 
       {/* Active Platforms */}
-      <div className="flex flex-col gap-2 mt-2">
+      <div className="flex flex-col gap-3 mt-4">
         <div className="flex items-center justify-between px-1">
-          <span className="text-[10px] uppercase tracking-widest text-white/30 font-bold">Активни платформи</span>
-          <span className="text-[10px] text-emerald-400/60 font-medium">Auto-detect</span>
+          <span className="text-[10px] uppercase tracking-[0.2em] text-white/30 font-black">Neural Nodes</span>
+          <div className="px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+            <span className="text-[9px] text-emerald-400 font-bold uppercase">Auto-detect</span>
+          </div>
         </div>
         
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 gap-2.5">
           {['ChatGPT', 'Claude', 'Gemini', 'Perplexity'].map(p => (
-            <div key={p} className="glass-panel p-2 flex items-center gap-2 border border-white/5 opacity-80">
-              <div className={`w-1.5 h-1.5 rounded-full ${platforms.includes(p) ? 'bg-emerald-400 pulse' : 'bg-white/10'}`} />
-              <span className={`text-[11px] ${platforms.includes(p) ? 'text-white/80' : 'text-white/20'}`}>{p}</span>
+            <div key={p} className={`glass-panel p-3 flex items-center gap-3 border border-white/5 transition-all duration-500 ${platforms.includes(p) ? 'opacity-100 bg-white/5 border-white/10' : 'opacity-30'}`}>
+              <div className={`w-2 h-2 rounded-full shadow-[0_0_8px_currentColor] ${platforms.includes(p) ? 'bg-emerald-400 text-emerald-400/40' : 'bg-white/10 text-transparent'}`} />
+              <span className="text-[11px] font-bold tracking-tight">{p}</span>
             </div>
           ))}
         </div>
