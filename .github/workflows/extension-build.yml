@@ -1,0 +1,57 @@
+name: Extension Build (WXT)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  NODE_VERSION: '22'
+  PNPM_VERSION: '9'
+
+jobs:
+  build-extension:
+    name: Build Extension (WXT + Vite 8 + Rolldown)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Extension
+        run: pnpm --filter extension build
+        env:
+          VITE_RELEASE: ${{ github.sha }}
+
+      - name: Validate manifest.json (MV3)
+        run: |
+          MANIFEST="apps/extension/.output/chrome-mv3/manifest.json"
+          if [ ! -f "$MANIFEST" ]; then
+            echo "❌ manifest.json not found in build output"
+            exit 1
+          fi
+          MV=$(jq -r '.manifest_version' "$MANIFEST")
+          if [ "$MV" != "3" ]; then
+            echo "❌ manifest_version is $MV, expected 3"
+            exit 1
+          fi
+          echo "✅ MV3 manifest valid (version: $MV)"
+
+      - name: Upload extension artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: brainbox-extension-${{ github.sha }}
+          path: apps/extension/.output/chrome-mv3/
+          retention-days: 7

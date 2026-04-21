@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { signIn, signOut, getUser } from '@/actions/auth'
+import { signIn, getUser } from '@/actions/auth'
 import { createClient } from '@/lib/supabase/server'
 
 vi.mock('@/lib/supabase/server', () => ({
@@ -17,7 +17,7 @@ describe('Auth Actions', () => {
 
   beforeEach(() => {
     vi.clearAllMocks()
-    ;(createClient as any).mockResolvedValue(mockSupabase)
+    ;(createClient as unknown as import('vitest').Mock).mockResolvedValue(mockSupabase)
   })
 
   describe('signIn', () => {

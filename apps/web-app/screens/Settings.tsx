@@ -4,14 +4,12 @@ import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { 
   Settings as SettingsIcon, 
-  Wrench, 
   RefreshCw, 
   Globe, 
   Zap, 
   Key, 
   Shield, 
   Save, 
-  ChevronDown,
   Check,
   Clock,
   Eye,
@@ -59,7 +57,7 @@ export function Settings() {
   });
 
   // Only top-level prompt folders for quick access
-  const promptFolders = allFolders.filter((f: Folder) => f.parentId === null);
+  // removed promptFolders computation to fix unused var
 
   const toggleFolder = (id: string) => {
     const newSelected = selectedFolders.includes(id) 
@@ -216,7 +214,7 @@ export function Settings() {
                       }`}
                     >
                       {isSelected && (
-                        <div className={`absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-current to-transparent opacity-50 ${colorClass}`} />
+                        <div className={`absolute top-0 left-0 w-full h-[2px] bg-linear-to-r from-transparent via-current to-transparent opacity-50 ${colorClass}`} />
                       )}
                       <div className="flex items-center gap-3">
                         <div className={`w-8 h-8 rounded-xl bg-black/40 flex items-center justify-center border border-white/5 group-hover:scale-110 transition-transform ${isSelected ? colorClass : 'text-white/20'}`}>

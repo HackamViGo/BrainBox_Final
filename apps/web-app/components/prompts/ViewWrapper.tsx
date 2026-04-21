@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { motion } from 'motion/react';
 
 interface ViewWrapperProps {
@@ -8,9 +8,10 @@ interface ViewWrapperProps {
   id: string;
 }
 
-export function ViewWrapper({ children, id }: ViewWrapperProps) {
+export const ViewWrapper = forwardRef<HTMLDivElement, ViewWrapperProps>(({ children, id }, ref) => {
   return (
     <motion.div 
+      ref={ref}
       className="absolute inset-0 z-10 flex flex-col"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -33,4 +34,6 @@ export function ViewWrapper({ children, id }: ViewWrapperProps) {
       </motion.div>
     </motion.div>
   );
-}
+});
+
+ViewWrapper.displayName = 'ViewWrapper';

@@ -1,15 +1,15 @@
-import { Home, BookOpen, Zap, BarChart2, Users, Settings, Fingerprint, Puzzle, Archive, Network, MessageSquare, Cpu, Sparkles, Brain, History, Folder, ChevronRight, ChevronLeft, Hash, Layers, Bot, Eye, Compass, Swords, Telescope, Cloud, Workflow, Activity, Search, Pin, Plus, FileText, Image, Music, Video, Globe, Terminal, Database, Shield, Lock, Unlock, Bell, Mail, Phone, Camera, Map, Calendar, Clock, Star, Heart, Share2, Download, Upload, Trash2, Edit3, Check, X, Filter, List, Grid, Maximize2, Minimize2, ExternalLink, Link2, Paperclip, Scissors, Copy, Clipboard, Save, HardDrive, Monitor, Smartphone, Tablet, Watch, Headphones, Speaker, Mic, Volume2, Sun, Moon, Wind, Droplets, Flame, ZapOff, Anchor, Target, Flag } from 'lucide-react';
+import { Home, Zap, BarChart2, Network, MessageSquare, Cpu, Sparkles, Brain, History, Folder, Hash, Layers, Bot, Eye, Compass, Swords, Telescope, Cloud, Workflow, Activity, Search, Pin, FileText, Image, Music, Video, Globe, Terminal, Database, Shield, Lock, Unlock, Bell, Mail, Phone, Camera, Map, Calendar, Clock, Star, Heart, Share2, Download, Upload, Trash2, Edit3, Check, X, Filter, List, Grid, Maximize2, Minimize2, ExternalLink, Link2, Paperclip, Scissors, Copy, Clipboard, Save, HardDrive, Monitor, Smartphone, Tablet, Watch, Headphones, Speaker, Mic, Volume2, Sun, Moon, Wind, Droplets, Flame, ZapOff, Anchor, Target, Flag } from 'lucide-react';
 import type { ThemeName, Theme } from './models';
 
 export const THEMES: Record<ThemeName, Theme> = {
-  chatgpt: { name: 'chatgpt', color: '#10a37f', lightPosition: 'top-left' },
-  gemini: { name: 'gemini', color: '#8ab4f8', lightPosition: 'bottom-right' },
-  claude: { name: 'claude', color: '#d97757', lightPosition: 'top-right' },
-  grok: { name: 'grok', color: '#e5e5e5', lightPosition: 'bottom-left' },
-  perplexity: { name: 'perplexity', color: '#22d3ee', lightPosition: 'top-center' },
-  lmarena: { name: 'lmarena', color: '#fbbf24', lightPosition: 'center' },
-  deepseek: { name: 'deepseek', color: '#2563eb', lightPosition: 'bottom-center' },
-  qwen: { name: 'qwen', color: '#a855f7', lightPosition: 'center-right' },
+  chatgpt: { name: 'chatgpt', color: 'var(--color-acc-chatgpt)', lightPosition: 'top-left' },
+  gemini: { name: 'gemini', color: 'var(--color-acc-gemini)', lightPosition: 'bottom-right' },
+  claude: { name: 'claude', color: 'var(--color-acc-claude)', lightPosition: 'top-right' },
+  grok: { name: 'grok', color: 'var(--color-acc-grok)', lightPosition: 'bottom-left' },
+  perplexity: { name: 'perplexity', color: 'var(--color-acc-perplexity)', lightPosition: 'top-center' },
+  lmarena: { name: 'lmarena', color: 'var(--color-acc-neutral)', lightPosition: 'center' },
+  deepseek: { name: 'deepseek', color: 'var(--color-acc-deepseek)', lightPosition: 'bottom-center' },
+  qwen: { name: 'qwen', color: 'var(--color-acc-mistral)', lightPosition: 'center-right' },
 };
 
 export const THEME_KEYS = Object.keys(THEMES) as ThemeName[];
@@ -24,6 +24,19 @@ export const ICON_LIBRARY = [
   Mic, Volume2, Sun, Moon, Wind, Droplets, Flame, ZapOff, Anchor, Target, Flag,
   Network, Cpu, History, Search, Pin, Home
 ];
+
+export const SCREEN_LABELS = {
+  dashboard: 'Dashboard',
+  library: 'Library',
+  prompts: 'Prompts',
+  studio: 'AI Nexus',
+  workspace: 'Workspace',
+  analytics: 'Mind Graph',
+  archive: 'Archive',
+  settings: 'Settings',
+  profile: 'Identity',
+  extension: 'Extension',
+} as const;
 
 export const MODELS = [
   { id: 'chatgpt', name: 'ChatGPT', icon: Brain, color: 'emerald', bg: 'bg-[var(--color-acc-chatgpt)]/10', border: 'border-[var(--color-acc-chatgpt)]/30', glow: 'shadow-[0_0_20px_var(--color-acc-chatgpt)]/50', text: 'text-[var(--color-acc-chatgpt)]', gradient: 'from-[var(--color-acc-chatgpt)]/40 via-[var(--color-acc-chatgpt)]/10 to-transparent' },

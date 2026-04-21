@@ -33,7 +33,9 @@ dist/
 *.key
 *.cert
 *.crt
-*.pfx
+.wxt/
+.output/
+.proxy
 *.p12
 auth.json
 credentials.json
@@ -84,7 +86,5 @@ playwright/.cache/
 
 # Local Scratch
 scratch/
-*.txt
 logs/
-.agents/
-brainbox/
+!scripts/update_docs.py

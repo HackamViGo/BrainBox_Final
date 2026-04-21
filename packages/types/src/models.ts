@@ -18,13 +18,14 @@ export interface Item {
   url?: string;
   source?: string;
   sourceId?: string;
-  platform?: ThemeName;
+  platform?: ThemeName | null;
   content?: string;
   messages?: any[];
   tags?: string[];
+  theme?: ThemeName | null;
   isFrozen?: boolean;
   isPermanent?: boolean;
-  deletedAt?: string;
+  deletedAt?: string | null;
 }
 
 export type ThemeName = 'chatgpt' | 'gemini' | 'claude' | 'grok' | 'perplexity' | 'lmarena' | 'deepseek' | 'qwen';

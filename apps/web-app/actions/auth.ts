@@ -1,5 +1,6 @@
 'use server'
 
+import { User } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/server'
 
 export async function signIn(email: string, password: string): Promise<void> {
@@ -14,7 +15,7 @@ export async function signOut(): Promise<void> {
   if (error) throw new Error(error.message)
 }
 
-export async function getUser(): Promise<any> {
+export async function getUser(): Promise<User | null> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   return user

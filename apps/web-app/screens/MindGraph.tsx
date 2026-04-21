@@ -3,10 +3,10 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
-  Network, Share2, Brain, Sparkles, Bot, 
-  Zap, Database, Clock, RefreshCw, Layers,
-  ChevronRight, Search, Activity, Workflow,
-  Maximize2, Minimize2, Filter, Info, ShieldAlert
+  Brain, 
+  Zap, Database, Clock,
+  Search, Activity, 
+  Maximize2, Minimize2
 } from 'lucide-react';
 import * as d3 from 'd3';
 import { useLibraryStore } from '@/store/useLibraryStore';
@@ -29,9 +29,9 @@ interface Link extends d3.SimulationLinkDatum<Node> {
 }
 
 // --- Data Transformation ---
-const transformToGraphData = (folders: any[], items: any[]) => {
+const transformToGraphData = (folders: { id: string; name: string; type?: string; parentId?: string | null }[], items: { id: string; title: string; type: 'chat' | 'prompt'; folderId?: string | null }[]) => {
   const nodes: Node[] = [
-    { id: 'root', name: 'Neural Core', color: '#ffffff', size: 40, type: 'folder', val: 100 },
+    { id: 'root', name: 'Neural Core', color: 'var(--foreground)', size: 40, type: 'folder', val: 100 },
   ];
   const links: Link[] = [];
 
@@ -40,7 +40,7 @@ const transformToGraphData = (folders: any[], items: any[]) => {
     nodes.push({
       id: f.id,
       name: f.name,
-      color: f.type === 'library' ? '#10a37f' : '#d97757',
+      color: f.type === 'library' ? 'var(--color-acc-chatgpt)' : 'var(--color-acc-claude)',
       size: 30,
       type: 'folder',
       val: 80
@@ -53,7 +53,7 @@ const transformToGraphData = (folders: any[], items: any[]) => {
     nodes.push({
       id: i.id,
       name: i.title,
-      color: i.type === 'chat' ? '#8ab4f8' : '#fbbf24',
+      color: i.type === 'chat' ? 'var(--color-acc-gemini)' : 'var(--color-acc-mistral)',
       size: 15,
       type: i.type,
       val: 40
@@ -69,10 +69,10 @@ const transformToGraphData = (folders: any[], items: any[]) => {
 };
 
 const MODELS = [
-  { name: 'GPT-4o', value: 45, color: '#10a37f' },
-  { name: 'Claude 3.5', value: 30, color: '#d97757' },
-  { name: 'Gemini 1.5', value: 15, color: '#8ab4f8' },
-  { name: 'Other', value: 10, color: '#e5e5e5' },
+  { name: 'GPT-4o', value: 45, color: 'var(--color-acc-chatgpt)' },
+  { name: 'Claude 3.5', value: 30, color: 'var(--color-acc-claude)' },
+  { name: 'Gemini 1.5', value: 15, color: 'var(--color-acc-gemini)' },
+  { name: 'Other', value: 10, color: 'var(--color-acc-neutral)' },
 ];
 
 const TOPICS = [
@@ -100,7 +100,7 @@ export function MindGraph() {
     promptFolders: s.promptFolders
   })));
   const graphData = useMemo(() => 
-    transformToGraphData([...libraryFolders, ...promptFolders], items),
+    transformToGraphData([...libraryFolders, ...promptFolders] as unknown as { id: string; name: string }[], items as unknown as { id: string; title: string; type: 'chat' | 'prompt' }[]),
   [items, libraryFolders, promptFolders]);
 
   useEffect(() => {
@@ -145,7 +145,7 @@ export function MindGraph() {
         setSelectedNode(d);
         const scale = 1.5;
         svg.transition().duration(750).call(
-          zoom.transform as any,
+          zoom.transform as unknown as (transition: d3.Transition<SVGSVGElement, unknown, null, undefined>, transform: d3.ZoomTransform) => void,
           d3.zoomIdentity.translate(width / 2, height / 2).scale(scale).translate(-d.x!, -d.y!)
         );
       })
@@ -222,7 +222,7 @@ export function MindGraph() {
       </div>
 
       <div className="flex-1 flex flex-col lg:flex-row z-10 relative overflow-hidden">
-        <div className={`relative flex-1 flex flex-col transition-all duration-500 ${isFullScreen ? 'lg:flex-[10]' : 'lg:flex-[2.5]'}`} ref={containerRef}>
+        <div className={`relative flex-1 flex flex-col transition-all duration-500 ${isFullScreen ? 'lg:flex-10' : 'lg:flex-[2.5]'}`} ref={containerRef}>
           <div className="absolute top-8 left-8 z-20 pointer-events-none">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -318,7 +318,7 @@ export function MindGraph() {
                 </div>
                 <div className="relative h-48 flex items-center justify-center">
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-32 h-32 rounded-full border-[1px] border-white/5 relative animate-[spin_20s_linear_infinite]">
+                    <div className="w-32 h-32 rounded-full border border-white/5 relative animate-[spin_20s_linear_infinite]">
                       <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1 h-1 bg-white rounded-full shadow-[0_0_10px_white]" />
                     </div>
                   </div>
@@ -330,7 +330,7 @@ export function MindGraph() {
                     <circle cx="50%" cy="50%" r="60" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="12" />
                     <circle 
                       cx="50%" cy="50%" r="60" fill="none" 
-                      stroke="#10a37f" strokeWidth="12" 
+                      stroke="var(--color-acc-chatgpt)" strokeWidth="12" 
                       strokeDasharray="377" strokeDashoffset={377 * (1 - 0.45)}
                       strokeLinecap="round"
                       className="transition-all duration-1000"
@@ -356,9 +356,9 @@ export function MindGraph() {
                 <h3 className="text-[10px] font-mono text-white/40 uppercase tracking-[0.2em] mb-6">Efficiency Matrix</h3>
                 <div className="space-y-3">
                   {[
-                    { icon: Database, label: 'Knowledge Growth', val: '+124', unit: 'Artifacts', color: '#10a37f' },
-                    { icon: Clock, label: 'Time Optimized', val: '14.5h', unit: 'Saved', color: '#8ab4f8' },
-                    { icon: Zap, label: 'Neural Sync', val: '94%', unit: 'Accuracy', color: '#a855f7' }
+                    { icon: Database, label: 'Knowledge Growth', val: '+124', unit: 'Artifacts', color: 'var(--color-acc-chatgpt)' },
+                    { icon: Clock, label: 'Time Optimized', val: '14.5h', unit: 'Saved', color: 'var(--color-acc-gemini)' },
+                    { icon: Zap, label: 'Neural Sync', val: '94%', unit: 'Accuracy', color: 'var(--color-acc-mistral)' }
                   ].map((item, i) => (
                     <div key={i} className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-all group cursor-default">
                       <div 
@@ -380,7 +380,7 @@ export function MindGraph() {
               <div className="glass-panel p-6 rounded-3xl border border-white/5 flex-1">
                 <h3 className="text-[10px] font-mono text-white/40 uppercase tracking-[0.2em] mb-6">Topic Heatmap</h3>
                 <div className="flex flex-wrap gap-2">
-                  {TOPICS.map((topic, i) => (
+                  {TOPICS.map((topic) => (
                     <motion.div
                       key={topic.name}
                       whileHover={{ scale: 1.1, backgroundColor: 'rgba(255,255,255,0.1)' }}
@@ -413,7 +413,7 @@ export function MindGraph() {
           
           <div className="relative h-1.5 w-full bg-white/5 rounded-full group">
             <div 
-              className="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 shadow-[0_0_20px_rgba(168,85,247,0.4)] transition-all duration-300"
+              className="absolute top-0 left-0 h-full bg-linear-to-r from-blue-500 via-purple-500 to-pink-500 shadow-[0_0_20px_rgba(168,85,247,0.4)] transition-all duration-300"
               style={{ width: `${timeValue}%` }}
             />
             <input 

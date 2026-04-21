@@ -17,7 +17,7 @@
     "scripts/**/*.ts",
     "packages/**/*.ts",
     "packages/**/*.tsx",
-    ".agents/**/*.md"
+    ".agent/**/*.md"
   ],
   "exclude": ["node_modules", "**/node_modules"]
 }

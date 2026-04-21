@@ -7,9 +7,8 @@ test.describe('Authentication Flow', () => {
     // Check for login overlay via the Login component content
     const loginHeading = page.getByText('BrainBox').first();
     await expect(loginHeading).toBeVisible();
-    
     // Check if the main app content is blurred
-    const shell = page.locator('.blur-2xl');
+    await expect(page.locator('.blur-2xl')).toBeVisible();
   });
 });
 
@@ -45,10 +44,10 @@ test.describe('Navigation', () => {
     
     // Switch to Library
     await libraryBtn.click();
-    await expect(page.getByText('Main Library').first()).toBeVisible();
+    await expect(page.getByText('Library').first()).toBeVisible();
     
     // Switch to Prompts
     await page.locator('button').filter({ hasText: 'Prompts' }).first().click();
-    await expect(page.getByText('Main Prompts').first()).toBeVisible();
+    await expect(page.getByText('Prompts').first()).toBeVisible();
   });
 });

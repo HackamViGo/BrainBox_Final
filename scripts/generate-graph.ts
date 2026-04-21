@@ -15,7 +15,7 @@ import { dirname, resolve, relative, join } from 'path'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 const ROOT = resolve(__dirname, '..')  // монорепо root
-const GRAPH_PATH = join(ROOT, 'docs/GRAPH.json')
+const GRAPH_PATH = join(ROOT, 'docs/JSONs/GRAPH.json')
 const DRY_RUN = process.argv.includes('--check')
 
 // ── Helpers ──────────────────────────────────────────────────────────────────

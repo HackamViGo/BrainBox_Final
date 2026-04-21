@@ -1,14 +1,14 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { FolderSchema, ItemSchema } from '@brainbox/types'
+import { FolderSchema, ItemSchema, type Folder, type Item, type ThemeName } from '@brainbox/types'
 import { revalidatePath } from 'next/cache'
 
 /**
  * FOLDERS
  */
 
-export async function createFolder(data: unknown): Promise<any> {
+export async function createFolder(data: unknown): Promise<Folder> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) throw new Error('Unauthorized')
@@ -29,7 +29,15 @@ export async function createFolder(data: unknown): Promise<any> {
     .single()
 
   if (error) throw new Error(error.message)
-  return folder
+  
+  return {
+    id: folder.id,
+    name: folder.name,
+    iconIndex: folder.icon_index,
+    parentId: folder.parent_id,
+    type: folder.type,
+    level: folder.level,
+  }
 }
 
 export async function deleteFolder(id: string): Promise<void> {
@@ -51,7 +59,7 @@ export async function deleteFolder(id: string): Promise<void> {
  * ITEMS
  */
 
-export async function upsertItem(data: unknown): Promise<any> {
+export async function upsertItem(data: unknown): Promise<Item> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) throw new Error('Unauthorized')
@@ -77,7 +85,19 @@ export async function upsertItem(data: unknown): Promise<any> {
     .single()
 
   if (error) throw new Error(error.message)
-  return item
+  
+  return {
+    id: item.id,
+    title: item.title,
+    description: item.description,
+    type: item.type,
+    folderId: item.folder_id,
+    content: item.content,
+    theme: item.theme,
+    tags: item.tags,
+    isFrozen: item.is_frozen,
+    deletedAt: item.deleted_at,
+  }
 }
 
 export async function softDeleteItem(id: string): Promise<void> {
@@ -114,7 +134,7 @@ export async function freezeItem(id: string): Promise<void> {
  * LOAD ALL DATA
  */
 
-export async function loadUserData(): Promise<any> {
+export async function loadUserData(): Promise<{ libraryFolders: Folder[], promptFolders: Folder[], items: Item[] } | null> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return null
@@ -125,7 +145,7 @@ export async function loadUserData(): Promise<any> {
   ])
 
   // Transform snake_case back to camelCase for the frontend
-  const transformFolder = (f: any) => ({
+  const transformFolder = (f: { id: string; name: string; icon_index: number; parent_id: string | null; type: 'library' | 'prompt'; level: number }): Folder => ({
     id: f.id,
     name: f.name,
     iconIndex: f.icon_index,
@@ -134,14 +154,14 @@ export async function loadUserData(): Promise<any> {
     level: f.level,
   })
 
-  const transformItem = (i: any) => ({
+  const transformItem = (i: { id: string; title: string; description: string | null; type: 'chat' | 'prompt'; folder_id: string | null; content: string; theme: string; tags: string[]; is_frozen: boolean; deleted_at: string | null }): Item => ({
     id: i.id,
     title: i.title,
-    description: i.description,
-    type: i.type,
+    description: i.description ?? '',
+    type: i.type as 'chat' | 'prompt',
     folderId: i.folder_id,
     content: i.content,
-    theme: i.theme,
+    theme: i.theme as ThemeName,
     tags: i.tags,
     isFrozen: i.is_frozen,
     deletedAt: i.deleted_at,

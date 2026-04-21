@@ -1,19 +1,19 @@
 'use client'
 
-import React, { useState, useRef, useEffect, useCallback, forwardRef } from 'react';
+import React, { useState, useRef, useEffect, forwardRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import type { LucideIcon
 } from 'lucide-react';
 import { 
-  Search, Filter, MessageSquare, MoreVertical, Sparkles, Activity, 
-  ChevronRight, ChevronLeft, Loader2, X, Brain, Zap, FileText, 
+  Search, MessageSquare, MoreVertical, Sparkles, Activity, 
+  ChevronLeft, Loader2, X, Brain, Zap, FileText, 
   List, Target, MessageCircle, BarChart3, ShieldAlert, Eye, 
-  Lightbulb, Scale, CheckCircle2, Folder as FolderIcon, LayoutGrid, 
+  Lightbulb, Scale, CheckCircle2, 
   Plus, BookOpen
 } from 'lucide-react';
 
-import { THEMES, ICON_LIBRARY } from '@brainbox/types';
-import type { ThemeName, Folder, Item } from '@brainbox/types';
+import { THEMES, ICON_LIBRARY, SCREEN_LABELS } from '@brainbox/types';
+import type { ThemeName, Item } from '@brainbox/types';
 import { useLibraryStore } from '@/store/useLibraryStore';
 import { useAppStore } from '@/store/useAppStore';
 import { useShallow } from 'zustand/react/shallow';
@@ -52,19 +52,15 @@ export function Library() {
   })));
   
   const { 
-    setTheme,
     setHoverTheme,
     activeFolder, 
     setActiveFolder,
-    setModalOpen,
-    isApiKeyModalOpen
+    setModalOpen
   } = useAppStore(useShallow(s => ({
-    setTheme: s.setTheme,
     setHoverTheme: s.setHoverTheme,
     activeFolder: s.activeFolder,
     setActiveFolder: s.setActiveFolder,
-    setModalOpen: s.setModalOpen,
-    isApiKeyModalOpen: s.isApiKeyModalOpen
+    setModalOpen: s.setModalOpen
   })));
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -91,7 +87,7 @@ export function Library() {
     return item.folderId === (activeFolder || null);
   });
 
-  const handleAction = async (chat: Item, option: any) => {
+  const handleAction = async (chat: Item, option: { id: string, label: string, prompt?: string }) => {
     // API key stored in Zustand store (not raw localStorage)
     const apiKey = useAppStore.getState().getApiKey('gemini')
     if (!apiKey) {
@@ -108,7 +104,7 @@ export function Library() {
       const prompt = `${option.prompt}\n\nContent:\n${chat.content || chat.description}`;
       const result = await generateGeminiResponse(prompt, apiKey);
       setAnalysisResult(result);
-    } catch (error) {
+    } catch {
       setAnalysisResult("Error generating analysis. Please check your API key and connection.");
     } finally {
       setIsAnalyzing(false);
@@ -139,7 +135,7 @@ export function Library() {
             <div>
               <h2 className="text-3xl font-bold flex items-center gap-4">
                 <ActiveIcon className="w-8 h-8 text-white/20" />
-                {activeFolderData ? activeFolderData.name : 'Library'}
+                {activeFolderData ? activeFolderData.name : SCREEN_LABELS.library}
               </h2>
               <p className="text-white/40">{activeFolder ? 'Browsing organized intelligence' : 'Access your collective intelligence'}</p>
             </div>
@@ -163,7 +159,10 @@ export function Library() {
               className="w-full h-12 pl-12 pr-4 bg-white/5 border border-white/10 rounded-2xl text-sm focus:outline-none focus:border-blue-500/50 focus:bg-white/10 transition-all placeholder:text-white/20"
             />
           </div>
-          <button className="h-12 px-6 bg-blue-500 hover:bg-blue-400 text-white rounded-2xl font-bold text-sm transition-all flex items-center gap-2 shadow-lg shadow-blue-500/20 active:scale-95">
+          <button 
+            onClick={() => setModalOpen('newChat', true)}
+            className="h-12 px-6 bg-blue-500 hover:bg-blue-400 text-white rounded-2xl font-bold text-sm transition-all flex items-center gap-2 shadow-lg shadow-blue-500/20 active:scale-95"
+          >
             <Plus className="w-4 h-4" />
             New Fragment
           </button>
@@ -206,13 +205,27 @@ export function Library() {
                 <ChatCard 
                   key={chat.id} 
                   chat={chat} 
-                  setTheme={setHoverTheme}
-                  onAction={(option: any) => handleAction(chat, option)}
+                  anyExpanded={!!expandedChatId}
+                  onAction={(option) => handleAction(chat, option)}
                   onDelete={() => deleteItem(chat.id)}
                   onClick={() => {
                     setExpandedChatId(chat.id);
                     setAnalysisResult(null);
                     setCurrentChatForAnalysis(chat);
+                    const themeId = chat.platform || chat.modelId || 'chatgpt';
+                    let resolvedTheme = themeId as ThemeName;
+                    if (!THEMES[resolvedTheme]) {
+                      const lower = themeId.toLowerCase();
+                      if (lower.includes('gpt') || lower.includes('openai')) resolvedTheme = 'chatgpt';
+                      else if (lower.includes('claude') || lower.includes('anthropic')) resolvedTheme = 'claude';
+                      else if (lower.includes('gemini') || lower.includes('google')) resolvedTheme = 'gemini';
+                      else if (lower.includes('grok') || lower.includes('xai')) resolvedTheme = 'grok';
+                      else if (lower.includes('qwen')) resolvedTheme = 'qwen';
+                      else if (lower.includes('deepseek')) resolvedTheme = 'deepseek';
+                      else if (lower.includes('perplexity')) resolvedTheme = 'perplexity';
+                      else resolvedTheme = 'chatgpt';
+                    }
+                    setHoverTheme(resolvedTheme);
                   }}
                 />
               ))}
@@ -232,10 +245,11 @@ export function Library() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[60] flex items-center justify-center p-0 sm:p-4 md:p-8 bg-black/80 backdrop-blur-xl"
+            className="fixed inset-0 z-60 flex items-center justify-center p-0 sm:p-4 md:p-8 bg-black/80 backdrop-blur-xl"
             onClick={() => {
               setExpandedChatId(null);
               setAnalysisResult(null);
+              setHoverTheme(null);
             }}
           >
             <motion.div
@@ -248,11 +262,11 @@ export function Library() {
                   <div className="flex items-center gap-3 mb-2">
                     <div 
                       className="w-10 h-10 rounded-xl flex items-center justify-center bg-white/5 border border-white/10 shrink-0"
-                      style={{ color: THEMES[(currentChatForAnalysis?.modelId as ThemeName) || 'chatgpt']?.color }}
+                      style={{ color: THEMES[(currentChatForAnalysis?.platform || currentChatForAnalysis?.modelId as ThemeName) || 'chatgpt']?.color || THEMES['chatgpt'].color }}
                     >
                       <MessageSquare className="w-5 h-5" />
                     </div>
-                    <span className="text-[10px] uppercase tracking-widest text-white/40 truncate">{(currentChatForAnalysis as any)?.modelId || 'chatgpt'}</span>
+                    <span className="text-[10px] uppercase tracking-widest text-white/40 truncate">{currentChatForAnalysis?.platform || 'chatgpt'}</span>
                   </div>
                   <h3 className="text-xl sm:text-3xl font-bold line-clamp-2">{currentChatForAnalysis?.title}</h3>
                   <div className="flex flex-wrap gap-2 mt-4">
@@ -267,6 +281,7 @@ export function Library() {
                   onClick={() => {
                     setExpandedChatId(null);
                     setAnalysisResult(null);
+                    setHoverTheme(null);
                   }} 
                   className="p-3 glass-panel-light rounded-full hover:bg-white/10 transition-colors ml-4 shrink-0"
                 >
@@ -313,7 +328,7 @@ export function Library() {
 
               <div className="p-6 bg-white/5 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-white/30 text-xs">
                 <div className="flex gap-6">
-                  <span>Created: {(currentChatForAnalysis as any)?.updatedAt || 'Just now'}</span>
+                  <span>Created: {currentChatForAnalysis?.updatedAt || 'Just now'}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <ShieldAlert className="w-3 h-3 shrink-0" />
@@ -328,9 +343,31 @@ export function Library() {
   );
 }
 
-const ChatCard = forwardRef<HTMLDivElement, any>(({ chat, setTheme, onAction, onClick, onDelete, onDragStart }, ref) => {
-  const modelId = chat.modelId || 'chatgpt';
-  const themeColor = THEMES[modelId as ThemeName]?.color || '#ffffff';
+const ChatCard = forwardRef<HTMLDivElement, {
+  chat: Item;
+  anyExpanded?: boolean;
+  onAction: (opt: { id: string, label: string }) => void;
+  onClick: () => void;
+  onDelete: (id: string) => void;
+  onDragStart?: (e: React.DragEvent, type: string, item: Item) => void;
+}>(({ chat, anyExpanded, onAction, onClick, onDelete, onDragStart }, ref) => {
+  const { setHoverTheme } = useAppStore();
+  const rawModelId = chat.platform || chat.modelId || 'chatgpt';
+  
+  let modelId = rawModelId as ThemeName;
+  if (!THEMES[modelId]) {
+    const lower = rawModelId.toLowerCase();
+    if (lower.includes('gpt') || lower.includes('openai')) modelId = 'chatgpt';
+    else if (lower.includes('claude') || lower.includes('anthropic')) modelId = 'claude';
+    else if (lower.includes('gemini') || lower.includes('google')) modelId = 'gemini';
+    else if (lower.includes('grok') || lower.includes('xai')) modelId = 'grok';
+    else if (lower.includes('qwen')) modelId = 'qwen';
+    else if (lower.includes('deepseek')) modelId = 'deepseek';
+    else if (lower.includes('perplexity')) modelId = 'perplexity';
+    else modelId = 'chatgpt';
+  }
+
+  const themeColor = THEMES[modelId]?.color || 'var(--color-acc-chatgpt)';
   const tags = chat.tags || [];
   const date = chat.updatedAt || 'Just now';
   const content = chat.content || chat.description || '';
@@ -360,17 +397,22 @@ const ChatCard = forwardRef<HTMLDivElement, any>(({ chat, setTheme, onAction, on
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
-      onMouseEnter={() => setTheme(modelId as ThemeName)}
-      onMouseLeave={() => setTheme(null as any)}
+      onMouseEnter={() => {
+        if (!anyExpanded) setHoverTheme(modelId);
+      }}
+      onMouseLeave={() => {
+        if (!anyExpanded) setHoverTheme(null);
+      }}
       onClick={onClick}
       draggable
-      onDragStart={(e: any) => {
+      onDragStart={(e: unknown) => {
+        const dragEvent = e as unknown as React.DragEvent;
         if (onDragStart) {
-          onDragStart(e, 'glassNode', chat);
+          onDragStart(dragEvent, 'glassNode', chat);
         } else {
-          if (e.dataTransfer) {
-            e.dataTransfer.setData('application/json', JSON.stringify(chat));
-            e.dataTransfer.effectAllowed = 'move';
+          if (dragEvent.dataTransfer) {
+            dragEvent.dataTransfer.setData('application/json', JSON.stringify(chat));
+            dragEvent.dataTransfer.effectAllowed = 'move';
           }
         }
       }}
@@ -450,10 +492,10 @@ const ChatCard = forwardRef<HTMLDivElement, any>(({ chat, setTheme, onAction, on
                     <Eye className="w-4 h-4 text-white/30 group-hover/opt:text-blue-400 transition-colors" />
                     Open Fragment
                   </button>
-                  <div className="h-[1px] bg-white/5 my-1" />
+                  <div className="h-px bg-white/5 my-1" />
                   <button
                     onClick={() => {
-                      onDelete();
+                      onDelete(chat.id);
                       setShowMore(false);
                     }}
                     className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-red-500/10 text-left text-xs text-red-400/70 hover:text-red-400 transition-all group/opt"

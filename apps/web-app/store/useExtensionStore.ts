@@ -1,48 +1,86 @@
 'use client'
 
 import { create } from 'zustand'
+import { persist, createJSONStorage } from 'zustand/middleware'
+import { useShallow } from 'zustand/react/shallow'
+import type { ExtensionChatPayload } from '@brainbox/types'
 import { logger } from '@brainbox/utils'
 
 interface ExtensionState {
+  /** List of raw captures received from the extension */
+  captures: ExtensionChatPayload[]
+  isLoading: boolean
   isConnected: boolean
-  lastSyncAt: string | null
-  activePaltforms: string[]
-  version: string | null
+  version: string
+  lastSyncAt: number | null
   error: string | null
-  
-  // Actions
-  setConnection: (status: boolean) => void
-  updateSyncStatus: (platforms: string[]) => void
-  setError: (error: string | null) => void
-  setVersion: (version: string) => void
+  activePlatforms: string[]
 }
 
+interface ExtensionActions {
+  /** Adds a new capture to the local feed */
+  addCapture: (capture: ExtensionChatPayload) => void
+  /** Removes a capture from the local feed */
+  removeCapture: (id: string) => void
+  /** Clears all local captures */
+  clearCaptures: () => void
+}
+
+type ExtensionStore = ExtensionState & ExtensionActions
+
 /**
- * Extension Store
- * Manages the client-side state of the BrainBox Chrome Extension connection.
+ * useExtensionStore
+ * Manages the "Raw Feed" of captures coming from the Chrome Extension.
+ * Persisted in localStorage with SSR hydration skip.
  */
-export const useExtensionStore = create<ExtensionState>((set) => ({
-  isConnected: false,
-  lastSyncAt: null,
-  activePaltforms: [],
-  version: null,
-  error: null,
+export const useExtensionStore = create<ExtensionStore>()(
+  persist(
+    (set) => ({
+      // ── Initial State ──
+      captures: [],
+      isLoading: false,
+      isConnected: false,
+      version: '1.0.0',
+      lastSyncAt: null,
+      error: null,
+      activePlatforms: [],
 
-  setConnection: (status) => {
-    set({ isConnected: status })
-    if (status) {
-      logger.info('ExtensionStore', 'Extension connected')
+      // ── Actions ──
+      addCapture: (capture) => {
+        logger.info('ExtensionStore', 'Adding new capture', { id: capture.id });
+        set((state) => ({
+          captures: [capture, ...state.captures]
+        }))
+      },
+
+      removeCapture: (id) => {
+        set((state) => ({
+          captures: state.captures.filter((c) => c.id !== id)
+        }))
+      },
+
+      clearCaptures: () => set({ captures: [] }),
+    }),
+    {
+      name: 'brainbox-extension-store',
+      storage: createJSONStorage(() => localStorage),
+      skipHydration: true,
+      partialize: (state) => ({
+        captures: state.captures,
+      }),
     }
-  },
+  )
+)
 
-  updateSyncStatus: (platforms) => {
-    set({ 
-      activePaltforms: platforms,
-      lastSyncAt: new Date().toISOString()
-    })
-  },
+// ── Selector Hooks ──────────────────────────────────────────────────────────
 
-  setError: (error) => set({ error }),
-  
-  setVersion: (version) => set({ version })
-}))
+export const useExtensionCaptures = () => useExtensionStore((s) => s.captures)
+
+export const useExtensionStoreActions = () =>
+  useExtensionStore(
+    useShallow((s) => ({
+      addCapture: s.addCapture,
+      removeCapture: s.removeCapture,
+      clearCaptures: s.clearCaptures,
+    }))
+  )

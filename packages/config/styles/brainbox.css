@@ -1,20 +1,37 @@
 /* BrainBox Global Design System Tokens & Utility Classes */
 
+@theme {
+  /* BrainBox Platform Accent Colors */
+  --color-acc-chatgpt: #10a37f;
+  --color-acc-claude: #d97757;
+  --color-acc-gemini: #8ab4f8;
+  --color-acc-mistral: #7c3aed;
+  --color-acc-grok: #e5e5e5;
+  --color-acc-perplexity: #20b2aa;
+  --color-acc-deepseek: #3b82f6;
+  --color-acc-neutral: #6b7280;
+
+  /* Glass system tokens */
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.05);
+  --glass-blur: 12px;
+}
+
 @layer utilities {
   /* Glasspanels */
   .glass-panel {
-    background: rgba(20, 20, 20, 0.4);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   }
 
   .glass-panel-light {
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.015);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid rgba(255, 255, 255, 0.03);
   }
 
   /* Grain texture overlay */

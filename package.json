@@ -10,20 +10,17 @@
     "typecheck": "turbo typecheck",
     "lint": "turbo lint",
     "install:all": "pnpm install",
-    "prepare": "husky"
-  },
-  "lint-staged": {
-    "*.{ts,tsx}": [
-      "eslint --fix",
-      "prettier --write"
-    ]
+    "prepare": "husky",
+    "kg:update": "tsx scripts/update-knowledge-graph.ts",
+    "brain:search": "tsx scripts/search-brain.ts",
+    "stop": "fuser -k 3000/tcp 2>/dev/null || true",
+    "rd": "pnpm stop && pnpm dev"
   },
   "workspaces": [
     "apps/*",
     "packages/*"
   ],
   "devDependencies": {
-    "turbo": "^2.4.4",
     "@commitlint/cli": "^20.5.0",
     "@commitlint/config-conventional": "^20.5.0",
     "@eslint/js": "^10.0.1",
@@ -36,11 +33,16 @@
     "dotenv-cli": "^11.0.0",
     "eslint": "catalog:",
     "eslint-config-next": "catalog:",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
     "globals": "^17.5.0",
     "husky": "^9.1.7",
     "lint-staged": "^15.5.2",
     "prettier": "^3.8.2",
+    "prettier-plugin-tailwindcss": "^0.7.2",
     "tsx": "^4.21.0",
+    "turbo": "^2.4.4",
     "typescript": "catalog:",
     "typescript-eslint": "^8.58.1",
     "vitest": "catalog:"

@@ -9,13 +9,13 @@ import { useShallow } from 'zustand/react/shallow';
 
 export function Extension() {
   const { setActiveScreen } = useAppStore();
-  const { isConnected, version, lastSyncAt, error, activePaltforms } = useExtensionStore(
+  const { isConnected, version, lastSyncAt, error, activePlatforms } = useExtensionStore(
     useShallow((s) => ({
       isConnected: s.isConnected,
       version: s.version,
       lastSyncAt: s.lastSyncAt,
       error: s.error,
-      activePaltforms: s.activePaltforms
+      activePlatforms: s.activePlatforms
     }))
   );
   
@@ -72,7 +72,7 @@ export function Extension() {
         className="max-w-4xl mx-auto w-full mt-20 sm:mt-24 pb-20"
       >
         <div className="flex flex-col sm:flex-row sm:items-center gap-6 mb-12 group">
-          <div className={`w-14 h-14 rounded-3xl ${isConnected ? 'bg-gradient-to-br from-green-400 to-emerald-600 shadow-[0_0_20px_rgba(34,197,94,0.3)]' : 'bg-gradient-to-br from-amber-400 to-orange-600 shadow-2xl'} flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:rotate-12 shrink-0 relative`}>
+          <div className={`w-14 h-14 rounded-3xl ${isConnected ? 'bg-linear-to-br from-green-400 to-emerald-600 shadow-[0_0_20px_rgba(34,197,94,0.3)]' : 'bg-linear-to-br from-amber-400 to-orange-600 shadow-2xl'} flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:rotate-12 shrink-0 relative`}>
             <Puzzle className="w-7 h-7 text-white" />
             {isConnected && (
               <motion.div 
@@ -103,7 +103,7 @@ export function Extension() {
                 <div className="text-xs text-white/60 font-mono italic">{lastSyncAt ? new Date(lastSyncAt).toLocaleTimeString() : 'Never'}</div>
               </div>
               <div className="flex -space-x-2">
-                {activePaltforms.map(p => (
+                {activePlatforms.map(p => (
                   <div key={p} className="w-8 h-8 rounded-full border-2 border-black bg-white/5 flex items-center justify-center text-[8px] font-bold uppercase text-white/40">
                     {p[0]}
                   </div>
@@ -142,7 +142,7 @@ export function Extension() {
 
         {!isConnected ? (
           <div className="glass-panel p-10 sm:p-16 rounded-3xl border border-white/5 flex flex-col items-center justify-center text-center relative overflow-hidden shadow-2xl">
-             <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent pointer-events-none" />
+             <div className="absolute inset-0 bg-linear-to-b from-white/2 to-transparent pointer-events-none" />
              <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center mb-8 border border-white/10 group animate-pulse">
                <Download className="w-10 h-10 text-white/40 group-hover:text-white transition-colors" />
              </div>
@@ -155,7 +155,7 @@ export function Extension() {
              <button className="group relative px-10 py-5 bg-white text-black rounded-2xl font-bold uppercase tracking-[0.2em] hover:bg-white/90 transition-all duration-300 hover:scale-105 active:scale-95 shadow-[0_0_50px_rgba(255,255,255,0.1)] flex items-center gap-3">
                <ExternalLink className="w-5 h-5" />
                Install on Chrome
-               <div className="absolute inset-x-0 -bottom-2 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent blur-sm" />
+               <div className="absolute inset-x-0 -bottom-2 h-px bg-linear-to-r from-transparent via-white/40 to-transparent blur-sm" />
              </button>
              
              <p className="mt-8 text-[10px] font-bold font-mono text-white/20 uppercase tracking-[0.4em]">Official Release • Free for All Users</p>
@@ -166,8 +166,8 @@ export function Extension() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {['chatgpt', 'gemini', 'claude', 'grok'].map(p => (
                 <div key={p} className="p-4 rounded-2xl bg-white/5 border border-white/5 flex flex-col items-center gap-3 group hover:border-white/10 transition-all">
-                  <div className={`w-2 h-2 rounded-full ${activePaltforms.includes(p) ? 'bg-green-500 animate-pulse' : 'bg-white/10'}`} />
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-white/60 capitalize">{p}</span>
+                  <div className={`w-2 h-2 rounded-full ${activePlatforms.includes(p) ? 'bg-green-500 animate-pulse' : 'bg-white/10'}`} />
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-white/60">{p}</span>
                 </div>
               ))}
             </div>

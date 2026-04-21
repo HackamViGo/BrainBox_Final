@@ -1,5 +1,5 @@
+/* eslint-disable no-console */
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs'
-import { glob } from 'glob'
 import path from 'path'
 
 const replacements = [

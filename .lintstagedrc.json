@@ -1,5 +1,5 @@
 {
-  "**/*.{ts,tsx}": ["eslint --fix", "bash -c 'pnpm typecheck'"],
-  "**/*.css": ["prettier --write"],
-  "**/*.{json,md}": ["prettier --write"]
+  "!(ref)/**/*.{ts,tsx}": ["eslint --fix", "bash -c 'pnpm typecheck'"],
+  "!(ref)/**/*.css": ["prettier --write"],
+  "!(ref)/**/*.{json,md}": ["prettier --write"]
 }

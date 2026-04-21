@@ -4,8 +4,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "wxt",
+    "build": "wxt build",
+    "zip": "wxt zip",
+    "prepare": "wxt prepare",
+    "postinstall": "wxt prepare",
     "preview": "vite preview",
     "test": "vitest",
     "typecheck": "tsc --noEmit"
@@ -20,17 +23,16 @@
     "zustand": "catalog:"
   },
   "devDependencies": {
-    "@crxjs/vite-plugin": "2.0.0-beta.33",
     "@testing-library/react": "catalog:",
     "@types/chrome": "^0.0.300",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
-    "@vitejs/plugin-react": "catalog:",
+    "@wxt-dev/module-react": "^1.2.2",
     "jsdom": "^25.0.0",
     "typescript": "catalog:",
     "vite": "^8.0.0",
-    "vite-tsconfig-paths": "^5.0.0",
-    "vitest": "catalog:"
+    "vitest": "catalog:",
+    "wxt": "^0.20.25"
   }
 }

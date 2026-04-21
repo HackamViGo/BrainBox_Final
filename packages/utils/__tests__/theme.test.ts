@@ -13,15 +13,15 @@ describe('theme utils', () => {
 
   describe('getNextTheme', () => {
     it('should return a different theme than current', () => {
-      const current: ThemeName = 'brainbox';
+      const current: ThemeName = 'chatgpt';
       const next = getNextTheme(current);
       expect(next).not.toBe(current);
       expect(THEME_KEYS).toContain(next);
     });
 
     it('should exclude specified themes', () => {
-      const current: ThemeName = 'brainbox';
-      const exclude: ThemeName[] = ['nebula', 'forest'];
+      const current: ThemeName = 'chatgpt';
+      const exclude: ThemeName[] = ['gemini', 'claude'];
       
       // Run multiple times to reduce chance of lucky pick
       for (let i = 0; i < 20; i++) {
@@ -32,12 +32,9 @@ describe('theme utils', () => {
     });
 
     it('should return current if no other themes available', () => {
-      // If we exclude everything else... 
-      // THEME_KEYS has 3 themes usually: 'brainbox', 'nebula', 'forest'
-      // Wait, let's see how many themes there are
-      const allExceptCurrent = THEME_KEYS.filter(t => t !== 'brainbox');
-      const next = getNextTheme('brainbox', allExceptCurrent);
-      expect(next).toBe('brainbox');
+      const allExceptCurrent = THEME_KEYS.filter(t => t !== 'chatgpt');
+      const next = getNextTheme('chatgpt', allExceptCurrent);
+      expect(next).toBe('chatgpt');
     });
   });
 });

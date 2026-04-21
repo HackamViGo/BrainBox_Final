@@ -1,0 +1,233 @@
+
+> brainbox-monorepo@ lint /home/hackamvigo/Projects/BrainBox_
+> turbo lint
+
+
+   • Packages in scope: @brainbox/config, @brainbox/types, @brainbox/ui, @brainbox/utils, extension, web-app
+   • Running lint in 6 packages
+   • Remote caching disabled
+
+web-app:lint: cache miss, executing 03ead82a192e2a3b
+web-app:lint: 
+web-app:lint: > web-app@0.1.0 lint /home/hackamvigo/Projects/BrainBox_/apps/web-app
+web-app:lint: > eslint .
+web-app:lint: 
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/__tests__/setup.ts
+web-app:lint:   2:10  error  'vi' is defined but never used  @typescript-eslint/no-unused-vars
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/__tests__/unit/actions/auth.test.ts
+web-app:lint:    2:18  error  'signOut' is defined but never used       @typescript-eslint/no-unused-vars
+web-app:lint:   20:23  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/__tests__/unit/actions/library.test.ts
+web-app:lint:   19:18  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint:   33:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint:   45:23  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint:   59:57  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint:   89:53  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint:   91:53  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/__tests__/unit/store/useAppStore.test.ts
+web-app:lint:   45:37  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/__tests__/unit/store/useLibraryStore.test.ts
+web-app:lint:    35:76  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint:    66:14  error  'e' is defined but never used             @typescript-eslint/no-unused-vars
+web-app:lint:    82:56  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint:   130:67  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint:   148:78  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint:   150:71  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint:   176:10  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/actions/library.ts
+web-app:lint:   148:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint:   157:29  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/app/api/chats/extension/route.ts
+web-app:lint:    8:7   error  'RATE_LIMIT' is assigned a value but never used      @typescript-eslint/no-unused-vars
+web-app:lint:    9:7   error  'RATE_WINDOW_MS' is assigned a value but never used  @typescript-eslint/no-unused-vars
+web-app:lint:   70:19  error  Unexpected any. Specify a different type             @typescript-eslint/no-explicit-any
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/app/api/chunks/route.ts
+web-app:lint:   55:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/app/api/prompts/route.ts
+web-app:lint:   31:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/app/page.tsx
+web-app:lint:   5:10  error  'motion' is defined but never used           @typescript-eslint/no-unused-vars
+web-app:lint:   5:18  error  'AnimatePresence' is defined but never used  @typescript-eslint/no-unused-vars
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/components/ApiKeyModal.tsx
+web-app:lint:    5:10  error  'X' is defined but never used             @typescript-eslint/no-unused-vars
+web-app:lint:    7:33  error  'DialogHeader' is defined but never used  @typescript-eslint/no-unused-vars
+web-app:lint:   11:10  error  'cn' is defined but never used            @typescript-eslint/no-unused-vars
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/components/NewChatModal.tsx
+web-app:lint:   64:67  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/components/NewFolderModal.tsx
+web-app:lint:   4:10  error  'motion' is defined but never used           @typescript-eslint/no-unused-vars
+web-app:lint:   4:18  error  'AnimatePresence' is defined but never used  @typescript-eslint/no-unused-vars
+web-app:lint:   5:10  error  'X' is defined but never used                @typescript-eslint/no-unused-vars
+web-app:lint:   8:33  error  'DialogHeader' is defined but never used     @typescript-eslint/no-unused-vars
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/components/PersistentShell.tsx
+web-app:lint:    3:17  error  'useState' is defined but never used                      @typescript-eslint/no-unused-vars
+web-app:lint:   23:38  error  'setActiveScreen' is assigned a value but never used      @typescript-eslint/no-unused-vars
+web-app:lint:   24:5   error  'isMobileSidebarOpen' is assigned a value but never used  @typescript-eslint/no-unused-vars
+web-app:lint:   27:9   error  'pathname' is assigned a value but never used             @typescript-eslint/no-unused-vars
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/components/Sidebar.tsx
+web-app:lint:    48:32  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint:    53:34  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint:   450:96  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint:   673:62  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint:   731:29  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint:   754:83  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/components/SmartSwitchModal.tsx
+web-app:lint:    3:10  error  'motion' is defined but never used           @typescript-eslint/no-unused-vars
+web-app:lint:    3:18  error  'AnimatePresence' is defined but never used  @typescript-eslint/no-unused-vars
+web-app:lint:    4:41  error  'X' is defined but never used                @typescript-eslint/no-unused-vars
+web-app:lint:    6:33  error  'DialogHeader' is defined but never used     @typescript-eslint/no-unused-vars
+web-app:lint:    7:10  error  'Button' is defined but never used           @typescript-eslint/no-unused-vars
+web-app:lint:   15:25  error  'type' is defined but never used             @typescript-eslint/no-unused-vars
+web-app:lint:   20:32  error  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/components/prompts/CapturesView.tsx
+web-app:lint:   77:21  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/components/prompts/FrameworksView.tsx
+web-app:lint:     3:27  error  'useEffect' is defined but never used     @typescript-eslint/no-unused-vars
+web-app:lint:     3:38  error  'useRef' is defined but never used        @typescript-eslint/no-unused-vars
+web-app:lint:    17:42  error  'setTheme' is defined but never used      @typescript-eslint/no-unused-vars
+web-app:lint:    18:52  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint:   123:54  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/components/prompts/HubView.tsx
+web-app:lint:   110:81  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/components/prompts/RefineView.tsx
+web-app:lint:    5:64  error  'X' is defined but never used                         @typescript-eslint/no-unused-vars
+web-app:lint:   25:10  error  'apiKeyModalOpen' is assigned a value but never used  @typescript-eslint/no-unused-vars
+web-app:lint:   33:37  error  Unexpected any. Specify a different type              @typescript-eslint/no-explicit-any
+web-app:lint:   80:16  error  'err' is defined but never used                       @typescript-eslint/no-unused-vars
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/components/prompts/SavedPromptsView.tsx
+web-app:lint:     4:18   error  'AnimatePresence' is defined but never used  @typescript-eslint/no-unused-vars
+web-app:lint:    20:66   error  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
+web-app:lint:   152:71   error  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
+web-app:lint:   152:99   error  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
+web-app:lint:   153:57   error  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
+web-app:lint:   157:36   error  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
+web-app:lint:   168:72   error  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
+web-app:lint:   168:100  error  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
+web-app:lint:   175:66   error  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
+web-app:lint:   175:94   error  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
+web-app:lint:   184:80   error  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
+web-app:lint:   184:108  error  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
+web-app:lint:   184:213  error  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
+web-app:lint:   184:241  error  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/components/prompts/ScrollHint.tsx
+web-app:lint:    6:79  error    Unexpected any. Specify a different type                                                                                                                              @typescript-eslint/no-explicit-any
+web-app:lint:   30:6   warning  React Hook useEffect was passed a dependency list that is not an array literal. This means we can't statically verify whether you've passed the correct dependencies  react-hooks/exhaustive-deps
+web-app:lint:   30:6   warning  React Hook useEffect has a missing dependency: 'ref'. Either include it or remove the dependency array                                                                react-hooks/exhaustive-deps
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/components/workspace/AssetLibrary.tsx
+web-app:lint:    7:15  error  'Item' is defined but never used          @typescript-eslint/no-unused-vars
+web-app:lint:   12:65  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/components/workspace/GlassNode.tsx
+web-app:lint:   4:41  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/components/workspace/StickyNode.tsx
+web-app:lint:   5:42  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/components/workspace/WhisperPanel.tsx
+web-app:lint:    5:32  error    'Zap' is defined but never used                                                                              @typescript-eslint/no-unused-vars
+web-app:lint:   13:33  error    Unexpected any. Specify a different type                                                                     @typescript-eslint/no-explicit-any
+web-app:lint:   30:6   warning  React Hook useEffect has a missing dependency: 'saveNote'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+web-app:lint:   39:20  error    Unexpected any. Specify a different type                                                                     @typescript-eslint/no-explicit-any
+web-app:lint:   39:57  error    Unexpected any. Specify a different type                                                                     @typescript-eslint/no-explicit-any
+web-app:lint:   44:49  error    Unexpected any. Specify a different type                                                                     @typescript-eslint/no-explicit-any
+web-app:lint:   56:48  error    Unexpected any. Specify a different type                                                                     @typescript-eslint/no-explicit-any
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/e2e/auth.spec.ts
+web-app:lint:   12:11  error  'shell' is assigned a value but never used  @typescript-eslint/no-unused-vars
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/hooks/useDragDrop.ts
+web-app:lint:   12:80  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/hooks/useScrollTransition.ts
+web-app:lint:   5:15  error  'ScreenName' is defined but never used  @typescript-eslint/no-unused-vars
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/lib/supabase/server.ts
+web-app:lint:   35:72  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/proxy.ts
+web-app:lint:   15:73  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/screens/Archive.tsx
+web-app:lint:   9:3  error  'Clock' is defined but never used  @typescript-eslint/no-unused-vars
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/screens/Dashboard.tsx
+web-app:lint:   16:9   error  Unexpected empty object pattern  no-empty-pattern
+web-app:lint:   16:42  error  '_s' is defined but never used   @typescript-eslint/no-unused-vars
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/screens/Identity.tsx
+web-app:lint:    10:3   error  'CheckCircle2' is defined but never used            @typescript-eslint/no-unused-vars
+web-app:lint:    11:3   error  'Zap' is defined but never used                     @typescript-eslint/no-unused-vars
+web-app:lint:    12:3   error  'Code2' is defined but never used                   @typescript-eslint/no-unused-vars
+web-app:lint:    13:3   error  'Palette' is defined but never used                 @typescript-eslint/no-unused-vars
+web-app:lint:    23:15  error  'User' is defined but never used                    @typescript-eslint/no-unused-vars
+web-app:lint:    38:22  error  'setModelUsage' is assigned a value but never used  @typescript-eslint/no-unused-vars
+web-app:lint:   330:30  error  'i' is defined but never used                       @typescript-eslint/no-unused-vars
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/screens/Library.tsx
+web-app:lint:   331:62  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint:   352:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint:   408:24  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/screens/Login.tsx
+web-app:lint:   24:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/screens/MindGraph.tsx
+web-app:lint:    32:40  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint:    32:54  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint:   148:29  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/screens/Prompts.tsx
+web-app:lint:   46:26  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/screens/Settings.tsx
+web-app:lint:    7:3  error  'Wrench' is defined but never used                  @typescript-eslint/no-unused-vars
+web-app:lint:   14:3  error  'ChevronDown' is defined but never used             @typescript-eslint/no-unused-vars
+web-app:lint:   62:9  error  'promptFolders' is assigned a value but never used  @typescript-eslint/no-unused-vars
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/screens/Workspace.tsx
+web-app:lint:    42:62  error  Unexpected any. Specify a different type          @typescript-eslint/no-explicit-any
+web-app:lint:   130:48  error  Unexpected any. Specify a different type          @typescript-eslint/no-explicit-any
+web-app:lint:   144:9   error  'onDragStart' is assigned a value but never used  @typescript-eslint/no-unused-vars
+web-app:lint:   144:72  error  Unexpected any. Specify a different type          @typescript-eslint/no-explicit-any
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/scripts/migrate-screens.ts
+web-app:lint:    2:10  error  'glob' is defined but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+web-app:lint:   50:3   error  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+web-app:lint: 
+web-app:lint: /home/hackamvigo/Projects/BrainBox_/apps/web-app/store/useAppStore.ts
+web-app:lint:   32:16  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint:   62:12  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+web-app:lint: 
+web-app:lint: ✖ 124 problems (120 errors, 4 warnings)
+web-app:lint: 
+web-app:lint:  ELIFECYCLE  Command failed with exit code 1.
+
+ Tasks:    0 successful, 1 total
+Cached:    0 cached, 1 total
+  Time:    3.186s 
+Failed:    web-app#lint
+
+ ELIFECYCLE  Command failed with exit code 1.

@@ -21,8 +21,12 @@ export function Login() {
     try {
       await signIn(email, password);
       setIsLoggedIn(true);
-    } catch (err: any) {
-      setError(err.message || 'Authentication failed');
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('Authentication failed');
+      }
       setIsLoading(false);
     }
   };
@@ -45,9 +49,9 @@ export function Login() {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: 'spring', damping: 12 }}
-            className="w-20 h-20 rounded-3xl bg-gradient-to-br from-blue-500 to-purple-600 p-0.5 mx-auto mb-6 shadow-2xl shadow-blue-500/20"
+            className="w-20 h-20 rounded-3xl bg-linear-to-br from-blue-500 to-purple-600 p-0.5 mx-auto mb-6 shadow-2xl shadow-blue-500/20"
           >
-            <div className="w-full h-full bg-[#050505] rounded-[22px] flex items-center justify-center">
+            <div className="w-full h-full bg-background rounded-[22px] flex items-center justify-center">
               <Brain className="w-10 h-10 text-white" />
             </div>
           </motion.div>
@@ -56,7 +60,7 @@ export function Login() {
         </div>
 
         <div className="glass-panel border border-white/10 rounded-[32px] p-8 shadow-2xl relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent" />
+          <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-transparent via-blue-500/50 to-transparent" />
           
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">

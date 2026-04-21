@@ -4,6 +4,17 @@ import { useEffect, useRef } from 'react';
 import { THEMES } from '@brainbox/types';
 import type { ThemeName } from '@brainbox/types';
 
+// Resolves CSS Custom Properties to HEX for Canvas usage
+const getCanvasColor = (cssVal: string) => {
+  if (typeof window === 'undefined') return '#10a37f';
+  const match = cssVal.match(/var\((--[\w-]+)\)/);
+  if (match && match[1]) {
+    const val = getComputedStyle(document.documentElement).getPropertyValue(match[1]).trim();
+    return val || '#10a37f';
+  }
+  return cssVal;
+};
+
 interface Particle {
   x: number;
   y: number;
@@ -34,7 +45,7 @@ export function NeuralField({
   particleCount?: number;
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const themeColor = monochrome ? '#333333' : THEMES[theme].color;
+  const themeColor = monochrome ? '#333333' : getCanvasColor(theme && THEMES[theme] ? THEMES[theme].color : 'var(--color-acc-chatgpt)');
   const mouseRef = useRef({ x: -1000, y: -1000, radius: 150 });
   const particlesRef = useRef<Particle[]>([]);
   const prevModeRef = useRef<string>(mode);
@@ -235,7 +246,7 @@ export function NeuralField({
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 pointer-events-none z-0"
+      className="absolute inset-0 pointer-events-none z-0"
     />
   );
 }
