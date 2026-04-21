@@ -1,6 +1,6 @@
 # Antigravity Rules Guide (March 2026)
 
-_Summary from https://antigravity.codes/blog/user-rules_
+## Summary from https://antigravity.codes/blog/user-rules
 
 ## Rules Hierarchy & Precedence
 

@@ -422,3 +422,18 @@ BrainBox — Progress Log
 - **Fix 3: Extension Auth Bridge Security**
   - Replaced `getSession()` with `getUser()` in `apps/web-app/app/extension-auth/page.tsx`.
   - Ensured server-side user verification for the extension auth bridge.
+
+## 2026-04-21 — Branch Sync: Merge with main
+
+**Фаза:** Maintenance
+**Статус:** В процес
+
+### Направено
+
+- Иницииран процес по синхронизация на клон `Claude` с най-новите промени от `main`.
+- Създаден `tasks/todo.md` за проследяване на стъпките по сливането.
+
+### Файлове променени
+
+- docs/PROGRESS.md
+- tasks/todo.md
