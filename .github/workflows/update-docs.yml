@@ -1,7 +1,7 @@
 name: 🤖 BrainBox — Auto Update Docs
 
 on:
-  workflow_dispatch: # Спрян автоматичен режим, само ръчно пускане
+  workflow_dispatch:
 
 jobs:
   update-docs:
