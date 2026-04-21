@@ -3,11 +3,11 @@
 ### Plan
 
 - [x] Initial sync of `Claude` with `main` (Already done) ✓
-- [ ] Checkout `main` branch
-- [ ] Merge `Claude` into `main`
-- [ ] Push `main` to origin
-- [ ] Checkout `Claude` branch and return
-- [ ] Verify everything is synced
+- [x] Checkout `main` branch ✓
+- [x] Merge `Claude` into `main` ✓
+- [x] Push `main` to origin ✓
+- [x] Checkout `Claude` branch and return ✓
+- [x] Verify everything is synced ✓
 
 ### Done When
 

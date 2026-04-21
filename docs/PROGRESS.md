@@ -423,15 +423,17 @@ BrainBox — Progress Log
   - Replaced `getSession()` with `getUser()` in `apps/web-app/app/extension-auth/page.tsx`.
   - Ensured server-side user verification for the extension auth bridge.
 
-## 2026-04-21 — Branch Sync: Merge with main
+## 2026-04-21 — Branch Sync: Merge Claude into main
 
 **Фаза:** Maintenance
 **Статус:** Завършена
 
 ### Направено
 
-- Иницииран процес по синхронизация на клон `Claude` с най-новите промени от `main`.
-- Създаден `tasks/todo.md` за проследяване на стъпките по сливането.
+- Извършено сливане на клон `Claude` в `main` (fast-forward след локална синхронизация).
+- `main` е обновен и качен в `origin`.
+- Върнахме се в клон `Claude`, който е напълно синхронизиран с `main`.
+- Коригиран проблем с разрешенията (permissions) в директория `ref/`, който пречеше на смяната на клоновете.
 
 ### Файлове променени
 
