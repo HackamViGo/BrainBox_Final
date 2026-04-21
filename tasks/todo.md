@@ -1,15 +1,16 @@
-## Task: Merge Claude with main
+## Task: Merge Claude into main
 
 ### Plan
 
-- [x] Commit current changes in `Claude` branch if any (docs update) ✓
-- [x] Sync `main` branch (fetch & pull) ✓
-- [x] Merge `main` into `Claude` ✓
-- [x] Resolve any conflicts (if they occur) ✓ - No conflicts occurred.
-- [x] Verify build/typecheck after merge ✓
+- [x] Initial sync of `Claude` with `main` (Already done) ✓
+- [ ] Checkout `main` branch
+- [ ] Merge `Claude` into `main`
+- [ ] Push `main` to origin
+- [ ] Checkout `Claude` branch and return
+- [ ] Verify everything is synced
 
 ### Done When
 
-- [ ] `Claude` branch is successfully merged with `main`
-- [ ] `pnpm typecheck` passes (if relevant)
-- [ ] Returned to `Claude` branch with clean state
+- [ ] `main` branch includes all changes from `Claude`
+- [ ] Both branches are pushed to origin
+- [ ] Returned to `Claude` branch
