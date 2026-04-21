@@ -6,15 +6,15 @@ catalog:
   react: ^19.2.0
   react-dom: ^19.2.0
   types-react: ^19.0.8
-  typescript: ^5.7.3
+  typescript: ^6.0.3
   vite: ^8.0.0
   vite-tsconfig-paths: ^5.0.0
-  vitest: ^3.0.4
+  vitest: ^4.1.4
   next: 16.2.0
-  eslint: ^10.2.0
-  eslint-config-next: 16.2.3
-  tailwindcss: ^4.0.0
-  "@tailwindcss/postcss": ^4.0.0
+  eslint: ^10.2.1
+  eslint-config-next: 16.2.4
+  tailwindcss: ^4.2.3
+  "@tailwindcss/postcss": ^4.2.3
   d3: ^7.9.0
   dotenv: ^16.4.0
   dotenv-cli: ^8.0.0
@@ -30,10 +30,10 @@ catalog:
   clsx: ^2.1.1
   "@types/react": ^19.0.8
   "@vidstack/react": ^1.13.0
-  "@vitejs/plugin-react": ^4.3.4
+  "@vitejs/plugin-react": ^6.0.1
   "@vitejs/plugin-react-swc": ^4.3.0
   "tailwind-merge": ^2.6.1
   "@testing-library/react": ^16.2.0
   "@types/react-dom": ^19.2.0
-  "@types/node": ^20.17.19
+  "@types/node": ^25.6.0
   "@playwright/test": ^1.59.1
