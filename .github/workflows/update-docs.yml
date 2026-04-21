@@ -1,7 +1,13 @@
 name: 🤖 BrainBox — Auto Update Docs
 
 on:
-  workflow_dispatch:
+  push:
+    branches: ['**']
+    paths:
+      - 'apps/web-app/**'
+      - 'packages/**'
+      - 'apps/extension/**'
+      - '!docs/**'
 
 jobs:
   update-docs:
