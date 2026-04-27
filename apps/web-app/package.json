@@ -42,7 +42,7 @@
     "@playwright/test": "catalog:",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "catalog:",
-    "@types/node": "^20",
+    "@types/node": "^25",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@vitejs/plugin-react": "catalog:",
