@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@testing-library/react": "catalog:",
-    "@types/chrome": "^0.0.300",
+    "@types/chrome": "^0.1.40",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
