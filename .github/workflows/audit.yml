@@ -9,7 +9,7 @@ jobs:
     name: Critical Rule Audit
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Check for 'any' types in source (not type definitions)
         run: |
