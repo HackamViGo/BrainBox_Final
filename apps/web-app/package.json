@@ -52,7 +52,7 @@
     "jsdom": "^29.0.2",
     "postcss": "^8",
     "tailwindcss": "catalog:",
-    "tsx": "^4.21.0",
+    "tsx": "^4.22.1",
     "typescript": "catalog:",
     "vite-tsconfig-paths": "^6.1.1",
     "vitest": "catalog:"
